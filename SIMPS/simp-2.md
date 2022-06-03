@@ -11,6 +11,7 @@ created: 2022-06-03
 
 A standard interface for tokens.
 
+Inspired by [EIP-20](https://eips.ethereum.org/EIPS/eip-20).
 
 ## Abstract
 
