@@ -30,6 +30,10 @@ See https://eips.ethereum.org/EIPS/eip-721#motivation.
 
 ### balanceOf
 
+Count all NFTs assigned to an owner.
+
+NFTs assigned to the zero address are considered invalid, and this function throws for queries about the zero address.
+
 ``` cairo
     func balanceOf(owner: felt) -> (balance: Uint256):
     end
@@ -37,12 +41,22 @@ See https://eips.ethereum.org/EIPS/eip-721#motivation.
 
 ### ownerOf
 
+Find the owner of an NFT.
+
+NFTs assigned to zero address are considered invalid, and queries about them do throw.
+
 ``` cairo
     func ownerOf(tokenId: Uint256) -> (owner: felt):
     end
 ```
 
 ### safeTransferFrom
+
+Transfers the ownership of an NFT from one address to another address.
+
+Throws unless `get_caller_address` is the current owner, an authorized operator, or the approved address for this NFT.
+
+Throws if `from_` is not the current owner.
 
 ``` cairo
     func safeTransferFrom(
