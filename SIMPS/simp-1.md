@@ -98,7 +98,7 @@ Each SIMP should have the following parts:
 - Test Cases - Test cases for an implementation are mandatory for SIMPs that are affecting consensus changes. Tests should either be inlined in the SIMP as data (such as input/expected output pairs, or included in `../assets/simp-###/<filename>`.
 - Reference Implementation - An optional section that contains a reference/example implementation that people can use to assist in understanding or implementing this specification.
 - Security Considerations - All SIMPs must contain a section that discusses the security implications/considerations relevant to the proposed change. Include information that might be important for security discussions, surfaces risks and can be used throughout the life-cycle of the proposal. E.g. include security-relevant design decisions, concerns, important discussions, implementation-specific guidance and pitfalls, an outline of threats and risks and how they are being addressed. SIMP submissions missing the "Security Considerations" section will be rejected. A SIMP cannot proceed to status "Final" without a Security Considerations discussion deemed sufficient by the reviewers.
-- Copyright Waiver - All SIMPs must be in the public domain. The copyright waiver MUST link to the license file and use the following wording: `Copyright and related rights waived via [CC0](../LICENSE.md).`
+- Copyright Waiver - All SIMPs must be in the public domain. The copyright waiver MUST link to the license file and use the following wording: `Copyright and related rights waived via [MIT](../LICENSE).`
 
 ## SIMP Formats and Templates
 
