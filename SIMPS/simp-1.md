@@ -198,22 +198,11 @@ If you are interested in assuming ownership of a SIMP, send a message asking to 
 
 ## SIMP Editors
 
-The current SIMP editors are
+The current SIMP editors are:
 
-- Alex Beregszaszi (@axic)
-- Matt Garnett (@lightclient)
-- Micah Zoltu (@MicahZoltu)
-- Greg Colvin (@gcolvin)
-- Sam Wilson (@SamWilsn)
+- Abdelhamid Bakhta (@abdelhamidbakhta)
 
-Emeritus SIMP editors are 
-
-- Casey Detrio (@cdetrio)
-- Nick Johnson (@arachnid)
-- Vitalik Buterin (@vbuterin)
-- Hudson Jameson (@Souptacular)
-- Nick Savers (@nicksavers)
-- Martin Becze (@wanderer)
+Emeritus SIMP editors are:
 
 ## SIMP Editor Responsibilities
 
