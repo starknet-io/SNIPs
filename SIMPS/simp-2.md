@@ -1,5 +1,5 @@
 ---
-simp: 1
+simp: 2
 title: Token Standard
 status: Draft
 type: SRC
