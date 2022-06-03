@@ -201,6 +201,7 @@ If you are interested in assuming ownership of a SIMP, send a message asking to 
 The current SIMP editors are:
 
 - Abdelhamid Bakhta (@abdelhamidbakhta)
+- Jag Lotus (@jag-lotus)
 
 Emeritus SIMP editors are:
 
