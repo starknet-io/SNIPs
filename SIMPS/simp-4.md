@@ -1,29 +1,84 @@
 ---
-simp: 2
+simp: 4
 title: Cairo Contract Comment Standard
 status: Draft
 type: SRC
-author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>
+author: Orlando <orlandothefraser@gmail.com>
 created: 2022-06-03
 ---
 
 ## Simple Summary
 
-A standard for writing comments on Cairo contracts.
+A standard for writing comments in Cairo contracts.
 
 Inspired by Natspec comments for Solidity.
 
 ## Abstract
 
-The following standard allows for the implementation of a standard API for tokens within smart contracts.
-This standard provides basic functionality to transfer tokens, as well as allow tokens to be approved so they can be spent by another on-chain third party.
+The following standard provides a consistent way for Cairo contracts and their functionality to be documented. I propose that initially this should just be informational, however in future it could be integrated into the Cairo compiler to allow automated documentation generation. 
+
 
 ## Motivation
 
-A standard interface allows any tokens on StarkNet to be re-used by other applications: from wallets to decentralized exchanges.
+A comment standard increases the readibility of contracts which makes it easier to ensure their correct functionality. 
 
 
 ## Specification
+
+### Contract Headers 
+
+A header comment to be placed directly after the imports. This 
+
+
+
+```
+%lang starknet
+
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+
+#
+# @title Eth Tx authentication
+# @author Daniel Machado
+# @notice This function is used to authenticate a transaction.
+#
+
+# @dev Stores balances for users
+# @param address: Address of the user
+# @param pot_index: Index of the pot
+# @returns amount: The amount stored
+@storage_var
+func balance(address : felt, pot_index : felt) -> (amount: felt):
+end
+
+# Increases the balance by the given amount.
+@external
+func increase_balance{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}(amount : felt):
+    let (res) = balance.read()
+    balance.write(res + amount)
+    return ()
+end
+
+# Returns the current balance.
+@view
+func get_balance{
+    syscall_ptr : felt*,
+    pedersen_ptr : HashBuiltin*,
+    range_check_ptr,
+}() -> (res : felt):
+    let (res) = balance.read()
+    return (res)
+end
+```
+
+
+
+
+
+
 
 ## Token
 ### Methods
