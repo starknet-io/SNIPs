@@ -36,7 +36,7 @@ All tags are optional. The following table explains the purpose of each tag and 
 | @param  | Documents a parameter                     | storage variable, function, event                     |
 | @return | Documents a return variable               | storage variable, function                            |
 
-### Contract Headers 
+### Headers 
 
 A header comment is a comment block that can be placed at the top of each cairo file, immediately following the imports. The header contains general information about the contents of the file including a brief description and an author.
 
