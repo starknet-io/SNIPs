@@ -40,6 +40,9 @@ All tags are optional. The following table explains the purpose of each tag and 
 
 A header comment is a comment block that can be placed at the top of each cairo file, immediately following the imports. The header contains general information about the contents of the file including a brief description and an author.
 
+### Arrays 
+
+When working with arrays, @param and @return tags should only be applied to the pointer variable and not for the length.  One can document the contents of the array in this single tag. 
 
 ### Example Contract
 ```
@@ -51,7 +54,7 @@ from starkware.starknet.common.syscalls import get_caller_address
 
 #
 # @title Simple Savings Account
-# @author Vitalik Buterin
+# @author Vitalik Buterin - vitalik.buterin@ethereum.org
 # @notice A contract to track users' savings in various pots
 #
 
