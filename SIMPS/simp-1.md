@@ -3,7 +3,7 @@ simp: 1
 title: SIMP Purpose and Guidelines
 status: Living
 type: Meta
-author: Martín Triay <Martín Triay>
+author: Martín Triay <martriay@gmail.com>
 created: 2022-06-03
 ---
 
