@@ -4,7 +4,7 @@ title: Cairo Comment Standard
 status: Draft
 type: Informational
 author: Orlando Fraser <orlandothefraser@gmail.com>
-created: 2022-06-03
+created: 2022-06-13
 ---
 
 ## Simple Summary
