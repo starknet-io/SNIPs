@@ -1,5 +1,5 @@
 ---
-simp: 4
+snip: 4
 title: Cairo Comment Standard
 status: Draft
 type: Informational
