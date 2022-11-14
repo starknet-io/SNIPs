@@ -14,7 +14,7 @@
 
 [![Project license](https://img.shields.io/github/license/starknet-community-libs/SNIPs.svg?style=flat-square)](LICENSE)
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/starknet-community-libs/SNIPs/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-[![code with love by StarkNet community](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-abdelhamidbakhta-ff1414.svg?style=flat-square)](https://github.com/starknet-community-libs)
+[![code with love by StarkNet community](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-StarkNet%20Community-ff1414.svg?style=flat-square)](https://github.com/starknet-community-libs)
 
 ## Mission
 
