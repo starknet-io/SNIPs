@@ -2,5 +2,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: SNIPs Community Support
-    url: https://github.com/starknet-community-libs/SNIPs/discussions
+    url: https://github.com/starknet-io/SNIPs/discussions
     about: Please ask and answer questions here.
