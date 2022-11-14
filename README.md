@@ -8,11 +8,11 @@
         <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
     </a>
       <br />
-  <a href="https://github.com/starknet-community-libs/SNIPs/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
+  <a href="https://github.com/starknet-io/SNIPs/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
   -
-  <a href="https://github.com/starknet-community-libs/SNIPs/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
+  <a href="https://github.com/starknet-io/SNIPs/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
   -
-  <a href="https://github.com/starknet-community-libs/SNIPs/discussions">Ask a Question</a>       
+  <a href="https://github.com/starknet-io/SNIPs/discussions">Ask a Question</a>       
   </p>
   
   <h3 align="center">StarkNet Improvement Proposal repository.</h3>
@@ -21,9 +21,9 @@
 <div align="center">
 <br />
 
-[![Project license](https://img.shields.io/github/license/starknet-community-libs/SNIPs.svg?style=flat-square)](LICENSE)
-[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/starknet-community-libs/SNIPs/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-[![code with love by StarkNet community](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-StarkNet%20Community-ff1414.svg?style=flat-square)](https://github.com/starknet-community-libs)
+[![Project license](https://img.shields.io/github/license/starknet-io/SNIPs.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/starknet-io/SNIPs/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+[![code with love by StarkNet community](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-StarkNet%20Community-ff1414.svg?style=flat-square)](https://github.com/starknet-io)
 
 </div>
 
@@ -56,7 +56,7 @@ Here is the process that a contributor should follow:
 1. Review [SNIP-1](./SNIPS/snip-1.md).
 2. Fork the repository by clicking "Fork" in the top right.
 3. Add your SNIP to your fork of the repository. There is a [template SNIP here](./SNIPS/snip-template.md).
-4. Submit a Pull Request to [SNIPs repository](https://github.com/starknet-community-libs/SNIPs)
+4. Submit a Pull Request to [SNIPs repository](https://github.com/starknet-io/SNIPs)
 
 Your first PR should be a first draft of the final SNIP. It must meet the formatting criteria enforced by the build (largely, correct metadata in the header). An editor will manually review the first PR for a new SNIP and assign it a number before merging it. Make sure you include a `discussions-to` header with the URL to a discussion forum or open GitHub issue where people can discuss the SNIP as a whole.
 
@@ -83,7 +83,7 @@ Reach out to the maintainer at one of the following places:
 
 If you want to say **thank you** or/and support active development of SNIPs:
 
-- Add a [GitHub Star](https://github.com/starknet-community-libs/SNIPs) to the project.
+- Add a [GitHub Star](https://github.com/starknet-io/SNIPs) to the project.
 - Tweet about the SNIPs.
 - Write interesting articles about the project on [Dev.to](https://dev.to/), [Medium](https://medium.com/) or your personal blog.
 
@@ -97,7 +97,7 @@ Please read [our contribution guidelines](docs/CONTRIBUTING.md), and thank you f
 
 ## Authors & contributors
 
-For a full list of all authors and contributors, see [the contributors page](https://github.com/starknet-community-libs/SNIPs/contributors).
+For a full list of all authors and contributors, see [the contributors page](https://github.com/starknet-io/SNIPs/contributors).
 
 ## Security
 
