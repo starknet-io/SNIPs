@@ -53,7 +53,7 @@ The SNIP process is the process that a contributor goes through to propose a cha
 
 Here is the process that a contributor should follow:
 
-1. Review [SNIP-1](./SNIPs/snip-1.md).
+1. Review [SNIP-1](./SNIPS/snip-1.md).
 2. Fork the repository by clicking "Fork" in the top right.
 3. Add your SNIP to your fork of the repository. There is a [template SNIP here](./SNIPs/snip-template.md).
 4. Submit a Pull Request to [SNIPs repository](https://github.com/starknet-community-libs/SNIPs)
