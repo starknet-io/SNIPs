@@ -1,5 +1,5 @@
 ---
-simp: $SNIP_ID
+snip: $SNIP_ID
 title: SNIP Purpose and Guidelines
 status: Living
 type: Meta
