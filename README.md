@@ -9,9 +9,10 @@
     </a>
       <br />
   <a href="https://github.com/starknet-community-libs/SNIPs/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
-  ·
+  -
   <a href="https://github.com/starknet-community-libs/SNIPs/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
-  .<a href="https://github.com/starknet-community-libs/SNIPs/discussions">Ask a Question</a>       
+  -
+  <a href="https://github.com/starknet-community-libs/SNIPs/discussions">Ask a Question</a>       
   </p>
   
   <h3 align="center">StarkNet Improvement Proposal repository.</h3>
