@@ -2,7 +2,7 @@
   <h1 align="center">SNIPs</h1>
   <p align="center">
     <a href="https://community.starknet.io/">
-        <img src="https://img.shields.io/badge/StarkNet%20Shamans-5C4C9F?style=for-the-badge&logo=startrek&logoColor=white">
+        <img src="https://img.shields.io/badge/StarkNet%20Community%20Forum-5C4C9F?style=for-the-badge&logo=startrek&logoColor=white">
     </a>
     <a href="https://twitter.com/intent/follow?screen_name=StarkNetFndn">
         <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
