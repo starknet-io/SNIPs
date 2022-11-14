@@ -4,7 +4,7 @@
     <a href="https://community.starknet.io/">
         <img src="https://img.shields.io/badge/StarkNet%20Shamans-5C4C9F?style=for-the-badge&logo=startrek&logoColor=white">
     </a>
-    <a href="https://twitter.com/intent/follow?screen_name=StarkWareLtd">
+    <a href="https://twitter.com/intent/follow?screen_name=StarkNetFndn">
         <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
     </a>       
   </p>
@@ -41,7 +41,7 @@ To update a `Draft` SNIP, the author can submit a PR making the required changes
 
 Lifecycle overview:
 
-[![SNIP lifecycle](./assets/snip-1/SNIP-process-update.jpg)
+![SNIP lifecycle](./assets/snip-1/SNIP-process-update.jpg)
 
 ## Credits
 
