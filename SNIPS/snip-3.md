@@ -1,5 +1,5 @@
 ---
-simp: 3
+snip: 3
 title: Non-Fungible Token Standard
 status: Draft
 type: SRC
