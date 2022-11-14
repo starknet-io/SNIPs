@@ -55,7 +55,7 @@ Here is the process that a contributor should follow:
 
 1. Review [SNIP-1](./SNIPS/snip-1.md).
 2. Fork the repository by clicking "Fork" in the top right.
-3. Add your SNIP to your fork of the repository. There is a [template SNIP here](./SNIPs/snip-template.md).
+3. Add your SNIP to your fork of the repository. There is a [template SNIP here](./SNIPS/snip-template.md).
 4. Submit a Pull Request to [SNIPs repository](https://github.com/starknet-community-libs/SNIPs)
 
 Your first PR should be a first draft of the final SNIP. It must meet the formatting criteria enforced by the build (largely, correct metadata in the header). An editor will manually review the first PR for a new SNIP and assign it a number before merging it. Make sure you include a `discussions-to` header with the URL to a discussion forum or open GitHub issue where people can discuss the SNIP as a whole.
