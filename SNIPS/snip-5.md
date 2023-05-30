@@ -42,7 +42,7 @@ Where `fn_name` is the function name, and `paramN_type` is the type of the n-th 
 
 ### Special types (Tuples, Structs, Enums, and Generics)
 
-We define how to provide these parameters to the signature for getting the extended function selector:
+A definition on how to provide these parameters to the signature for getting the extended function selector:
 
 #### Tuples
 
