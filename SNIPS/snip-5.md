@@ -20,7 +20,7 @@ This standardizes:
 
 1. How interfaces are identified.
 2. How a contract will publish the interfaces it implements.
-3. How to detect if a contract implements SRC-165.
+3. How to detect if a contract implements SRC-5.
 4. How to detect if a contract implements any given interface.
 
 
