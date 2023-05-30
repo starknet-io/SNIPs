@@ -105,7 +105,7 @@ fn foo<T, E, impl TDrop: Drop<T>, impl EDrop: Drop<E>>(
 The signature is:
 
 ```cairo
-foo(E((felt252,u32),Array<{Drop}>),S(E((felt252,u32),Array<{Drop}>),{Drop}));
+foo(E((felt252,u32),Array<{Drop}>),S(E((felt252,u32),Array<{Drop}>),{Drop}))
 ```
 
 ### How Interfaces are Identified
@@ -142,8 +142,8 @@ from starkware.starknet.public.abi import starknet_keccak
 extended_function_selector_list = [
     'supports_interface(felt252)',
     'is_valid_signature(felt252,Array<felt252>)',
-    '__execute__(Array<(ContractAddress,felt252,Array<felt252>)>)',
-    '__validate__(Array<(ContractAddress,felt252,Array<felt252>)>)',
+    '__execute__(Array<S(ContractAddress,felt252,Array<felt252>)>)',
+    '__validate__(Array<S(ContractAddress,felt252,Array<felt252>)>)',
     '__validate_declare__(felt252)'
 ]
 
