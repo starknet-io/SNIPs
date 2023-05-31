@@ -40,7 +40,7 @@ fn_name(param1_type,param2_type,...)
 
 Where `fn_name` is the function name, and `paramN_type` is the type of the n-th function parameter. Next, we will define how to treat complex types for this signature definition.
 
-### Special types (Tuples, Structs, Enums, and Generics)
+### Special types (Tuples, Structs, and Enums)
 
 A definition on how to provide these parameters to the signature for getting the extended function selector:
 
@@ -60,52 +60,30 @@ The signature for an enum having `n` fields is: `E(variant1_type,variant2_type,.
 
 The leading `E` avoid clashes with similar signatures using tuples or structs.
 
-#### Generics
-
-The signature for a generic argument required to implement `n` traits is: `{trait1_name,trait2_name,...}`, where `traitN_name` is the type of the n-th trait required from the function signature in the same specified order.
-
 #### Examples
 
 1. From the Cairo function:
 
 ```cairo
-fn foo<T, impl TDrop: Drop<T>>(param1: Array<T>) -> bool;
-```
-
-The signature is:
-
-```cairo
-foo(Array<{Drop}>)
-```
-
-2. From the Cairo function:
-
-```cairo
-enum MyEnum<T> {
+#[derive(Drop, Serde)]
+enum MyEnum {
     FirstVariant: (felt252, u32),
-    SecondVariant: Array<T>,
+    SecondVariant: Array<u128>,
 }
 
-impl MyEnumDrop<T, impl TDrop: Drop<T>> of Drop<MyEnum<T>>;
-
-struct MyStruct<T, E> {
-    field1: MyEnum<T>,
-    field2: E,
+#[derive(Drop, Serde)]
+struct MyStruct {
+    field1: MyEnum,
+    field2: felt252,
 }
 
-impl MyStructDrop<T, E, impl TDrop: Drop<T>, impl EDrop: Drop<E>> of Drop<MyStruct<T, E>>;
-
-fn foo<T, E, impl TDrop: Drop<T>, impl EDrop: Drop<E>>(
-    param1: MyEnum<T>, param2: MyStruct<T, E>
-) -> bool {
-    return true;
-}
+fn foo>(param1: MyEnum, param2: MyStruct) -> bool;
 ```
 
 The signature is:
 
 ```cairo
-foo(E((felt252,u32),Array<{Drop}>),S(E((felt252,u32),Array<{Drop}>),{Drop}))
+foo(E((felt252,u32),Array<u128>),S(E((felt252,u32),Array<u128>),felt252))
 ```
 
 ### How Interfaces are Identified
