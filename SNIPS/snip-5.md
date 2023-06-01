@@ -30,6 +30,13 @@ For some "standard interfaces" like the ERC-721 token interface, it is sometimes
 
 ## Specification
 
+### Serialization compatibility
+
+One of the objectives of this standard is to ensure that all the contracts which state they implement a given interface, will behave in a similar expected way for callers. In Cairo, the language doesn't enforce an encoding format for Structs and Enums, needing the developers to implement a Serde trait on these types when they are part of an external function signature, and different implementations may lead to incompatibility between contracts exposing the same interface.
+
+We define that, to be compliant with this standard, Structs and Enums used as parameters of external functions, must
+implement the default format given from the `[#derive(Serde)]` attribute, which is: the concatenation of the serialized fields for Structs, and the concatenation of a felt252 acting as a variant identifier and the serialized value for Enums.
+
 ### Extended Function Selector
 
 In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the extended function selector as the `starknet_keccak` of the function signature, having this signature the following format:
@@ -38,11 +45,11 @@ In Starknet, a function selector is the `starknet_keccak` of the function name (
 fn_name(param1_type,param2_type,...)
 ```
 
-Where `fn_name` is the function name, and `paramN_type` is the type of the n-th function parameter. Next, we will define how to treat complex types for this signature definition.
+Where `fn_name` is the function name, and `paramN_type` is the type of the n-th function parameter. Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types by following the rules defined below.
 
 ### Special types (Tuples, Structs, and Enums)
 
-A definition on how to provide these parameters to the signature for getting the extended function selector:
+A definition of how to provide these parameters to the signature for getting the extended function selector:
 
 #### Tuples
 
@@ -50,9 +57,7 @@ The signature for a tuple of `n` elements is: `(elem1_type,elem2_type,...)`, whe
 
 #### Structs
 
-The signature for a struct having `n` fields is: `S(field1_type,field2_type,...)`, where `fieldN_type` is the type of the n-th struct field.
-
-The leading `S` avoid clashes with similar signatures using tuples.
+The signature for a struct having `n` fields is: `(field1_type,field2_type,...)`, where `fieldN_type` is the type of the n-th struct field.
 
 #### Enums
 
@@ -67,7 +72,7 @@ The leading `E` avoid clashes with similar signatures using tuples or structs.
 ```cairo
 #[derive(Drop, Serde)]
 enum MyEnum {
-    FirstVariant: (felt252, u32),
+    FirstVariant: (felt252, u256),
     SecondVariant: Array<u128>,
 }
 
@@ -83,7 +88,7 @@ fn foo>(param1: MyEnum, param2: MyStruct) -> bool;
 The signature is:
 
 ```cairo
-foo(E((felt252,u32),Array<u128>),S(E((felt252,u32),Array<u128>),felt252))
+foo(E((felt252,(u128,u128)),Array<u128>),(E((felt252,(u128,u128)),Array<u128>),felt252))
 ```
 
 ### How Interfaces are Identified
@@ -120,8 +125,8 @@ from starkware.starknet.public.abi import starknet_keccak
 extended_function_selector_list = [
     'supports_interface(felt252)',
     'is_valid_signature(felt252,Array<felt252>)',
-    '__execute__(Array<S(ContractAddress,felt252,Array<felt252>)>)',
-    '__validate__(Array<S(ContractAddress,felt252,Array<felt252>)>)',
+    '__execute__(Array<(ContractAddress,felt252,Array<felt252>)>)',
+    '__validate__(Array<(ContractAddress,felt252,Array<felt252>)>)',
     '__validate_declare__(felt252)'
 ]
 
