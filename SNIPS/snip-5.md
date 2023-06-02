@@ -82,7 +82,7 @@ struct MyStruct {
     field2: felt252,
 }
 
-fn foo>(param1: MyEnum, param2: MyStruct) -> bool;
+fn foo(param1: MyEnum, param2: MyStruct) -> bool;
 ```
 
 The signature is:
