@@ -65,7 +65,7 @@ The signature for an enum having `n` fields is: `E(variant1_type,variant2_type,.
 
 The leading `E` avoid clashes with similar signatures using tuples or structs.
 
-#### Examples
+### Examples
 
 1. From the Cairo function:
 
