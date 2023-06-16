@@ -126,7 +126,7 @@ foo(@E((felt252,(u128,u128)),Array<u128>),(E((felt252,(u128,u128)),Array<u128>),
 
 ### How Interfaces are Identified
 
-For this standard, we define the interface identifier as the XOR of all [Extended Function Selectors](#extended-function-selector) in the [Interface](#inteface). This code example shows how to calculate an interface identifier:
+For this standard, we define the interface identifier as the XOR of all [Extended Function Selectors](#extended-function-selector) in the [Interface](#interface). This code example shows how to calculate an interface identifier:
 
 From this Cairo interface:
 
