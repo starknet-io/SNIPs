@@ -39,26 +39,9 @@ One of the objectives of this standard is to ensure that all the contracts which
 We define that, to be compliant with this standard, Structs and Enums used as parameters of external functions, SHOULD
 implement the default format given from the `[#derive(Serde)]` attribute, which is: the concatenation of the serialized fields for Structs, and the concatenation of a felt252 acting as a variant identifier and the serialized value for Enums. Other types MUST use the serialization format specified in the language core library.
 
-### Interface Blueprints
-
-Since Cairo 2.0, we can define traits leveraging generic types to represent a set of interfaces:
-
-```cairo
-#[starknet::interface]
-trait IMyContract<TContractState, TNumber> {
-    fn foo(self: @TContractState, some: TNumber) -> felt252;
-}
-```
-
-For this standard, we call these modules Interface Blueprints, not representing the actual interface, but a set of them. The real interfaces contain only concrete types since no generic type inputs are allowed in smart contract external methods.
-
-Different implementations of these blueprints, specifyng concrete types, define different interfaces.
-
 ### Interface
 
-For this standard, an interface is a set of functions with no generic type parameters.
-
-The actual interface can be represented as a trait with no generic types. From the [Interface Blueprint](#interface-blueprints) presented above, we can the following valid interfaces among others:
+An interface is a set of function signatures with concrete type parameters, usually represented by a `trait`. These are meant to be implemented as `external` by contracts complying with such interface. For example:
 
 ```cairo
 trait IMyContract1 {
@@ -69,6 +52,19 @@ trait IMyContract2 {
     fn foo(some: felt252) -> felt252;
 }
 ```
+
+#### Generic types
+
+Since Cairo 2.0, we can define traits leveraging generic types to represent a set of interfaces:
+
+```cairo
+#[starknet::interface]
+trait IMyContract<TContractState, TNumber> {
+    fn foo(self: @TContractState, some: TNumber) -> felt252;
+}
+```
+
+Since these traits don't represent actual interfaces, but a category, they're not covered by this standard. SRC-5 interfaces contain only concrete types since no generic type inputs are allowed in smart contract external methods.
 
 ### Extended Function Selector
 
