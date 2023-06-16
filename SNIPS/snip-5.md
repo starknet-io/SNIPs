@@ -30,26 +30,59 @@ For some "standard interfaces" like the ERC-721 token interface, it is sometimes
 
 ## Specification
 
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+
 ### Serialization compatibility
 
 One of the objectives of this standard is to ensure that all the contracts which state they implement a given interface, will behave in a similar expected way for callers. In Cairo, the language doesn't enforce an encoding format for Structs and Enums, needing the developers to implement a Serde trait on these types when they are part of an external function signature, and different implementations may lead to incompatibility between contracts exposing the same interface.
 
-We define that, to be compliant with this standard, Structs and Enums used as parameters of external functions, must
-implement the default format given from the `[#derive(Serde)]` attribute, which is: the concatenation of the serialized fields for Structs, and the concatenation of a felt252 acting as a variant identifier and the serialized value for Enums.
+We define that, to be compliant with this standard, Structs and Enums used as parameters of external functions, SHOULD
+implement the default format given from the `[#derive(Serde)]` attribute, which is: the concatenation of the serialized fields for Structs, and the concatenation of a felt252 acting as a variant identifier and the serialized value for Enums. Other types MUST use the serialization format specified in the language core library.
+
+### Interface Blueprints
+
+Since Cairo 2.0, we can define traits leveraging generic types to represent a set of interfaces:
+
+```cairo
+#[starknet::interface]
+trait IMyContract<TContractState, TNumber> {
+    fn foo(self: @TContractState, some: TNumber) -> felt252;
+}
+```
+
+For this standard, we call these modules Interface Blueprints, not representing the actual interface, but a set of them. The real interfaces contain only concrete types since no generic type inputs are allowed in smart contract external methods.
+
+Different implementations of these blueprints, specifyng concrete types, define different interfaces.
+
+### Interface
+
+For this standard, an interface is a set of functions with no generic type parameters.
+
+The actual interface can be represented as a trait with no generic types. From the [Interface Blueprint](#interface-blueprints) presented above, we can the following valid interfaces among others:
+
+```cairo
+trait IMyContract1 {
+    fn foo(some: u256) -> felt252;
+}
+// or
+trait IMyContract2 {
+    fn foo(some: felt252) -> felt252;
+}
+```
 
 ### Extended Function Selector
 
-In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the extended function selector as the `starknet_keccak` of the function signature, having this signature the following format:
+In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the Extended Function Selector as the `starknet_keccak` of the function signature, having this signature the following format:
 
 ```
 fn_name(param1_type,param2_type,...)
 ```
 
-Where `fn_name` is the function name, and `paramN_type` is the type of the n-th function parameter. Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types by following the rules defined below.
+Where `fn_name` is the function name, and `paramN_type` is the type of the n-th function parameter. Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types.
 
 ### Special types (Tuples, Structs, and Enums)
 
-A definition of how to provide these parameters to the signature for getting the extended function selector:
+A definition of how to provide these parameters to the signature for getting the [Extended Function Selectorr](#extended-function-selector):
 
 #### Tuples
 
@@ -82,20 +115,18 @@ struct MyStruct {
     field2: felt252,
 }
 
-fn foo(param1: MyEnum, param2: MyStruct) -> bool;
+fn foo(param1: @MyEnum, param2: MyStruct) -> bool;
 ```
 
 The signature is:
 
 ```cairo
-foo(E((felt252,(u128,u128)),Array<u128>),(E((felt252,(u128,u128)),Array<u128>),felt252))
+foo(@E((felt252,(u128,u128)),Array<u128>),(E((felt252,(u128,u128)),Array<u128>),felt252))
 ```
 
 ### How Interfaces are Identified
 
-For this standard, an *interface* is a set of [extended function selectors](#extended-function-selector-efns).
-
-We define the interface identifier as the XOR of all extended function selectors in the interface. This code example shows how to calculate an interface identifier:
+For this standard, we define the interface identifier as the XOR of all [Extended Function Selectors](#extended-function-selector) in the [Interface](#inteface). This code example shows how to calculate an interface identifier:
 
 From this Cairo interface:
 
