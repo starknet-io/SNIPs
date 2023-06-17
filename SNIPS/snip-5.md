@@ -55,7 +55,7 @@ trait IMyContract2 {
 
 #### Generic types
 
-Since Cairo 2.0, we can define traits leveraging generic types to represent a set of interfaces:
+Since Cairo 2.0 we can define traits leveraging generic types to represent a set of interfaces:
 
 ```cairo
 #[starknet::interface]
@@ -64,7 +64,7 @@ trait IMyContract<TContractState, TNumber> {
 }
 ```
 
-Since these traits don't represent actual interfaces, but a category, they're not covered by this standard. SRC-5 interfaces contain only concrete types since no generic type inputs are allowed in smart contract external methods.
+Because these traits don't represent actual interfaces but categories, they're not covered by this standard. SRC-5 interfaces contain only concrete types since no generic type inputs are allowed in smart contract external methods.
 
 ### Extended Function Selector
 
