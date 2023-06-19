@@ -44,12 +44,8 @@ implement the default format given from the `[#derive(Serde)]` attribute, which 
 An interface is a set of function signatures with concrete type parameters, usually represented by a `trait`. These are meant to be implemented as `external` by contracts complying with such interface. For example:
 
 ```cairo
-trait IMyContract1 {
+trait IMyContract {
     fn foo(some: u256) -> felt252;
-}
-// or
-trait IMyContract2 {
-    fn foo(some: felt252) -> felt252;
 }
 ```
 
