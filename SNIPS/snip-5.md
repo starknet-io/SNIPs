@@ -11,7 +11,6 @@ created: 2023-05-29
 ## Simple Summary
 
 A standard method to publish and detect what interfaces a smart contract implements.
-
 Inspired by [ERC-165](https://eips.ethereum.org/EIPS/eip-165).
 
 ## Abstract
@@ -36,8 +35,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 One of the objectives of this standard is to ensure that all the contracts which state they implement a given interface, will behave in a similar expected way for callers. In Cairo, the language doesn't enforce an encoding format for Structs and Enums, needing the developers to implement a Serde trait on these types when they are part of an external function signature, and different implementations may lead to incompatibility between contracts exposing the same interface.
 
-We define that, to be compliant with this standard, Structs and Enums used as parameters of external functions, SHOULD
-implement the default format given from the `[#derive(Serde)]` attribute, which is: the concatenation of the serialized fields for Structs, and the concatenation of a felt252 acting as a variant identifier and the serialized value for Enums. Other types MUST use the serialization format specified in the language core library.
+We define that, to be compliant with this standard, Structs and Enums used as parameters, or return types of external functions SHOULD implement the default format given from the `[#derive(Serde)]` attribute, which is: the concatenation of the serialized fields for Structs, and the concatenation of a felt252 acting as a variant identifier and the serialized value for Enums. Other types MUST use the serialization format specified in the language core library.
 
 ### Interface
 
@@ -67,10 +65,12 @@ Because these traits don't represent actual interfaces but categories, they're n
 In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the Extended Function Selector as the `starknet_keccak` of the function signature, having this signature the following format:
 
 ```
-fn_name(param1_type,param2_type,...)
+fn_name(param1_type,param2_type,...)->output_type
 ```
 
-Where `fn_name` is the function name, and `paramN_type` is the type of the n-th function parameter. Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types.
+Where `fn_name` is the function name, `paramN_type` is the type of the n-th function parameter, and `output_type` is the type of the returned value.
+
+Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, being `u128` a type, and `u256` a Struct.
 
 ### Special types (Tuples, Structs, and Enums)
 
@@ -113,7 +113,7 @@ fn foo(param1: @MyEnum, param2: MyStruct) -> bool;
 The signature is:
 
 ```cairo
-foo(@E((felt252,(u128,u128)),Array<u128>),(E((felt252,(u128,u128)),Array<u128>),felt252))
+foo(@E((felt252,(u128,u128)),Array<u128>),(E((felt252,(u128,u128)),Array<u128>),felt252))->E((),())
 ```
 
 ### How Interfaces are Identified
@@ -130,33 +130,33 @@ struct Call {
 }
 
 trait IAccount {
-    fn supports_interface(felt252);
-    fn is_valid_signature(felt252, Array<felt252>);
-    fn __execute__(Array<Call>);
-    fn __validate__(Array<Call>);
-    fn __validate_declare__(felt252);
+    fn supports_interface(felt252) -> bool;
+    fn is_valid_signature(felt252, Array<felt252>) -> bool;
+    fn __execute__(Array<Call>) -> Array<Span<felt252>>;
+    fn __validate__(Array<Call>) -> felt252;
+    fn __validate_declare__(felt252) -> felt252;
 }
 ```
 
-This is the python code that computes the interface id:
+This is the Python code that computes the interface id:
 
 ```python
 # pip install cairo-lang
 from starkware.starknet.public.abi import starknet_keccak
 
-# This is the interface
-extended_function_selector_list = [
-    'supports_interface(felt252)',
-    'is_valid_signature(felt252,Array<felt252>)',
-    '__execute__(Array<(ContractAddress,felt252,Array<felt252>)>)',
-    '__validate__(Array<(ContractAddress,felt252,Array<felt252>)>)',
-    '__validate_declare__(felt252)'
+# These are the public interface function signatures
+extended_function_selector_signatures_list = [
+    'supports_interface(felt252)->E((),())',
+    'is_valid_signature(felt252,Array<felt252>)->E((),())',
+    '__execute__(Array<(ContractAddress,felt252,Array<felt252>)>)->Array<(@Array<felt252>)>',
+    '__validate__(Array<(ContractAddress,felt252,Array<felt252>)>)->felt252',
+    '__validate_declare__(felt252)->felt252'
 ]
 
 def main():
     interface_id = 0x0
-    for function in extended_function_selector_list:
-        function_id = starknet_keccak(function.encode())
+    for function_signature in extended_function_selector_signatures_list:
+        function_id = starknet_keccak(function_signature.encode())
         interface_id ^= function_id
     print('IAccount ID:')
     print(hex(interface_id))
@@ -179,11 +179,11 @@ trait ISRC5 {
 }
 ```
 
-The interface identifier for this interface is `0x1ba86cc668fafde77705c7bfcafa3ee47934b5631ff0e32841dcdcd4e100a60`. You can calculate this by running `starknet_keccak('supports_interface(felt252)')`.
+The interface identifier for this interface is `0x3f918d17e5ee77373b56385708f855659a07f75997f365cf87748628532a055`. You can calculate this by running `starknet_keccak('supports_interface(felt252)->E((),())')`.
 
 Therefore the implementing contract will have a `supports_interface` function that returns:
 
-- `true` when `interface_id` is `0x1ba86cc668fafde77705c7bfcafa3ee47934b5631ff0e32841dcdcd4e100a60` (SNIP-5 interface)
+- `true` when `interface_id` is `0x3f918d17e5ee77373b56385708f855659a07f75997f365cf87748628532a055` (SNIP-5 interface)
 - `true` for any other `interface_id` this contract implements
 - `false` for any other `interface_id`
 
@@ -191,7 +191,7 @@ This function must return a bool.
 
 ### How to Detect if a Contract Implements SRC-5
 
-1. The source contract makes a `call_contract_syscall` to the destination address with `entrypoint_selector` as: `0xfe80f537b66d12a00b6d3c072b44afbb716e78dde5c3f0ef116ee93d3e3283` and calldata as a one element Span containing: `0x1ba86cc668fafde77705c7bfcafa3ee47934b5631ff0e32841dcdcd4e100a60`. This corresponds to `contract.supports_interface(0x1ba86cc668fafde77705c7bfcafa3ee47934b5631ff0e32841dcdcd4e100a60)`.
+1. The source contract makes a `call_contract_syscall` to the destination address with `entrypoint_selector` as: `0xfe80f537b66d12a00b6d3c072b44afbb716e78dde5c3f0ef116ee93d3e3283` and calldata as a one element Span containing: `0x3f918d17e5ee77373b56385708f855659a07f75997f365cf87748628532a055`. This corresponds to `contract.supports_interface(0x3f918d17e5ee77373b56385708f855659a07f75997f365cf87748628532a055)`.
 2. If the call fails or returns false, the destination contract does not implement SRC-5.
 5. Otherwise it implements SRC-5.
 
