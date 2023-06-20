@@ -31,7 +31,7 @@ For some "standard interfaces" like the ERC-721 token interface, it is sometimes
 
 The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-### Serialization compatibility
+### Serialization Compatibility
 
 One of the objectives of this standard is to ensure that all the contracts which state they implement a given interface, will behave in a similar expected way for callers. In Cairo, the language doesn't enforce an encoding format for Structs and Enums, needing the developers to implement a Serde trait on these types when they are part of an external function signature, and different implementations may lead to incompatibility between contracts exposing the same interface.
 
@@ -47,7 +47,7 @@ trait IMyContract {
 }
 ```
 
-#### Generic types
+#### Generic Types
 
 Since Cairo 2.0 we can define traits leveraging generic types to represent a set of interfaces:
 
@@ -72,7 +72,7 @@ Where `fn_name` is the function name, `paramN_type` is the type of the n-th func
 
 Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, being `u128` a type, and `u256` a Struct.
 
-### Special types (Tuples, Structs, and Enums)
+### Special Types (Tuples, Structs, and Enums)
 
 A definition of how to provide these parameters to the signature for getting the [Extended Function Selector](#extended-function-selector):
 
