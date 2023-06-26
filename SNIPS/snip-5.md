@@ -76,7 +76,7 @@ The signature for a function with zero parameters and no return value is:
 fn_name()
 ```
 
-Types are those defined as such in the corelib (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, being `u128` a type, and `u256` a Struct.
+Types are those defined as such in the [corelib](https://github.com/starkware-libs/cairo/blob/main/corelib/src/lib.cairo) (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, being `u128` a type, and `u256` a Struct.
 
 ### Special Types (Tuples, Structs, and Enums)
 
