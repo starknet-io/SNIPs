@@ -193,7 +193,7 @@ Therefore the implementing contract will have a `supports_interface` function th
 - `true` for any other `interface_id` this contract implements
 - `false` for any other `interface_id`
 
-This function must return a bool.
+This function MUST return a bool.
 
 ### How to Detect if a Contract Implements SRC-5
 
