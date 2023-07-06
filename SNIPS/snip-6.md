@@ -77,6 +77,10 @@ Notice that, ff the signature, the return value of `is_valid_signature` MUST be 
 let VALIDATED: felt252 = 'VALID';
 ```
 
+## Rationale
+
+(To Do...)
+
 ## Backwards Compatibility
 
 Currently there are multiple accounts using `bool` as the `is_valid_signature` return value. While in the future we expect that most of the accounts will migrate to this standard, in the meantime, we recommend dapps and protocols using this feature to check for both `true` or `'VALID'`.
