@@ -6,7 +6,7 @@ discussions-to: https://community.starknet.io/t/snip-starknet-standard-account/9
 status: Draft
 type: Standards Track
 category: SRC
-created: 2023-05-29
+created: 2023-07-06
 ---
 
 ## Simple Summary
