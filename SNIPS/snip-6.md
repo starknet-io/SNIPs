@@ -71,7 +71,7 @@ trait ISRC5 {
 }
 ```
 
-Notice that, ff the signature, the return value of `is_valid_signature` MUST be the same that the one expected from the `__validate__` entrypoint, that can be obtained doing:
+Notice that, if the signature is valid, the return value of `is_valid_signature` MUST be the same that the one expected from the `__validate__` entrypoint, that can be obtained doing:
 
 ```
 let VALIDATED: felt252 = 'VALID';
