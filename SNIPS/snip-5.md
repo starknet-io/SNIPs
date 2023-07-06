@@ -2,6 +2,7 @@
 snip: 5
 title: Standard Interface Detection
 author: Eric Nordelo <eric.nordelo39@gmail.com>
+discussions-to: https://community.starknet.io/t/starknet-standard-interface-detection/92664/30
 status: Draft
 type: Standards Track
 category: SRC
