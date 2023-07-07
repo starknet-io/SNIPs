@@ -30,7 +30,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 ### Interfaces
 
-*Every SNIP-6 compliant account MUST implement the `SRC6` and `SRC5` (from [SNIP-5](./snip-5.md)) interfaces*:
+**Every SNIP-6 compliant account MUST implement the `SRC6` and `SRC5` (from [SNIP-5](./snip-5.md)) interfaces**, and publish both interface ids through `supports_interface`:
 
 ```cairo
 /// @title Represents a call to a target contract
@@ -47,7 +47,7 @@ struct Call {
 trait ISRC6 {
     /// @notice Execute a transaction through the account
     /// @param calls The list of calls to execute
-    /// @return The list of each call return value (serialized)
+    /// @return The list of each call's serialized return value
     fn __execute__(calls: Array<Call>) -> Array<Span<felt252>>;
 
     /// @notice Assert whether the transaction is valid to be executed
@@ -58,7 +58,7 @@ trait ISRC6 {
     /// @notice Assert whether a given signature for a given hash is valid
     /// @param hash The hash of the data
     /// @param signature The signature to validate
-    /// @return The string 'VALID' represented as felt when the is valid
+    /// @return The string 'VALID' represented as felt when the signature is valid
     fn is_valid_signature(hash: felt252, signature: Array<felt252>) -> felt252;
 }
 
