@@ -15,14 +15,14 @@ A standard interface for accounts.
 
 ## Abstract
 
-The following standard allows for the implementation of a standard API for smart contracts acting as accounts in Starknet. It provides basic functionality for sending transactions through the contract, as well as functionality for validating signatures supporting interoperability among accounts, protocols, and dapps.
+The following standard defines a standard API for smart contracts acting as accounts in Starknet. It provides basic functionality for sending transactions through the contract, as well as functionality for validating signatures supporting interoperability among accounts, protocols, and dapps.
 
 
 ## Motivation
 
 With native Account Abstraction, Starknet has a lot of flexibility in the management of accounts rather than having their behavior determined at the protocol level. Different use cases are and will continue to bring different implementations of accounts to the ecosystem.
 
-Having a Standard Account Interface supports different dapps, protocols, and standard contracts (like tokens) that often require interaction with accounts in a predictable way, either by recognizing them or by expecting certain features that may not be implemented otherwise.
+Having a Standard Account Interface supports different dapps, protocols, and standard contracts (like tokens) that often require predictable interactions with accounts, either by recognizing them or by expecting certain behaviors that may not be implemented otherwise.
 
 ## Specification
 
@@ -30,7 +30,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 ### Interfaces
 
-*Every SNIP-6 compliant account must implement the `SRC6` and `SRC5` (from [SNIP-5](./snip-5.md)) interfaces*:
+*Every SNIP-6 compliant account MUST implement the `SRC6` and `SRC5` (from [SNIP-5](./snip-5.md)) interfaces*:
 
 ```cairo
 /// @title Represents a call to a target contract
@@ -71,11 +71,7 @@ trait ISRC5 {
 }
 ```
 
-Notice that, if the signature is valid, the return value of `is_valid_signature` MUST be the same that the one expected from the `__validate__` entrypoint, that can be obtained doing:
-
-```
-let VALIDATED: felt252 = 'VALID';
-```
+Notice that, if the signature is valid, the return value for `is_valid_signature` MUST be the short string literal `VALID`.
 
 ## Rationale
 
