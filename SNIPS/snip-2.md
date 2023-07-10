@@ -3,7 +3,7 @@ snip: 2
 title: Token Standard
 status: Draft
 type: SRC
-author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>
+author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>, Moody Salem <moody@ekubo.org>
 created: 2022-06-03
 ---
 
@@ -11,7 +11,7 @@ created: 2022-06-03
 
 A standard interface for tokens.
 
-Inspired by [EIP-20](https://eips.ethereum.org/EIPS/eip-20).
+Inspired by [EIP-20](https://eips.ethereum.org/EIPS/eip-20), tailored for Starknet.
 
 ## Abstract
 
@@ -29,158 +29,56 @@ A standard interface allows any tokens on StarkNet to be re-used by other applic
 ### Methods
 
 **NOTES**:
- - The following specifications use syntax from Cairo `0.8.1` (or above)
+ - The following specifications use syntax from Cairo `2.0.2`
 
 
-#### name
+#### Full ABI
 
-Returns the name of the token - e.g. `"MyToken"`.
-
-OPTIONAL - This method can be used to improve usability,
-but interfaces and other contracts MUST NOT expect these values to be present.
+```cairo
+use starknet::{ContractAddress};
 
 
-``` cairo
-    func name() -> (name: felt):
-    end
-```
+#[starknet::interface]
+trait SRC2<TContractState> {
+  // Returns the short string representation of the name of the token
+  fn name(self: @TContractState) -> felt252;
 
+  // Returns the short string representation of the symbol of the token
+  fn symbol(self: @TContractState) -> felt252;
 
-#### symbol
+  // Returns the number of decimals that should be used for interpreting the token balances.
+  fn decimals(self: @TContractState) -> u8;
 
-Returns the symbol of the token. E.g. "HIX".
+  // Returns the total supply of the token, i.e. the maximum value of the sum of all balances.
+  fn totalSupply(self: @TContractState) -> u256;
 
-OPTIONAL - This method can be used to improve usability,
-but interfaces and other contracts MUST NOT expect these values to be present.
+  // Returns the balance of the given account.
+  fn balanceOf(self: @TContractState, account: ContractAddress) -> u256;
 
-``` cairo
-    func symbol() -> (symbol: felt):
-    end
-```
-
-#### decimals
-
-Returns the number of decimals the token uses - e.g. `8`, means to divide the token amount by `100000000` to get its user representation.
-
-OPTIONAL - This method can be used to improve usability,
-but interfaces and other contracts MUST NOT expect these values to be present.
-
-``` cairo
-    func decimals() -> (decimals: felt):
-    end
-```
-
-
-#### totalSupply
-
-Returns the total token supply.
-
-``` cairo
-    func totalSupply() -> (totalSupply: Uint256):
-    end
-```
-
-
-
-#### balanceOf
-
-Returns the account balance of another account with address `account`.
-
-``` cairo
-    func balanceOf(account: felt) -> (balance: Uint256):
-    end
-```
-
-
-
-#### transfer
-
-Transfers `amount` amount of tokens to address `recipient`, and MUST fire the `Transfer` event.
-The function SHOULD `throw` if the message caller's account balance does not have enough tokens to spend.
-
-*Note* Transfers of 0 values MUST be treated as normal transfers and fire the `Transfer` event.
-
-``` cairo
-    func transfer(recipient: felt, amount: Uint256) -> (success: felt):
-    end
-```
-
-
-
-#### transferFrom
-
-Transfers `amount` amount of tokens from address `sender` to address `recipient`, and MUST fire the `Transfer` event.
-
-The `transferFrom` method is used for a withdraw workflow, allowing contracts to transfer tokens on your behalf.
-This can be used for example to allow a contract to transfer tokens on your behalf and/or to charge fees in sub-currencies.
-The function SHOULD `throw` unless the `sender` account has deliberately authorized the sender of the message via some mechanism.
-
-*Note* Transfers of 0 values MUST be treated as normal transfers and fire the `Transfer` event.
-
-``` cairo
-    func transferFrom(
-            sender: felt, 
-            recipient: felt, 
-            amount: Uint256
-        ) -> (success: felt):
-    end
-```
-
-
-
-#### approve
-
-Allows `spender` to withdraw from your account multiple times, up to the `amount` amount. If this function is called again it overwrites the current allowance with `amount`.
-
-``` cairo
-    func approve(spender: felt, amount: Uint256) -> (success: felt):
-    end
-```
-
-
-#### allowance
-
-Returns the amount which `spender` is still allowed to withdraw from `owner`.
-
-``` cairo
-    func allowance(owner: felt, spender: felt) -> (remaining: Uint256):
-    end
+  // Transfers the specified amount of tokens from the caller address to the recipient. Reverts with insufficient balance.
+  fn transfer(ref self: TContractState, recipient: ContractAddress, amount: u256);
+}
 ```
 
 ### Events
 
+There is only a single event in this simplified ERC20 specification, which is emitted from the write method of the interface and any SHOULD be emitted from any
+other balance-changing custom methods that are added to the contract.
 
 #### Transfer
 
 MUST trigger when tokens are transferred, including zero value transfers.
 
-A token contract which creates new tokens SHOULD trigger a Transfer event with the `from_` address set to `0x0` when tokens are created.
+A token contract which creates new tokens SHOULD trigger a Transfer event with the `from` argument set to `0x0` when tokens are created.
 
-``` cairo
-@event
-func Transfer(from_: felt, to: felt, value: Uint256):
-end
+```cairo
+#[derive(starknet::Event, Drop)]
+struct Transfer {
+  from: ContractAddress,
+  to: ContractAddress,
+  amount: u256,
+}
 ```
-
-
-
-#### Approval
-
-MUST trigger on any successful call to `approve(address _spender, uint256 _value)`.
-
-``` cairo
-@event
-func Approval(owner: felt, spender: felt, value: Uint256):
-end
-```
-
-## Implementation
-
-#### Example implementations are available at
-- [OpenZeppelin implementation](https://github.com/OpenZeppelin/cairo-contracts/tree/main/src/openzeppelin/token/erc20)
-
-
-## History
 
 
 ## Copyright
