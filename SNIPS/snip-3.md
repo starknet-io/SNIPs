@@ -1,9 +1,10 @@
 ---
 snip: 3
 title: Non-Fungible Token Standard
-status: Draft
-type: SRC
 author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>
+status: Draft
+type: Standards Track
+category: SRC
 created: 2022-06-03
 ---
 

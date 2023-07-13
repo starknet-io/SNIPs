@@ -1,9 +1,9 @@
 ---
 snip: 1
 title: SNIP Purpose and Guidelines
+author: Martín Triay <martriay@gmail.com>
 status: Living
 type: Meta
-author: Martín Triay <martriay@gmail.com>
 created: 2022-06-03
 ---
 
