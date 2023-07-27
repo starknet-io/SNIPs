@@ -1,5 +1,5 @@
 ---
-snip: 5
+snip: 7
 title: Addition of Starknet Appchain Info RPC Endpoint
 author: Abdelhamid Bakhta <@abdelhamidbakhta>
 discussions-to: https://community.starknet.io/t/addition-of-starknet-appchain-info-rpc-endpoint/97884
