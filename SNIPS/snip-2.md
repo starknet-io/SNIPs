@@ -1,7 +1,6 @@
 ---
 snip: 2
 title: Token Standard
-status: Draft
 author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>, Moody Salem <moody@ekubo.org>
 status: Draft
 type: Standards Track
