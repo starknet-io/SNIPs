@@ -1,9 +1,9 @@
 ---
 snip: 4
 title: Cairo Comment Standard
+author: Orlando Fraser <orlandothefraser@gmail.com>
 status: Draft
 type: Informational
-author: Orlando Fraser <orlandothefraser@gmail.com>
 created: 2022-06-13
 ---
 

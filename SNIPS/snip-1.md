@@ -1,9 +1,9 @@
 ---
 snip: 1
 title: SNIP Purpose and Guidelines
+author: Martín Triay <martriay@gmail.com>
 status: Living
 type: Meta
-author: Martín Triay <martriay@gmail.com>
 created: 2022-06-03
 ---
 
@@ -44,7 +44,7 @@ Parties involved in the process are you, the champion or _SNIP author_, the [_SN
 
 Before you begin writing a formal SNIP, you should vet your idea. Ask the StarkNet community first if an idea is original to avoid wasting time on something that will be rejected based on prior research. It is thus recommended to open a discussion thread on [the StarkNet community forum](https://community.starknet.io/) to do this.
 
-Once the idea has been vetted, your next responsibility will be to present (by means of a SNIP) the idea to the reviewers and all interested parties, invite editors, developers, and the community to give feedback on the aforementioned channels. You should try and gauge whether the interest in your SNIP is commensurate with both the work involved in implementing it and how many parties will have to conform to it. For example, the work required for implementing a Core SNIP will be much greater than for an ERC and the SNIP will need sufficient interest from the StarkNet client teams. Negative community feedback will be taken into consideration and may prevent your SNIP from moving past the Draft stage.
+Once the idea has been vetted, your next responsibility will be to present (by means of a SNIP) the idea to the reviewers and all interested parties, invite editors, developers, and the community to give feedback on the aforementioned channels. You should try and gauge whether the interest in your SNIP is commensurate with both the work involved in implementing it and how many parties will have to conform to it. For example, the work required for implementing a Core SNIP will be much greater than for an SRC and the SNIP will need sufficient interest from the StarkNet client teams. Negative community feedback will be taken into consideration and may prevent your SNIP from moving past the Draft stage.
 
 ### Core SNIPs
 
@@ -125,7 +125,7 @@ Each SNIP must begin with an [RFC 822](https://www.ietf.org/rfc/rfc822.txt) styl
 
 `type`: _One of `Standards Track`, `Meta`, or `Informational`_
 
-`category`: _One of `Core`, `Networking`, `Interface`, or `ERC`_ (Optional field, only needed for `Standards Track` SNIPs)
+`category`: _One of `Core`, `Networking`, `Interface`, or `SRC`_ (Optional field, only needed for `Standards Track` SNIPs)
 
 `created`: _Date the SNIP was created on_
 
@@ -165,7 +165,7 @@ The preferred discussion URL is a topic on [StarkNet Magicians](https://ethereum
 
 #### `type` header
 
-The `type` header specifies the type of SNIP: Standards Track, Meta, or Informational. If the track is Standards please include the subcategory (core, networking, interface, or ERC).
+The `type` header specifies the type of SNIP: Standards Track, Meta, or Informational. If the track is Standards please include the subcategory (core, networking, interface, or SRC).
 
 #### `category` header
 

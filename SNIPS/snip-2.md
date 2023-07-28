@@ -2,8 +2,10 @@
 snip: 2
 title: Token Standard
 status: Draft
-type: SRC
 author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>, Moody Salem <moody@ekubo.org>
+status: Draft
+type: Standards Track
+category: SRC
 created: 2022-06-03
 ---
 
