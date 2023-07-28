@@ -1,7 +1,7 @@
 ---
 snip: 5
 title: Standard Interface Detection
-author: Eric Nordelo <eric.nordelo39@gmail.com>, Francisco Giordano <frangio.1@gmail.com>, Martin Triay <martriay@gmail.com>, Sergio Garcia <sergio@argent.xyz>
+authors: Eric Nordelo <eric.nordelo39@gmail.com>, Francisco Giordano <frangio.1@gmail.com>, Martin Triay <martriay@gmail.com>, Sergio Garcia <sergio@argent.xyz>
 discussions-to: https://community.starknet.io/t/starknet-standard-interface-detection/92664/30
 status: Draft
 type: Standards Track
