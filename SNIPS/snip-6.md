@@ -1,7 +1,7 @@
 ---
 snip: 6
 title: Standard Account Interface
-author: Eric Nordelo <eric.nordelo39@gmail.com>
+authors: Martín Triay <martriay@gmail.com>, Julien Niset <julien@argent.xyz>, Eric Nordelo <eric.nordelo39@gmail.com>, Sergio Garcia <sergio@argent.xyz>, Yoav Gaziel <yoav.gaziel@braavos.app>
 discussions-to: https://community.starknet.io/t/snip-starknet-standard-account/95665
 status: Draft
 type: Standards Track
