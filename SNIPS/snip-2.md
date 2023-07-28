@@ -4,6 +4,7 @@ title: Token Standard
 author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>, Moody Salem <moody@ekubo.org>
 status: Draft
 type: Standards Track
+discussions-to: https://github.com/starknet-io/SNIPs/discussions/34
 category: SRC
 created: 2022-06-03
 ---
