@@ -38,17 +38,27 @@ it's not necessary to send a separate approve transaction.
 
 ## Specification
 
-```cairo
-use starknet::{ContractAddress};
+### Methods
 
-#[starknet::interface]
-trait IERC20<TStorage> {
-    // Transfers `amount` tokens from the caller to the `recipient`, emitting a `Transfer` event
-    fn transfer(ref self: TStorage, recipient: ContractAddress, amount: u256);
-    // Checks the balance of the given `account`
-    fn balanceOf(self: @TStorage, account: ContractAddress) -> u256;
-}
-```
+#### fn transfer(ref self: TStorage, recipient: ContractAddress, amount: u256);
+
+Transfers `amount` tokens from the caller to the `recipient`, emitting a `Transfer` event.
+
+#### fn balanceOf(self: @TStorage, account: ContractAddress) -> u256;
+
+Checks the balance of the given `account`. The `balanceOf` result **MUST NOT** change for a sender without a transfer, i.e.
+this specification explicitly disallows rebasing tokens.
+
+### Events
+
+#### Transfer
+
+This event is emitted with 3 pieces of data. It **MUST** be emitted from any balance-changing event.
+The event **SHOULD** be emitted for transfers with 0 `amount`. 
+
+- `from`: The address from which the token was transferred, or address `0` if the amount was newly minted
+- `to`: The address to which tokens were transferred, or address `0` if the amount was burned
+- `amount`: How much token was transferred to the new address
 
 ## Implementation
 
