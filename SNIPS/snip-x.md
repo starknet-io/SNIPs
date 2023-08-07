@@ -44,10 +44,17 @@ it's not necessary to send a separate approve transaction.
 
 Transfers `amount` tokens from the caller to the `recipient`, emitting a `Transfer` event.
 
+This method **MUST** revert if the caller has insufficient balance. 
+This method **MUST** return true.
+This allows integrators to ignore the returned boolean, but keeps the implementation compatible with existing SNIP-2 integrations.
+
 #### fn balanceOf(self: @TStorage, account: ContractAddress) -> u256;
 
 Checks the balance of the given `account`. The `balanceOf` result **MUST NOT** change for a sender without a transfer, i.e.
 this specification explicitly disallows rebasing tokens.
+
+The value returned by `balanceOf` result **MUST** have a zero high component, i.e. be less than `2**128`. 
+This allows integrators to ignore the second limb, but keeps the implementation compatible with existing SNIP-2 integrations.
 
 ### Events
 
@@ -68,7 +75,7 @@ use starknet::{ContractAddress};
 #[starknet::interface]
 trait IERC20<TStorage> {
     // Transfers `amount` tokens from the caller to the `recipient`, emitting a `Transfer` event
-    fn transfer(ref self: TStorage, recipient: ContractAddress, amount: u256);
+    fn transfer(ref self: TStorage, recipient: ContractAddress, amount: u256) -> bool;
     // Checks the balance of the given `account`
     fn balanceOf(self: @TStorage, account: ContractAddress) -> u256;
 }
@@ -100,12 +107,13 @@ mod ERC20 {
 
     #[external(v0)]
     impl IERC20Impl of super::IERC20<ContractState> {
-        fn transfer(ref self: ContractState, recipient: ContractAddress, amount: u256) {
+        fn transfer(ref self: ContractState, recipient: ContractAddress, amount: u256) -> bool {
             let amount: u128 = amount.try_into().expect('AMOUNT_OVERFLOW');
             let caller = get_caller_address();
             self.balances.write(caller, self.balances.read(caller) - amount);
             self.balances.write(recipient, self.balances.read(recipient) + amount);
             self.emit(Transfer { from: caller, to: recipient, amount });
+            true
         }
 
         fn balanceOf(self: @ContractState, account: ContractAddress) -> u256 {
