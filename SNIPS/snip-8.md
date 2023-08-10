@@ -2,6 +2,7 @@
 snip: 8
 title: Transaction V3 Structure
 authors: Evyatar Oster <@evyataro>, Elin Tulchinsky <elin@starkware.co>
+discussions-to: https://community.starknet.io/t/transaction-v3-snip/98228
 status: Draft
 type: Standards Track
 category: Core
@@ -34,7 +35,7 @@ By incorporating these changes into the transaction structure, we aim to smooth 
 
 ## Specification
 
-**API Changes:**
+### API Changes:
 
 This chapter will describe the three new transaction structures.
 
@@ -138,9 +139,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
    1. The hash of the desired account class.
 
 
-
-
-**Protocol Changes:**
+### Protocol Changes:
 
 Define: 
 
@@ -186,6 +185,14 @@ Where:
       6. `init_code: List[felt]`
 
    2. Where Resource is a new struct that contains: `resource: str`, `max_price_per_unit: u128`, `max_amount: u64`
+
+### Backward Compatibility
+
+Starknet will provide support for the older transaction version during a transition phase. However, the older transaction version will not have access to the new features such as the Fee market, Volition, and Paymaster, once these features are implemented on Starknet.
+
+## Security Considerations
+
+This SNIP have no impact at all in terms of security.
 
 ## Copyright
 
