@@ -26,9 +26,9 @@ The motivation behind this SNIP is to minimize the breaking changes in the trans
 
 - Nonce generalization: The transaction structure aims to support semi-nonce abstraction, similar to the [approach suggested in EIP-4337](https://eips.ethereum.org/EIPS/eip-4337#semi-abstracted-nonce-support). The nonce field will remain the same, containing a single felt (251 bits) interpreted as 64 bits for the sequential nonce, which remains consistent with the current implementation. Additionally, the remaining 187 bits will be available for an arbitrary channel, giving users the freedom to choose. The default channel is set to 0 and will be enforced until the protocol fully supports nonce generalization. The nonce can only be sequential within each channel, and if users need parallelism, they can create new channels accordingly.
 
-- Deploy account in the first Invoke/Declare transaction: In line with the concept presented in EIP-4337, we propose adding an init_code field to Invoke and Declare transactions sent from a non-existing contract, eliminating the need for a separate transaction to deploy an account.
+- Deploy account in the first Invoke/Declare transaction: In line with the concept presented in EIP-4337, we propose adding an account_init_code field to Invoke and Declare transactions sent from a non-existing contract, eliminating the need for a separate transaction to deploy an account.
 
-  - init_code is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_delcare__`.
+  - account_init_code is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_delcare__`.
 
 By incorporating these changes into the transaction structure, we aim to smooth the evolution of Starknet while minimizing disruptions and preserving compatibility with existing functionality.
 
@@ -100,10 +100,10 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 
    1. The arguments that are passed to the `__validate__` and `__execute__` functions.
 
-3. `Init_code: List[felt]`
+3. `account_init_code: List[felt]`
 
-   1. The list will contain the class_hash and the calldata needed for the constructor.
-   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `init_code`.
+   1. The list will contain the class_hash, salt, and the calldata needed for the constructor.
+   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_init_code`.
 
 **Declare Specific Fields:**
 
@@ -119,10 +119,10 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 
    1. The hash of the compiled class (see[ here](https://docs.starknet.io/documentation/starknet_versions/upcoming_versions/#what_to_expect) for more information)
 
-4. `Init_code: List[felt]`
+4. `account_init_code: List[felt]`
 
    1. The list will contain the class_hash and the calldata needed for the constructor.
-   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `init_code`.
+   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_init_code`.
 
 **DeployAccount Specific Fields:**
 
@@ -157,10 +157,10 @@ Where:
 
 1. Invoke transaction hash calculation:
 
-`Invoke_v3_tx_hash = h(common_tx_fields, h(init_code),h(calldata))`
+`Invoke_v3_tx_hash = h(common_tx_fields, h(account_init_code),h(calldata))`
 
 2. Declare transaction hash calculation:
-   `Declare_v3_tx_hash=h(common_tx_fields, h(init_code), class_hash, compiled_class_hash)`
+   `Declare_v3_tx_hash=h(common_tx_fields, h(account_init_code), class_hash, compiled_class_hash)`
 
    1. Where:
 
@@ -182,7 +182,7 @@ Where:
       3. `nonce_data_availability_mode: u32`
       4. `fee_data_availability_mode:  u32`
       5. `paymaster_address: felt`
-      6. `init_code: List[felt]`
+      6. `account_init_code: List[felt]`
 
    2. Where Resource is a new struct that contains: `resource: str`, `max_price_per_unit: u128`, `max_amount: u64`
 
