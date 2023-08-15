@@ -69,6 +69,9 @@ The event **SHOULD** be emitted for transfers with 0 `amount`.
 
 ## Implementation
 
+Note this implementation stores amounts as `u128`, but the interface only exposes methods with `u256` amounts.
+This is recommended for other implementors of the interface because `u128` is large enough to fit any reasonable total supply of tokens.
+
 ```cairo
 use starknet::{ContractAddress};
 
