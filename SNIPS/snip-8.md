@@ -78,10 +78,10 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 
 4. Paymaster-related fields:
 
-   1. `paymaster_address: felt`
+   1. `paymaster_data: List[felt]`
 
       1. The default value is 0
-      2. The paymaster should pay for the execution of the tx.
+      2. Represent the address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transaction)
 
 
 5. `nonce: felt`
@@ -143,7 +143,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 
 Define: 
 
-` common_tx_fields =  [TX_PREFIX, version, address, h(tip, resource_bounds_for_fee), paymaster_address, chain_id, nonce, nonce_data_availability_mode || fee_data_availability_mode]`
+`common_tx_fields =  [TX_PREFIX, version, address, h(tip, resource_bounds_for_fee), h(paymaster_data), chain_id, nonce, nonce_data_availability_mode || fee_data_availability_mode]`
 
 Where:
 
@@ -181,7 +181,7 @@ Where:
       2. `tip: u64`
       3. `nonce_data_availability_mode: u32`
       4. `fee_data_availability_mode:  u32`
-      5. `paymaster_address: felt`
+      5. `paymaster_data: List[felt]`
       6. `account_deployment_data: List[felt]`
 
    2. Where Resource is a new struct that contains: `resource: str`, `max_price_per_unit: u128`, `max_amount: u64`
