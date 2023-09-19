@@ -80,7 +80,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 
    1. `paymaster_data: List[felt]`
 
-      1. The default value is 0
+      1. The default value is an empty list, indicating no paymaster
       2. Represent the address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transaction)
 
 
