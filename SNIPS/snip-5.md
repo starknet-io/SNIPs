@@ -175,6 +175,10 @@ if __name__ == "__main__":
     main()
 ```
 
+#### Tooling
+
+[src5-rs](https://github.com/ericnordelo/src5-rs) Is a utility for generating SRC5 interfaces ids from Cairo traits, using Cairo source code as input.
+
 ### How a Contract will Publish the Interfaces it Implements
 
 A contract that is compliant with SRC-5 shall implement the following interface (referred to as `ISRC5.sol`):

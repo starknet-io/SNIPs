@@ -26,7 +26,7 @@ There are three types of SNIPs:
   - **Core**: improvements requiring a consensus fork, as well as changes that are not necessarily consensus critical but may be relevant to [“core dev” discussions](https://community.starknet.io/).
   - **Networking**: includes proposed improvements to network protocol specifications.
   - **Interface**: includes improvements around client [API/RPC](https://github.com/starkware-libs/starknet-specs) specifications and standards, and also certain language-level standards like method names and Contract ABIs. The label “interface” aligns with the [interfaces repo] and discussion should primarily occur in that repository before a SNIP is submitted to the SNIPs repository.
-  - **SRC**: application-level standards and conventions, including contract standards such as token standards ([SNIP-20](./snip-20.md)), URI schemes, library/package formats, and wallet formats.
+  - **SRC**: application-level standards and conventions, including contract standards such as token standards ([SNIP-2](./snip-2.md)), URI schemes, library/package formats, and wallet formats.
 
 - A **Meta SNIP** describes a process surrounding StarkNet or proposes a change to (or an event in) a process. Process SNIPs are like Standards Track SNIPs but apply to areas other than the StarkNet protocol itself. They may propose an implementation, but not to StarkNet's codebase; they often require community consensus; unlike Informational SNIPs, they are more than recommendations, and users are typically not free to ignore them. Examples include procedures, guidelines, changes to the decision-making process, and changes to the tools or environment used in StarkNet development. Any meta-SNIP is also considered a Process SNIP.
 
