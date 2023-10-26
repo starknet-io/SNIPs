@@ -96,11 +96,6 @@ trait IOutsideExecution<TContractState> {
 
 Reference implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/contracts/account/src/argent_account.cairo#L247](https://github.com/argentlabs/argent-contracts-starknet/blob/main/contracts/account/src/argent_account.cairo#L247)
 
-## Other links
-
-- AVNU [https://419labs.notion.site/Draft-Meta-Transactions-support-by-Wallets-0b9e5108bf294a1bbd82bcb68861412c](https://www.notion.so/Draft-Meta-Transactions-support-by-Wallets-0b9e5108bf294a1bbd82bcb68861412c?pvs=21)
-- zkSync Era for original idea [https://era.zksync.io/docs/reference/concepts/account-abstraction.html#iaccount-interface](https://era.zksync.io/docs/reference/concepts/account-abstraction.html#iaccount-interface)
-
 ### Copyright
 
 Copyright and related rights waived via [MIT](../LICENSE).
