@@ -11,8 +11,6 @@ created: 2023-10-11
 
 ## Simple summary
 
-*This SNIP is a joint effort from the teams at AVNU and Argent.*
-
 Executing transactions “from outside” (otherwise called meta-transactions) allows a protocol to submit transactions on behalf of a user account, as long as they have the relevant signatures.
 
 ## Motivation
@@ -70,7 +68,7 @@ let results = account.execute_from_outside(outside_execution, signature);
 // post-execution logic...
 ```
 
-### For account buildoors
+### For account builders
 
 To accept such outside transactions, the account contract must implement the following interface:
 
@@ -78,10 +76,10 @@ To accept such outside transactions, the account contract must implement the fol
 /// Interface ID: 0x68cfd18b92d1907b8ba3cc324900277f5a3622099431ea85dd8089255e4181
 #[starknet::interface]
 trait IOutsideExecution<TContractState> {
-    /// @notice This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures
-    /// @param outside_execution The parameters of the transaction to execute
-    /// @param signature A valid signature on the ERC-712 message encoding of `outside_execution`
-    /// @notice This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`.
+    /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures. This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`.
+    /// # Arguments
+    /// * `outside_execution ` - The parameters of the transaction to execute.
+    /// * `signature ` - A valid signature on the ERC-712 message encoding of `outside_execution`.
     fn execute_from_outside(
         ref self: TContractState,
         outside_execution: OutsideExecution,
