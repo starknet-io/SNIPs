@@ -38,84 +38,24 @@ Compliant contracts MUST implement the following interface:
 
 
 ## Token
-### Methods
-
-**NOTES**:
- - The following specifications use syntax from Cairo `0.8.1` (or above)
+### Interface
 
 
-#### name
+An interface is a set of function signatures with concrete type parameters, usually represented by a `trait`. These are meant to be implemented as `external` by contracts complying with such interface. For example:
 
-Returns the name of the token - e.g. `"MyToken"`.
+```cairo
+#[starknet::interface]
+trait ISimpletoken<TContractState> {
+    fn totalSupply(self: @TContractState) -> u256;
+    fn balanceOf(self: @TContractState, account: ContractAddress) -> u256;
+    fn transfer(ref self: TContractState, recipient: ContractAddress, amount: u256);
+    fn name(self: @TContractState) -> felt252;
+    fn symbol(self: @TContractState) -> felt252;
+    fn decimals(self: @TContractState) -> u8;
 
-OPTIONAL - This method can be used to improve usability,
-but interfaces and other contracts MUST NOT expect these values to be present.
-
-
-``` cairo
-    func name() -> (name: felt):
-    end
+}
 ```
 
-
-#### symbol
-
-Returns the symbol of the token. E.g. "HIX".
-
-OPTIONAL - This method can be used to improve usability,
-but interfaces and other contracts MUST NOT expect these values to be present.
-
-``` cairo
-    func symbol() -> (symbol: felt):
-    end
-```
-
-#### decimals
-
-Returns the number of decimals the token uses - e.g. `8`, means to divide the token amount by `100000000` to get its user representation.
-
-OPTIONAL - This method can be used to improve usability,
-but interfaces and other contracts MUST NOT expect these values to be present.
-
-``` cairo
-    func decimals() -> (decimals: felt):
-    end
-```
-
-
-#### totalSupply
-
-Returns the total token supply.
-
-``` cairo
-    func totalSupply() -> (totalSupply: Uint256):
-    end
-```
-
-
-
-#### balanceOf
-
-Returns the account balance of another account with address `account`.
-
-``` cairo
-    func balanceOf(account: felt) -> (balance: Uint256):
-    end
-```
-
-
-
-#### transfer
-
-Transfers `amount` amount of tokens to address `recipient`, and MUST fire the `Transfer` event.
-The function SHOULD `throw` if the message caller's account balance does not have enough tokens to spend.
-
-*Note* Transfers of 0 values MUST be treated as normal transfers and fire the `Transfer` event.
-
-``` cairo
-    func transfer(recipient: felt, amount: Uint256) -> (success: felt):
-    end
-```
 
 
 
@@ -126,12 +66,20 @@ The function SHOULD `throw` if the message caller's account balance does not hav
 
 MUST trigger when tokens are transferred, including zero value transfers.
 
-A token contract which creates new tokens SHOULD trigger a Transfer event with the `from_` address set to `0x0` when tokens are created.
+A token contract which creates new tokens SHOULD trigger a Transfer event with the `from` address set to `0x0` when tokens are created.
 
 ``` cairo
-@event
-func Transfer(from_: felt, to: felt, value: Uint256):
-end
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        Transfer: Transfer,
+    }
+    #[derive(Drop, starknet::Event)]
+    struct Transfer {
+        from: ContractAddress,
+        to: ContractAddress,
+        value: u256,
+    }
 ```
 
 
@@ -142,7 +90,7 @@ As mentioned in the beginning, this SNRC is forward compatible with [SNRC-2](./s
 
 ## Implementation
 #### Example implementations are available at
-- [Moss implementation](https://github.com/)
+- [Moss implementation]([https://github.com/mossdapp/simpletoken-cairo])
 
 ## History
 
