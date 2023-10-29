@@ -71,7 +71,7 @@ To switch to Mainnet:
   "method": "wallet_switchStarknetChain",
   "params": [
     {
-      "chainId": "0x1",
+      "chainId": "0x534e5f4d41494e",
     }
   ]
 }
@@ -84,7 +84,7 @@ To switch to the Goerli testnet:
   "method": "wallet_switchStarknetChain",
   "params": [
     {
-      "chainId": "0x534e5f4d41494e",
+      "chainId": "0x534e5f474f45524c49",
     }
   ]
 }
@@ -97,7 +97,7 @@ Code example with `get-starknet`:
 await window.starknet.request({
     type: "wallet_switchStarknetChain",
     params: {
-        chainId: "0x534e5f474f45524c49"
+        chainId: "SN_MAIN"
     }
 });
 ```
