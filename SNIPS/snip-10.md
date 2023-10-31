@@ -2,7 +2,7 @@
 snip: 10
 title: Wallet Switch Ethereum Chain RPC Method (`wallet_switchStarknetChain`)
 author: Darlington Nnam <darlingtonnnam@gmail.com>
-discussions-to: 
+discussions-to: https://community.starknet.io/t/wallet-switch-ethereum-chain-rpc-method-wallet-switchstarknetchain/102034
 status: Draft
 type: Standards Track
 category: SRC
@@ -17,7 +17,7 @@ Inspired by [EIP-3326](https://eips.ethereum.org/EIPS/eip-3326).
 
 ## Abstract
 
-The `wallet_switchStarknetChain` RPC method allows Starknet decentralized applications (“dapps”) to request that the wallet switches its active Starknet chain. The caller must specify a chain ID, and the method returns `null` if the active chain was switched, and an error otherwise.
+The `wallet_switchStarknetChain` RPC method allows Starknet decentralized applications (“dapps”) to request that the wallet switches its active Starknet chain. The caller must specify a chain ID, and the method returns `true` if the active chain was switched, and an error otherwise.
 
 Important cautions for implementers of this method are included in the [Security Considerations](#security-consideration) section.
 
@@ -35,7 +35,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 ### Method - `wallet_switchStarknetChain`
 
-The method accepts a single object parameter with a `chainId` field. The method returns `null` if the wallet switched its active chain, and an error otherwise.
+The method accepts a single object parameter with a `chainId` field. The method returns `true` if the wallet switched its active chain, and an error otherwise.
 
 **NB:** The method presupposes that the wallet has a concept of a single “active chain”. The active chain is defined as the chain that the wallet is forwarding RPC requests to.
 
@@ -49,15 +49,11 @@ export interface SwitchStarknetChainParameter {
 
 The method as specified above, accepts a single parameter `chainId`. 
 
-The `chainId`:
-- MUST be the integer ID of the chain, specified as a 0x-prefixed hexadecimal string.
-
-The wallet:
-- MUST recognize the specified ID, able to switch to the specified chain and capable of servicing RPC requests to it.
+The `chainId` is a shortString encoded value into felt252 representing the chain.
 
 ### Returns
 
-The method MUST return `null` if the request was successful, and an error otherwise.
+The method MUST return `true` if the request was successful, and an error otherwise.
 
 ### Example
 
@@ -103,7 +99,7 @@ await window.starknet.request({
 ```
 **Result**
 ```bash
-"null"
+"true"
 ```
 
 ## Security Consideration
