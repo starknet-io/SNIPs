@@ -1,8 +1,8 @@
 ---
 snip: 10
-title: Wallet Switch Ethereum Chain RPC Method (`wallet_switchStarknetChain`)
+title: Wallet Switch Starknet Chain RPC Method (`wallet_switchStarknetChain`)
 author: Darlington Nnam <darlingtonnnam@gmail.com>
-discussions-to: https://community.starknet.io/t/wallet-switch-ethereum-chain-rpc-method-wallet-switchstarknetchain/102034
+discussions-to: https://community.starknet.io/t/wallet-switch-starknet-chain-rpc-method-wallet-switchstarknetchain/102034
 status: Draft
 type: Standards Track
 category: SRC
