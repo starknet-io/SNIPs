@@ -20,7 +20,7 @@ The motivation behind this SNIP is to minimize the breaking changes in the trans
 
 - [Fee market](https://www.starknet.io/en/roadmap/fee-market-for-transactions): Implementing a mechanism to enable users to utilize the network even during periods of congestion. 
 
-- [Volition](https://community.starknet.io/t/volition-hybrid-data-availability-solution/97387): Introducing a hybris state design that allows users to choose their preferred data availability mode. 
+- [Volition](https://community.starknet.io/t/volition-hybrid-data-availability-solution/97387): Introducing a hybrid state design that allows users to choose their preferred data availability mode. 
 
 - Paymaster (see [1](https://community.starknet.io/t/starknet-account-abstraction-model-part-1/781), [2](https://community.starknet.io/t/starknet-account-abstraction-model-part-2/839)): Similar to the [EIP-4337](https://github.com/ethereum/EIPs/blob/3fd65b1a782912bfc18cb975c62c55f733c7c96e/EIPS/eip-4337.md), enriching the protocol with fee abstraction, enabling entities other than the transaction sender to pay the transaction fees. 
 
