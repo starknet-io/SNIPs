@@ -1,7 +1,7 @@
 ---
-snip: 9
+snip: 12
 title: Off-chain signatures (à la EIP712)
-authors: Gaëtan A. <@gaetbout>, Sergio sgc <@sgc-code>
+authors: Gaëtan A. <@gaetbout>, Sergio sgc <@sgc-code>, Julien Niset <@juniset>
 discussions-to: https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029
 status: Draft
 type: Standards Track
@@ -61,7 +61,7 @@ This is intended to distinguish between a message sent off-chain for future use 
 
 The `domain_separator` is defined as the object below.
 
-```json
+```js
 "StarkNetDomain": [
   { "name": "name", "type": "shortstring" }, 
   { "name": "version", "type": "shortstring" },
@@ -104,7 +104,7 @@ Is the transaction message to be signed represented as an object.
 
 Example:
 
-```json
+```js
 "My Object": [
   { "name": "Param 1", "type": "felt" },
   { "name": "Param 2", "type": "felt*" },
@@ -196,7 +196,7 @@ For revision `1`:  `poseidon`
 On the wallet level, providing just the merkletree root without including any data isn’t safe. The wallet also needs to receive the data, which is why an additional parameter is required.
 The parameter  `contains`  needs to be specified, it will refer to a object type that will be used to represent the leaves as a objects:
 
-```json
+```js
 // ...
 "Example": [
   { "name": "Contract Addresses", "type": "merkletree", "contains": "Leaf" },
@@ -209,7 +209,7 @@ The parameter  `contains`  needs to be specified, it will refer to a object type
 
 The wallet will receive a list of leaves from the Dapp, so the leaves can be shown to the user. It should then perform the hashing on all the leaves and ensure that the root is the same:
 
-```json
+```js
 // ...
 "Contract Addresses": [
   {
@@ -275,7 +275,7 @@ Introduced in revision `1`
 
 It will be encoded as the following object, splitting the low/high 128 bits. This type does NOT need to be declared on the `types` section.
 
-```json
+```js
 "u256": [
   { "name": "low", "type": "u128" },
   { "name": "high", "type": "u128" }
@@ -290,7 +290,7 @@ It will be encoded as the following object. This type does NOT need to be declar
 
 This allows wallets to group the token with the amount for better display. Wallets would be able to should correct decimals, fiat value, icon…)
 
-```json
+```js
 "TokenAmount": [
   { "name": "token_address", "type": "ContractAddress" },
   { "name": "amount", "type": "u256" }
@@ -305,7 +305,7 @@ It will be encoded as the following object. This type does NOT need to be declar
 
 This allows wallets to group the token id with the contract address for better display. Wallets will be able to show correct token info, image, and other attributes)
 
-```json
+```js
 "NftId": [
   { "name": "collection_address", "type": "ContractAddress" },
   { "name": "token_id", "type": "u256" }
@@ -330,7 +330,7 @@ Introduced in revision `1`
 
 Example:
 
-```json
+```js
 {
   "types": {
     // ...
@@ -373,7 +373,7 @@ The request should be considered invalid
 
 ### JSON example
 
-```json
+```js
 {
   "types": {
     "StarkNetDomain": [
