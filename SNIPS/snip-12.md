@@ -106,13 +106,13 @@ Example:
 
 ```js
 "My Object": [
-  { "name": "Param 1", "type": "felt" },
-  { "name": "Param 2", "type": "felt*" },
+  { "name": "Param 1", "type": "u128" },
+  { "name": "Param 2", "type": "u128*" },
   { "name": "Param 3", "type": "selector" },
   { "name": "Param 4", "type": "Other Object" },
   { "name": "Param 5", "type": "merkletree" },
   // ...
-  { "name": "Param N", "type": "felt" }
+  { "name": "Param N", "type": "u128" }
 ]
 ```
 
@@ -123,7 +123,7 @@ Example:
 If the object references other objects/enum which can also reference other objects/enums, the set of referenced objects/enums is collected, sorted by name, and appended to the encoding. 
 
 If we take back our example used previously, we have:  
-`type_hash(MyObject) = starknet_keccak('"My Object"("Param 1":"felt","Param 2":"felt*","Param 3":"selector","Param 4":"Other Object","Param 5":"merkletree",...,"Param N":"felt")"Other Object"("Param 1":"felt"...)')`
+`type_hash(MyObject) = starknet_keccak('"My Object"("Param 1":"u128","Param 2":"u128*","Param 3":"selector","Param 4":"Other Object","Param 5":"merkletree",...,"Param N":"u128")"Other Object"("Param 1":"u128"...)')`
 
 ### When X is an array
 
@@ -339,9 +339,9 @@ Example:
     ],
     "My Enum": [
       { "name": "Variant 1", "type": "()" }
-      { "name": "Variant 2", "type": "(u32, felt*)," }
+      { "name": "Variant 2", "type": "(u128, u128*)," }
       // ...
-      { "name": "Variant N", "type": "(felt)" }
+      { "name": "Variant N", "type": "(u128)" }
     ]
   },
   // ...
@@ -365,7 +365,7 @@ Example:
 If the enum references other objects/enum which can also reference other objects/enum, the set of referenced objects/enum is collected, sorted by name, and appended to the encoding. 
 
 If we take back our example used previously, we have:  
-`type_hash(MyEnum) = starknet_keccak('"My Enum"("Variant 1"(),"Variant 2"("u32","felt*"),...,"Variant N"("felt"))')`
+`type_hash(MyEnum) = starknet_keccak('"My Enum"("Variant 1"(),"Variant 2"("u128","u128*"),...,"Variant N"("u128"))')`
 
 ### When X is some other type
 
