@@ -111,7 +111,7 @@ Example:
   { "name": "Param 3", "type": "selector" },
   { "name": "Param 4", "type": "Other Object" },
   { "name": "Param 5", "type": "merkletree" },
-	...
+  // ...
   { "name": "Param N", "type": "felt" }
 ]
 ```
@@ -197,30 +197,30 @@ On the wallet level, providing just the merkletree root without including any da
 The parameter  `contains`  needs to be specified, it will refer to a object type that will be used to represent the leaves as a objects:
 
 ```json
-...
+// ...
 "Example": [
   { "name": "Contract Addresses", "type": "merkletree", "contains": "Leaf" },
 ],
 "Leaf": [
-	{ "name": "Contract Address", "type": "ContractAddress" }
+  { "name": "Contract Address", "type": "ContractAddress" }
 ]
-...
+// ...
 ```
 
 The wallet will receive a list of leaves from the Dapp, so the leaves can be shown to the user. It should then perform the hashing on all the leaves and ensure that the root is the same:
 
 ```json
-...
+// ...
 "Contract Addresses": [
-	{
-		"Contract Address": "0x...123"
-	},
-	...,
-	{
-		"Contract Address": "0x..beaf"
-	}
+  {
+    "Contract Address": "0x...123"
+  },
+  // ...,
+  {
+    "Contract Address": "0x..beaf"
+  }
 ]
-...
+// ...
 ```
 
 In order to calculate the Merkle root the wallet will encode each leave to a single felt (using the same encoding used in this document). 
@@ -333,20 +333,20 @@ Example:
 ```json
 {
   "types": {
-    ...
-		"Example": [
-		  { "name": "some_enum", "type": "enum", "contains": "My Enum" },
-		],
-		"My Enum": [
-			{ "name": "Variant 1", "type": "()" }
-			{ "name": "Variant 2", "type": "(u32, felt*)," }
-			...
-			{ "name": "Variant N", "type": "(felt)" }
-		]
+    // ...
+    "Example": [
+      { "name": "some_enum", "type": "enum", "contains": "My Enum" },
+    ],
+    "My Enum": [
+      { "name": "Variant 1", "type": "()" }
+      { "name": "Variant 2", "type": "(u32, felt*)," }
+      // ...
+      { "name": "Variant N", "type": "(felt)" }
+    ]
   },
-  ...
+  // ...
   "message": {
-    ...
+    // ...
     "Some Enum": { "Variant 2": [32, [12, 32]] }
     "Some Other Enum": { "Variant 1": [] }
   }
@@ -397,7 +397,7 @@ The request should be considered invalid
     "name": "Starknet Example",
     "version": "1",
     "chainId": "SN_MAIN",
-		"revision" : "1"
+    "revision" : "1"
   },
   "message": {
     "Name": "some name"
