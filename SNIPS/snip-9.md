@@ -215,7 +215,7 @@ The wallet will receive a list of leaves from the Dapp, so the leaves can be sho
   {
     "Contract Address": "0x...123"
   },
-  // ...,
+  // ...
   {
     "Contract Address": "0x..beaf"
   }
