@@ -62,7 +62,7 @@ This is intended to distinguish between a message sent off-chain for future use 
 The `domain_separator` is defined as the object below.
 
 ```js
-"StarkNetDomain": [
+"StarknetDomain": [
   { "name": "name", "type": "shortstring" }, 
   { "name": "version", "type": "shortstring" },
   { "name": "chainId", "type": "shortstring" },
@@ -79,7 +79,15 @@ This object ensures the uniqueness of messages based on:
     - Revision `0`: Represents the de facto spec before this SNIP was published. The purpose is to help with backwards compatibility. It’s not recommended to use it.
     - Revision `1`: Will be the initial version of the specification
 
-With revision `0` The fields `name` , `version` and `chainId` had type `felt`. In the following revisions they have been updated to `shortstring` s
+Introduced in revision `0`, changed in revision `1`  
+In revision `0` the fields `name` , `version` and `chainId` are of type `felt` .  
+Starting with revision `1` those fields are using the type `shortstring` .
+
+In revision `0` the domain object is named `StarkNetDomain`.  
+Starting with revision `1` the domain object is named `StarknetDomain`.  
+An issue arise when a user using an old version of the wallet that only supports revision `0` receives a request sign with revision `1`.  The outdated wallet, unaware of revision `1` , would calculate the hash differently and therefore produce an invalid signature.
+This is the reason we introduce the change from `StarkNetDomain` to `StarknetDomain`. 
+If a dapp requests the wallet to sign something using `StarknetDomain` , it should should fail as it expects `StarkNetDomain` .
 
 ### Account
 
@@ -376,7 +384,7 @@ The request should be considered invalid
 ```js
 {
   "types": {
-    "StarkNetDomain": [
+    "StarknetDomain": [
       { "name": "name", "type": "shortstring" },
       { "name": "version", "type": "shortstring" },
       { "name": "chainId", "type": "shortstring" },
