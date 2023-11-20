@@ -94,7 +94,39 @@ trait IOutsideExecution<TContractState> {
 }
 ```
 
-Reference implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/contracts/account/src/argent_account.cairo#L247](https://github.com/argentlabs/argent-contracts-starknet/blob/main/contracts/account/src/argent_account.cairo#L247)
+Indicative implementation outline:
+
+```rust
+fn execute_from_outside(ref self: ContractState, outside_execution: OutsideExecution, signature: Array<felt252>) -> Array<Span<felt252>> {
+    // 1. Checks
+    if outside_execution.caller.into() != 'ANY_CALLER' {
+        assert(get_caller_address() == outside_execution.caller, 'argent/invalid-caller');
+    }
+
+    let block_timestamp = get_block_timestamp();
+    assert(
+        outside_execution.execute_after < block_timestamp && block_timestamp < outside_execution.execute_before,
+        'argent/invalid-timestamp'
+    );
+    let nonce = outside_execution.nonce;
+    assert(!self.outside_nonces.read(nonce), 'argent/duplicated-outside-nonce');
+
+    let outside_tx_hash = hash_outside_execution_message(@outside_execution);
+
+    let calls = outside_execution.calls;
+
+    self.assert_valid_calls_and_signature(calls, outside_tx_hash, signature.span(), is_from_outside: true);
+
+    // 2. Effects
+    self.outside_nonces.write(nonce, true);
+
+    // 3. Interactions
+    let retdata = execute_multicall(calls);
+
+    self.emit(TransactionExecuted { hash: outside_tx_hash, response: retdata.span() });
+    retdata
+}
+```
 
 ### Copyright
 
