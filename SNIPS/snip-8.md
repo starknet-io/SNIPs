@@ -148,7 +148,7 @@ Define: 
 Where:
 
 - TX_PREFIX is {“declare”, “deploy_account”, “invoke”}, accordingly.
-- `address` is  `sender_address` for Daeclare and Invoke or `contract_address` for DeployAccount
+- `address` is  `sender_address` for Declare and Invoke or `contract_address` for DeployAccount
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See[ Chain-Id](https://docs.starknet.io/documentation/architecture_and_concepts/Blocks/transactions/#chain-id).
 - `h(tip, resource_bounds_for_fee) = h(tip, (resource||max_amount||max_price_per_unit),(resource||max_amount||max_price_per_unit)...)`, where the resource order is `L1_gas`, `L2_gas`, and the resource name is at most 7 characters.
 - `h` is the [Poseidon hash](https://docs.starknet.io/documentation/architecture_and_concepts/Cryptography/hash-functions/#poseidon_hash)
