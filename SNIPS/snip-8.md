@@ -28,7 +28,7 @@ The motivation behind this SNIP is to minimize the breaking changes in the trans
 
 - Deploy account in the first Invoke/Declare transaction: In line with the concept presented in EIP-4337, we propose adding an account_deployment_data field to Invoke and Declare transactions sent from a non-existing contract, eliminating the need for a separate transaction to deploy an account.
 
-  - account_deployment_data is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_delcare__`.
+  - account_deployment_data is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_declare__`.
 
 By incorporating these changes into the transaction structure, we aim to smooth the evolution of Starknet while minimizing disruptions and preserving compatibility with existing functionality.
 
