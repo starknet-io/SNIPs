@@ -59,13 +59,13 @@ trait IMyContract<TContractState, TNumber> {
 }
 ```
 
-Notice that these traits don't represent the actual public interface of a specific contract, but sort of a category of them. The generic `TContractState` type self parameter is not included in the exposed API of the function. It is used internally to restrict how the function can access the local storage, and is not part of the public API of the function. The `TNumber` type parameter must be concretized in the implementation, because generic type parameters are not allowed in contract's external functions.
+Notice that these traits don't represent the actual public interface of a specific contract, but sort of a category of them. The generic `TContractState` type self parameter is not included in the exposed API of the function. It is used internally to restrict how the function can access the local storage, and is not part of the public API of the function. The `TNumber` type parameter must be concretized in the implementation, because generic type parameters are not allowed in the contract's external functions.
 
-To this standard, generic traits anotated with the `#[starknet::interface]` attribute represent a set of interfaces, while each real interface can be represented as a non-generic trait, as presented above.
+To this standard, generic traits annotated with the `#[starknet::interface]` attribute represent a set of interfaces, while each real interface can be represented as a non-generic trait, as presented above.
 
 ### Extended Function Selector
 
-In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the Extended Function Selector as the `starknet_keccak` of the function signature, having this signature the following format:
+In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the Extended Function Selector as the `starknet_keccak` of the function signature, having this signature in the following format:
 
 ```
 fn_name(param1_type,param2_type,...)->output_type
