@@ -22,7 +22,7 @@ Signing blindly some random hexadecimal is not very user-friendly, but on top of
 
 This document aims to create a standard that’s compatible with existing Dapps, wallets, and smart contracts while also adding some extra functionality to express the new types to help with a better display. This document consolidates some previous efforts to create off-chain signatures in Starknet (some of which were not well documented).
 
-Here an example of NFT sell order, and how a wallet will be able to show today, versus what can be done after the improvements in this spec
+Here is an example of an NFT sell order, and how a wallet will be able to show today, versus what can be done after the improvements in this spec
 
 ![wallet rev 0 vs rev 1](../assets/snip-12/wallet-example.png)
 
@@ -74,8 +74,8 @@ The `domain_separator` is defined as the object below.
 This object ensures the uniqueness of messages based on:
 
 - **name**: The name of the Dapp, can even contain the function name if your contract needs to perform multiple off-chain signatures.
-- **version**: The version of the Dapp your contract is using. Prevents two versions of the same Dapp from producing the same hash. Typically, if you update your contract and the hashing behaviour changes, this field should be updated.
-- **chainId**: The chain ID used by the Dapp represented as a shortstring. Prevents replay attacks from one network to another.
+- **version**: The version of the Dapp your contract is using. Prevents two versions of the same Dapp from producing the same hash. Typically, if you update your contract and the hashing behavior changes, this field should be updated.
+- **chainId**: The chain ID used by the Dapp is represented as a shortstring. Prevents replay attacks from one network to another.
 - **revision (optional)**: the revision of the specification to be used. If the value is omitted it will default to `0` .
     - Revision `0`: Represents the de facto spec before this SNIP was published. The purpose is to help with backwards compatibility. It’s not recommended to use it.
     - Revision `1`: Will be the initial version of the specification
@@ -86,13 +86,13 @@ Starting with revision `1` those fields are using the type `shortstring` .
 
 In revision `0` the domain object is named `StarkNetDomain`.  
 Starting with revision `1` the domain object is named `StarknetDomain`.  
-An issue arise when a user using an old version of the wallet that only supports revision `0` receives a request sign with revision `1`.  The outdated wallet, unaware of revision `1` , would calculate the hash differently and therefore produce an invalid signature.
+An issue arises when a user using an old version of the wallet that only supports revision `0` receives a request sign with revision `1`.  The outdated wallet, unaware of revision `1` , would calculate the hash differently and therefore produce an invalid signature.
 This is the reason we introduce the change from `StarkNetDomain` to `StarknetDomain`. 
-If a dapp requests the wallet to sign something using `StarknetDomain` , it should should fail as it expects `StarkNetDomain` .
+If a dapp requests the wallet to sign something using `StarknetDomain` , it should fail as it expects `StarkNetDomain` .
 
 ### Account
 
-The `account` is the contract address of the Account Contract that is signing. 
+The `account` is the contract address of the Account Contract that is signed. 
 This prevents two accounts from producing the same hash for the same message
 
 ### Message
@@ -150,7 +150,7 @@ The inner type could be any of the other types supported in this specification.
 ### When X is a felt
 
 Introduced in revision `0`  
-This is usually not recommended as it’s hard do display in an user friendly way. There are usually more specific types that can be used
+This is usually not recommended as it’s hard to display in an user friendly way. There are usually more specific types that can be used
 
 **encoding** `Enc[x] = serialise(x)`, **encode_type** `felt`
 
@@ -196,14 +196,14 @@ This type allows the wallet to sign a large amount of data, but signing just the
 
 X is a list of items of the same type that we will sign as a merkle tree.
 
-The the hash function used for the merkle tree will be:  
+The hash function used for the merkle tree will be:  
 For revision `0`: `pedersen`  
 For revision `1`:  `poseidon`  
 
 **encode_type** `merkletree`
 
 On the wallet level, providing just the merkletree root without including any data isn’t safe. The wallet also needs to receive the data, which is why an additional parameter is required.
-The parameter  `contains`  needs to be specified, it will refer to a object type that will be used to represent the leaves as a objects:
+The parameter  `contains`  needs to be specified, it will refer to an object type that will be used to represent the leaves as an object:
 
 ```js
 // ...
@@ -295,9 +295,9 @@ It will be encoded as the following object, splitting the low/high 128 bits. Thi
 
 Introduced in revision `1`
 
-It will be encoded as the following object. This type does NOT need to be declared on the `types` section.
+It will be encoded as the following object. This type does NOT need to be declared in the `types` section.
 
-This allows wallets to group the token with the amount for better display. Wallets would be able to should correct decimals, fiat value, icon…)
+This allows wallets to group the token with the amount for better display. Wallets would be able to should correct decimals, fiat values, icon…)
 
 ```js
 "TokenAmount": [
@@ -310,7 +310,7 @@ This allows wallets to group the token with the amount for better display. Walle
 
 Introduced in revision `1`
 
-It will be encoded as the following object. This type does NOT need to be declared on the `types` section.
+It will be encoded as the following object. This type does NOT need to be declared in the `types` section.
 
 This allows wallets to group the token id with the contract address for better display. Wallets will be able to show correct token info, image, and other attributes)
 
@@ -435,7 +435,7 @@ https://github.com/argentlabs/starknet-off-chain-signature
 
 ## Security Considerations
 
-This SNIP have no impact at all in terms of security.
+This SNIP has no impact at all in terms of security.
 
 ## Copyright
 
