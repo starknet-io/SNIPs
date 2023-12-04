@@ -6,7 +6,7 @@ discussions-to: $DISCUSSION_LINK
 status: Draft
 type: Standards Track
 created: 2023-12-4
-requires: [SNIP-12](./snip-12.md)
+requires: SNIP-12
 ---
 
 ## Abstract
