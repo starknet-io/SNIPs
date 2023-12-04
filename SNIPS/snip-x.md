@@ -74,6 +74,8 @@ Here is an explanation of each field listed above:
 
 ## Implementation
 
+This is a minimal implementation. It is NOT production ready. See the full repository [here](https://github.com/EthSign/sign-in-with-starknet/).
+
 ```ts
 import {
   json,
