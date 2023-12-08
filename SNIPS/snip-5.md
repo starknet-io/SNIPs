@@ -61,11 +61,11 @@ trait IMyContract<TContractState, TNumber> {
 
 Notice that these traits don't represent the actual public interface of a specific contract, but sort of a category of them. The generic `TContractState` type self parameter is not included in the exposed API of the function. It is used internally to restrict how the function can access the local storage, and is not part of the public API of the function. The `TNumber` type parameter must be concretized in the implementation, because generic type parameters are not allowed in contract's external functions.
 
-To this standard, generic traits anotated with the `#[starknet::interface]` attribute represent a set of interfaces, while each real interface can be represented as a non-generic trait, as presented above.
+To this standard, generic traits annotated with the `#[starknet::interface]` attribute represent a set of interfaces, while each real interface can be represented as a non-generic trait, as presented above.
 
 ### Extended Function Selector
 
-In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard we define the Extended Function Selector as the `starknet_keccak` of the function signature, having this signature the following format:
+In Starknet, a function selector is the `starknet_keccak` of the function name (ASCII encoded). For this standard, we define the Extended Function Selector as the `starknet_keccak` of the function signature in the following format:
 
 ```
 fn_name(param1_type,param2_type,...)->output_type
@@ -79,7 +79,7 @@ The signature for a function with zero parameters and no return value is:
 fn_name()
 ```
 
-Types are those defined as such in the [corelib](https://github.com/starkware-libs/cairo/blob/main/corelib/src/lib.cairo) (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, being `u128` a type, and `u256` a Struct.
+Types are those defined as such in the [corelib](https://github.com/starkware-libs/cairo/blob/main/corelib/src/lib.cairo) (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, with `u128` being a type, and `u256` being a Struct.
 
 ### Special Types (Tuples, Structs, and Enums)
 
@@ -181,7 +181,7 @@ if __name__ == "__main__":
 
 ### How a Contract will Publish the Interfaces it Implements
 
-A contract that is compliant with SRC-5 shall implement the following interface (referred to as `ISRC5.sol`):
+A contract that is compliant with SRC-5 shall implement the following interface (referred to as `ISRC5.cairo`):
 
 ```cairo
 trait ISRC5 {
@@ -192,7 +192,7 @@ trait ISRC5 {
 }
 ```
 
-The interface identifier for this interface is `0x3f918d17e5ee77373b56385708f855659a07f75997f365cf87748628532a055`. You can calculate this by running `starknet_keccak('supports_interface(felt252)->E((),())')`.
+The interface identifier for this interface is `0x3f918d17e5ee77373b56385708f855659a07f75997f365cf87748628532a055`. You can calculate this by running `starknet_keccak('supports_interface(felt252)->E((),())')`. Note that the return type of `bool` is represented as `E((),())` because it is an enum defined in corelib.
 
 Therefore the implementing contract will have a `supports_interface` function that returns:
 
@@ -211,8 +211,8 @@ This function MUST return a bool.
 ### How to Detect if a Contract Implements any Given Interface
 
 1. If you are not sure if the contract implements SRC-5, use the above procedure to confirm.
-2. If it does not implement it, then you will have to see what methods it uses the old-fashioned way.
-3. If it does implement it, call `supports_interface(interface_id)` to determine if it implements an interface you can use.
+2. If the contract does not implement SRC-5, then you will have to see what methods the contract uses the old-fashioned way.
+3. If the contract does implement SRC-5, call `supports_interface(interface_id)` to determine if the contract implements an interface you can use.
 
 ## Copyright
 
