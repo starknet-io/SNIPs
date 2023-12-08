@@ -184,7 +184,7 @@ struct SetApprovalAllDapp {
 
 Example implementations are available at
 
-- [Moss implementation](https://github.com/)
+- [Moss implementation](https://github.com/mossdapp/superdapp)
 
 ## Security Considerations
 1. An own dapp cannot use a constructor function and should adopt an init function
