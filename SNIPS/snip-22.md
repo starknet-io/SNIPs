@@ -11,22 +11,21 @@ created: 2023-11-24
 A standard interface for manage modular Own Dapp.
 
 ## Abstract
-该SNRC是模块化的Own Dapp的系统，也可以称之为Supper Dapp,该Supper Dapp管理所有的Own Dapp,并且没有数量限制,这里Own Dapp是代码逻辑是单独declare的，Own Dapp之间可共享存储变量。
+This SNRC is a system for manageing modular Own Dapps, also known as Supper Dapp. The Supper Dapp manages all Own Dapps without a limit on the number. Here, Own Dapp refers to a code logic that is declared. Own Dapps can share storage among themselves.
 
 
 ## Motivation
 
-1. 提供单一智能合约地址支持多个Own Dapp的功能
-2. 该提议可基于账户抽象SNIP，让每个用户真正拥有自己的Own Dapp(例如用户自己nft市场，token交易市场，遗产，资产管理等)
-3. Own Dapp存储共享，逻辑也可以重复使用，提供更强的组合性
-4. 提供开启，关闭一个或多个 Own Dapp功能
-5. Own Dapp可逐步开发，让你的Supper Dapp可持续成长
-6. Supper Dapp模块化管理Own Dapp，添加新的Own Dapp不需要升级智能合约
-7. Own Dapp的逻辑可重复使用
-8. 可以直接支持部分现在已声明的Dapp智能合约
+1. Provide a single smart contract address to support multiple Own Dapps.
+2. This proposal can be based on the Standard Account Interface [SNIP-5](./snip-5.md), allowing each user to truly own their Own Dapp (e.g., Own NFT market, dex, inheritance, asset management, etc.).
+3. Shared storage for Own Dapps and reusable logic, offering stronger composability.
+4. Provide the ability to enable or disable one or more Own Dapps.
+5. Own Dapps can be developed progressively, allowing your Supper Dapp to grow continuously.
+6. Supper Dapp modularly manages Own Dapps, and adding new Own Dapps does not require upgrading the smart contract.
+7. Direct support for some of the currently declared Dapp smart contracts.
 
 
-不同own dapp 之间的存储
+### Storage among different Own Dapps
 
 ```mermaid
 flowchart TD
@@ -59,7 +58,7 @@ flowchart TD
     LogicA--> DataA
 ```
 
-外部账户调用Supper Dapp的Own Dapp逻辑
+### External accounts call Supper Dapp’s Own Dapp logic
 
 ```mermaid
 flowchart TD
@@ -94,10 +93,6 @@ flowchart TD
 
 ## Specification
 
-安全考虑
-own dapp 不能使用构造函数，采用init形式
-own dapp不一定需要部署，但一定需要声明
-需要注意共用存储，也可能带来存储冲突的问题
 
 ### Interface
 
@@ -192,11 +187,11 @@ Example implementations are available at
 - [Moss implementation](https://github.com/)
 
 ## Security Considerations
-own dapp 不能使用构造函数，采用init形式
-own dapp不一定需要部署，但一定需要声明
-需要注意共用存储，也可能带来存储冲突的问题
-每次添加或删除一个或多个dapp时，添加所有dapp时也是，合约都需发出一个事件。所有源代码都可以验证。
-这使得人员和软件能够监控合同的变更。如果添加了任何不良的dapp，那么它是可以被看到的，而且可添加的dapp是通过验证后的。
+1. An own dapp cannot use a constructor function and should adopt an init function
+2. An own dapp does not necessarily need to be deployed but must be declared.
+3. Shared storage should be carefully considered as it might lead to storage conflicts.
+4. Whenever one or more own dapps are added or removed, and also when all dapps are added, the contract must emit an event.
+5. All own dapp source code can be verified.
 
 
 ## Copyright
