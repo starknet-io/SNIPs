@@ -24,7 +24,7 @@ This document aims to create a standard that’s compatible with existing Dapps,
 
 Here an example of NFT sell order, and how a wallet will be able to show today, versus what can be done after the improvements in this spec
 
-![wallet rev 0 vs rev 1](../assets/snip-12/wallet-example.jpeg)
+![wallet rev 0 vs rev 1](../assets/snip-12/wallet-example.png)
 
 ## Specification
 

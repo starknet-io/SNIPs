@@ -20,7 +20,7 @@ The motivation behind this SNIP is to minimize the breaking changes in the trans
 
 - [Fee market](https://www.starknet.io/en/roadmap/fee-market-for-transactions): Implementing a mechanism to enable users to utilize the network even during periods of congestion. 
 
-- [Volition](https://community.starknet.io/t/volition-hybrid-data-availability-solution/97387): Introducing a hybris state design that allows users to choose their preferred data availability mode. 
+- [Volition](https://community.starknet.io/t/volition-hybrid-data-availability-solution/97387): Introducing a hybrid state design that allows users to choose their preferred data availability mode. 
 
 - Paymaster (see [1](https://community.starknet.io/t/starknet-account-abstraction-model-part-1/781), [2](https://community.starknet.io/t/starknet-account-abstraction-model-part-2/839)): Similar to the [EIP-4337](https://github.com/ethereum/EIPs/blob/3fd65b1a782912bfc18cb975c62c55f733c7c96e/EIPS/eip-4337.md), enriching the protocol with fee abstraction, enabling entities other than the transaction sender to pay the transaction fees. 
 
@@ -28,7 +28,7 @@ The motivation behind this SNIP is to minimize the breaking changes in the trans
 
 - Deploy account in the first Invoke/Declare transaction: In line with the concept presented in EIP-4337, we propose adding an account_deployment_data field to Invoke and Declare transactions sent from a non-existing contract, eliminating the need for a separate transaction to deploy an account.
 
-  - account_deployment_data is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_delcare__`.
+  - account_deployment_data is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_declare__`.
 
 By incorporating these changes into the transaction structure, we aim to smooth the evolution of Starknet while minimizing disruptions and preserving compatibility with existing functionality.
 
@@ -148,10 +148,10 @@ Define: 
 Where:
 
 - TX_PREFIX is {“declare”, “deploy_account”, “invoke”}, accordingly.
-- `address` is  `sender_address` for Daeclare and Invoke or `contract_address` for DeployAccount
+- `address` is  `sender_address` for Declare and Invoke or `contract_address` for DeployAccount
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See[ Chain-Id](https://docs.starknet.io/documentation/architecture_and_concepts/Blocks/transactions/#chain-id).
 - `h(tip, resource_bounds_for_fee) = h(tip, (resource||max_amount||max_price_per_unit),(resource||max_amount||max_price_per_unit)...)`, where the resource order is `L1_gas`, `L2_gas`, and the resource name is at most 7 characters.
-- `h` is the [Poseidon hash](https://docs.starknet.io/documentation/architecture_and_concepts/Hashing/hash-functions/#pedersen_hash)
+- `h` is the [Poseidon hash](https://docs.starknet.io/documentation/architecture_and_concepts/Cryptography/hash-functions/#poseidon_hash)
 
 **Transaction Hash Calculation:** 
 
