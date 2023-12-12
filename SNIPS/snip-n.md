@@ -28,7 +28,7 @@ When a SNIP is adapted from an EIP with its concept, naming, and specifications 
 
 ## History
 
-This SNIP is inspired by discussions from [https://github.com/starknet-io/SNIPs/pull/35](https://eips.ethereum.org/EIPS/eip-4361).
+This SNIP is inspired by discussions from [https://github.com/starknet-io/SNIPs/pull/35](https://github.com/starknet-io/SNIPs/pull/35).
 
 ## Copyright
 
