@@ -20,7 +20,7 @@ The following standard provides a consistent way for Cairo contracts and their f
 
 ## Motivation
 
-A comment standard increases the readibility of contracts which makes it easier to ensure their correct functionality. 
+A comment standard increases the readability of contracts which makes it easier to ensure their correct functionality. 
 
 
 ## Specification

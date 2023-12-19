@@ -30,7 +30,7 @@ There are three types of SNIPs:
 
 - A **Meta SNIP** describes a process surrounding StarkNet or proposes a change to (or an event in) a process. Process SNIPs are like Standards Track SNIPs but apply to areas other than the StarkNet protocol itself. They may propose an implementation, but not to StarkNet's codebase; they often require community consensus; unlike Informational SNIPs, they are more than recommendations, and users are typically not free to ignore them. Examples include procedures, guidelines, changes to the decision-making process, and changes to the tools or environment used in StarkNet development. Any meta-SNIP is also considered a Process SNIP.
 
-- An **Informational SNIP** describes an StarkNet design issue, or provides general guidelines or information to the StarkNet community, but does not propose a new feature. Informational SNIPs do not necessarily represent StarkNet community consensus or a recommendation, so users and implementers are free to ignore Informational SNIPs or follow their advice.
+- An **Informational SNIP** describes a StarkNet design issue, or provides general guidelines or information to the StarkNet community, but does not propose a new feature. Informational SNIPs do not necessarily represent StarkNet community consensus or a recommendation, so users and implementers are free to ignore Informational SNIPs or follow their advice.
 
 It is highly recommended that a single SNIP contain a single key proposal or new idea. The more focused the SNIP, the more successful it tends to be. A change to one client doesn't require a SNIP; a change that affects multiple clients, or defines a standard for multiple apps to use, does.
 
