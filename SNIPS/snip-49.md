@@ -1,5 +1,5 @@
 ---
-snip: 10
+snip: 49
 title: Introducing Privacy-Preserving Transactions on StarkNet
 status: Draft
 type: Standards Track
