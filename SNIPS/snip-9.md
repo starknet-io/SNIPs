@@ -50,19 +50,19 @@ Reference implementation: [https://github.com/argentlabs/argent-contracts-starkn
 
 See this SNIP for more info on offchain signatures on Starknet: [https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029](https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029)
 
-### 3. Pass the struct and signature to the account
+### 3. Pass the structure and signature to the account
 
 Check if the account supports this SNIP:
 
 ```rust
-let acccount = IErc165Dispatcher { contract_address: acount_address };
+let account = IErc165Dispatcher { contract_address: acount_address };
 let is_supported = account.supports_interface(ERC165_OUTSIDE_EXECUTION_INTERFACE_ID); // see below for actual value
 ```
 
 Call the `execute_from_outside` method on the account:
 
 ```rust
-let acccount = IOutsideExecutionDispatcher { contract_address: acount_address };
+let account = IOutsideExecutionDispatcher { contract_address: acount_address };
 // pre-execution logic...
 let results = account.execute_from_outside(outside_execution, signature);
 // post-execution logic...

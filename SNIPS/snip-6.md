@@ -52,13 +52,13 @@ trait ISRC6 {
 
     /// @notice Assert whether the transaction is valid to be executed
     /// @param calls The list of calls to execute
-    /// @return The string 'VALID' represented as felt when is valid
+    /// @return The string 'VALID' is represented as felt when is valid
     fn __validate__(calls: Array<Call>) -> felt252;
 
     /// @notice Assert whether a given signature for a given hash is valid
     /// @param hash The hash of the data
     /// @param signature The signature to validate
-    /// @return The string 'VALID' represented as felt when the signature is valid
+    /// @return The string 'VALID' is represented as felt when the signature is valid
     fn is_valid_signature(hash: felt252, signature: Array<felt252>) -> felt252;
 }
 
@@ -79,7 +79,7 @@ Notice that, if the signature is valid, the return value for `is_valid_signature
 
 ## Backwards Compatibility
 
-Currently there are multiple accounts using `bool` as the `is_valid_signature` return value. While in the future we expect that most of the accounts will migrate to this standard, in the meantime, we recommend dapps and protocols using this feature to check for both `true` or `'VALID'`.
+Currently, multiple accounts are using `bool` as the `is_valid_signature` return value. While in the future we expect that most of the accounts will migrate to this standard, in the meantime, we recommend dapps and protocols using this feature to check for both `true` or `'VALID'`.
 
 ## Copyright
 
