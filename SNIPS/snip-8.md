@@ -16,7 +16,7 @@ The SNIP focuses on the modifications to the transaction structure and the calcu
 
 ## Motivation
 
-The motivation behind this SNIP is to minimize the breaking changes in the transaction structure within Starknet. To achieve this, we propose the introduction of a new transaction version that can support upcoming API and protocol changes. Specifically, we consider five significant changes for the near future: 
+The motivation behind this SNIP is to minimize the breaking of changes in the transaction structure within Starknet. To achieve this, we propose the introduction of a new transaction version that can support upcoming API and protocol changes. Specifically, we consider five significant changes for the near future: 
 
 - [Fee market](https://www.starknet.io/en/roadmap/fee-market-for-transactions): Implementing a mechanism to enable users to utilize the network even during periods of congestion. 
 
@@ -81,7 +81,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
    1. `paymaster_data: List[felt]`
 
       1. The default value is an empty list, indicating no paymaster
-      2. Represent the address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transaction)
+      2. Represent the address of the paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transactions)
 
 
 5. `nonce: felt`
@@ -103,7 +103,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 3. `account_deployment_data: List[felt]`
 
    1. The list will contain the class_hash, salt, and the calldata needed for the constructor.
-   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
+   2. In the future, we might want to use Invoke instead of deploy_account, the same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
 
 **Declare Specific Fields:**
 
@@ -122,7 +122,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 4. `account_deployment_data: List[felt]`
 
    1. The list will contain the class_hash and the calldata needed for the constructor.
-   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
+   2. In the future, we might want to use Invoke instead of deploy_account, the same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
 
 **DeployAccount Specific Fields:**
 
@@ -175,7 +175,7 @@ Where:
 
 1. `get_execution_info` syscall:
 
-   1. To support both old and new tx version, there’s a need to update the struct [TxInfo](https://github.com/starkware-libs/cairo/blob/90f813f487c85a20ebb65449ffc62506916504b4/corelib/src/starknet/info.cairo#L24). All the existing fields will remain for backward compatibility. For v3 txs the member `max_fee` will be always equal 0, and the struct will contain the following members as well:
+   1. To support both old and new tx versions, there’s a need to update the struct [TxInfo](https://github.com/starkware-libs/cairo/blob/90f813f487c85a20ebb65449ffc62506916504b4/corelib/src/starknet/info.cairo#L24). All the existing fields will remain for backward compatibility. For v3 txs the member `max_fee` will be always equal to 0, and the struct will contain the following members as well:
 
       1. `List[Resource]`
       2. `tip: u64`
@@ -192,7 +192,7 @@ Starknet will provide support for the older transaction version during a transit
 
 ## Security Considerations
 
-This SNIP have no impact at all in terms of security.
+This SNIP has no impact at all in terms of security.
 
 ## Copyright
 
