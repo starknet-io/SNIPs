@@ -1,5 +1,5 @@
 ---
-snip: 15
+snip: 53
 title: Simple NFT
 author: Xiang (@wenzhenxiang), Ben77 (@ben2077), Mingshi S. (@newnewsms)
 status: Draft
