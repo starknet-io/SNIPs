@@ -1,5 +1,5 @@
 ---
-snip: 16
+snip: 54
 title: Contract wallet management nft
 status: Draft
 author: Xiang (@wenzhenxiang), Ben77 (@ben2077), Mingshi S. (@newnewsms)
