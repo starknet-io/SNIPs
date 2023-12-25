@@ -1,5 +1,5 @@
 ---
-snip: 11
+snip: 44
 title: Contract wallet management token
 status: Draft
 author: Xiang (@wenzhenxiang), Ben77 (@ben2077), Mingshi S. (@newnewsms)
