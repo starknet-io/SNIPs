@@ -43,7 +43,7 @@
 
 ## About
 
-The goal of the SNIP project is to document standardized protocols for StarkNet related softwares and to document them in a high quality and implementable way.
+The goal of the SNIP project is to document standardized protocols for StarkNet related software and to document them in a high quality and implementable way.
 
 ## SNIP Process
 

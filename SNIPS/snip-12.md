@@ -165,7 +165,7 @@ Introduced in revision `0`
 `0` for false  
 `1` for true
 
-**enconde_type:** `bool` 
+**encode_type:** `bool`
 
 ### When x is a string
 

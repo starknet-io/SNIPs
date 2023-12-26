@@ -1,0 +1,15 @@
+name: Pull request workflow
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+
+  typos:
+    name: Spell Checker
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: crate-ci/typos@master
