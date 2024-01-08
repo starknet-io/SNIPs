@@ -93,7 +93,7 @@ Code example with `get-starknet`:
 await window.starknet.request({
     type: "wallet_switchStarknetChain",
     params: {
-        chainId: "SN_MAIN"
+        chainId: 0x534e5f4d41494e
     }
 });
 ```
