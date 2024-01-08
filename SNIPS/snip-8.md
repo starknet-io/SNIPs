@@ -16,11 +16,11 @@ The SNIP focuses on the modifications to the transaction structure and the calcu
 
 ## Motivation
 
-The motivation behind this SNIP is to minimize the breaking changes in the transaction structure within Starknet. To achieve this, we propose the introduction of a new transaction version that can support upcoming API and protocol changes. Specifically, we consider five significant changes for the near future: 
+The motivation behind this SNIP is to minimize the breaking of changes in the transaction structure within Starknet. To achieve this, we propose the introduction of a new transaction version that can support upcoming API and protocol changes. Specifically, we consider five significant changes for the near future: 
 
 - [Fee market](https://www.starknet.io/en/roadmap/fee-market-for-transactions): Implementing a mechanism to enable users to utilize the network even during periods of congestion. 
 
-- [Volition](https://community.starknet.io/t/volition-hybrid-data-availability-solution/97387): Introducing a hybris state design that allows users to choose their preferred data availability mode. 
+- [Volition](https://community.starknet.io/t/volition-hybrid-data-availability-solution/97387): Introducing a hybrid state design that allows users to choose their preferred data availability mode. 
 
 - Paymaster (see [1](https://community.starknet.io/t/starknet-account-abstraction-model-part-1/781), [2](https://community.starknet.io/t/starknet-account-abstraction-model-part-2/839)): Similar to the [EIP-4337](https://github.com/ethereum/EIPs/blob/3fd65b1a782912bfc18cb975c62c55f733c7c96e/EIPS/eip-4337.md), enriching the protocol with fee abstraction, enabling entities other than the transaction sender to pay the transaction fees. 
 
@@ -28,7 +28,7 @@ The motivation behind this SNIP is to minimize the breaking changes in the trans
 
 - Deploy account in the first Invoke/Declare transaction: In line with the concept presented in EIP-4337, we propose adding an account_deployment_data field to Invoke and Declare transactions sent from a non-existing contract, eliminating the need for a separate transaction to deploy an account.
 
-  - account_deployment_data is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_delcare__`.
+  - account_deployment_data is used to deploy an account contract that contains the entrypoints: `__validate__`, `__execute__`_, and in the case of Declare, also `__validate_declare__`.
 
 By incorporating these changes into the transaction structure, we aim to smooth the evolution of Starknet while minimizing disruptions and preserving compatibility with existing functionality.
 
@@ -81,7 +81,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
    1. `paymaster_data: List[felt]`
 
       1. The default value is an empty list, indicating no paymaster
-      2. Represent the address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transaction)
+      2. Represent the address of the paymaster sponsoring the transaction, followed by extra data to send to the paymaster (empty for self-sponsored transactions)
 
 
 5. `nonce: felt`
@@ -103,7 +103,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 3. `account_deployment_data: List[felt]`
 
    1. The list will contain the class_hash, salt, and the calldata needed for the constructor.
-   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
+   2. In the future, we might want to use Invoke instead of deploy_account, the same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
 
 **Declare Specific Fields:**
 
@@ -122,7 +122,7 @@ DA_mode 0 is L1DA and DA_mode 1 is L2DA.
 4. `account_deployment_data: List[felt]`
 
    1. The list will contain the class_hash and the calldata needed for the constructor.
-   2. In the future, we might want to use Invoke instead of deploy_account, same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
+   2. In the future, we might want to use Invoke instead of deploy_account, the same as in EIP-4337. In that case, the sender address does not exist - the sequencer will try to deploy a contract with the class hash specified in `account_deployment_data`.
 
 **DeployAccount Specific Fields:**
 
@@ -148,10 +148,10 @@ Define: 
 Where:
 
 - TX_PREFIX is {“declare”, “deploy_account”, “invoke”}, accordingly.
-- `address` is  `sender_address` for Daeclare and Invoke or `contract_address` for DeployAccount
+- `address` is  `sender_address` for Declare and Invoke or `contract_address` for DeployAccount
 - `chain_id` is a constant value that specifies the network to which this transaction is sent. See[ Chain-Id](https://docs.starknet.io/documentation/architecture_and_concepts/Blocks/transactions/#chain-id).
 - `h(tip, resource_bounds_for_fee) = h(tip, (resource||max_amount||max_price_per_unit),(resource||max_amount||max_price_per_unit)...)`, where the resource order is `L1_gas`, `L2_gas`, and the resource name is at most 7 characters.
-- `h` is the [Poseidon hash](https://docs.starknet.io/documentation/architecture_and_concepts/Hashing/hash-functions/#pedersen_hash)
+- `h` is the [Poseidon hash](https://docs.starknet.io/documentation/architecture_and_concepts/Cryptography/hash-functions/#poseidon_hash)
 
 **Transaction Hash Calculation:** 
 
@@ -175,7 +175,7 @@ Where:
 
 1. `get_execution_info` syscall:
 
-   1. To support both old and new tx version, there’s a need to update the struct [TxInfo](https://github.com/starkware-libs/cairo/blob/90f813f487c85a20ebb65449ffc62506916504b4/corelib/src/starknet/info.cairo#L24). All the existing fields will remain for backward compatibility. For v3 txs the member `max_fee` will be always equal 0, and the struct will contain the following members as well:
+   1. To support both old and new tx versions, there’s a need to update the struct [TxInfo](https://github.com/starkware-libs/cairo/blob/90f813f487c85a20ebb65449ffc62506916504b4/corelib/src/starknet/info.cairo#L24). All the existing fields will remain for backward compatibility. For v3 txs the member `max_fee` will be always equal to 0, and the struct will contain the following members as well:
 
       1. `List[Resource]`
       2. `tip: u64`
@@ -192,7 +192,7 @@ Starknet will provide support for the older transaction version during a transit
 
 ## Security Considerations
 
-This SNIP have no impact at all in terms of security.
+This SNIP has no impact at all in terms of security.
 
 ## Copyright
 
