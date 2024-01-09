@@ -82,9 +82,32 @@ fn_name()
 
 Types are those defined as such in the [corelib](https://github.com/starkware-libs/cairo/blob/main/corelib/src/lib.cairo) (ex: `type felt252`). Tuples, Structs, and Enums are treated as special types. For example, `u256` is represented as `(u128,u128)`, with `u128` being a type, and `u256` being a Struct.
 
-### Special Types (Tuples, Structs, and Enums)
+### Special Types (Arrays, Tuples, Structs, and Enums)
 
 A definition of how to provide these parameters to the signature for getting the [Extended Function Selector](#extended-function-selector):
+
+#### Arrays and Spans
+
+Arrays and Spans have a simillar `Serde` implementation. That is, the following tests will pass for any type `T` for which the fuctions are callable:
+
+```
+fn serialize<T, +Serde<T>, +Drop<T>>(array: Array<T>, span: Span<T>) {
+    let mut serialized_array = array![];
+    let mut serialized_span = array![];
+    array.serialize(ref serialized_array);
+    span.serialize(ref serialized_span);
+    assert!(serialized_array == serialized_span);
+}
+
+fn deserialize<T, +Serde<T>, +Drop<T>, +PartialEq<T>>(ref serialized_data: Span<felt252>) {
+    let mut serialized_data_copy = serialized_data.clone();
+    let array: Array<T> = Serde::deserialize(ref serialized_data).unwrap();
+    let span: Span<T> = Serde::deserialize(ref serialized_data_copy).unwrap();
+    assert!(array.span() == span);
+}
+```
+
+The above means that contracts expecting `Span<T>` can receive a serialized `Array<T>` and contracts expecting `Array<T>` can receive a serialized `Span<T>`. Hence, it make sense to treat interfaces with `Span` and `Array` in the same manner. To keep backwards-compatability with the account interface described in SNIP-6 which uses arrays, before computing the interface id, **all `Span<T>` need to be replaced with `Array<T>`**.
 
 #### Tuples
 
