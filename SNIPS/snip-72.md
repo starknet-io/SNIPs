@@ -2,7 +2,7 @@
 snip: 72
 title: Non-fungible Tokenbound Accounts
 author: Darlington Nnam <darlingtonnnam@gmail.com>, Ademola Kelvin <adegbiteademola1999@gmail.com>
-discussions-to: https://community.starknet.io/
+discussions-to: https://community.starknet.io/t/snip-72-non-fungible-tokenbound-accounts/112479
 status: Draft
 type: Standards Track
 category: SRC
@@ -50,7 +50,7 @@ The system outlined in this proposal has two main components:
 
 <img src="https://eips.ethereum.org/assets/eip-6551/diagram.png" width="100%" alt="ERC6551 illustration">
 
-The following diagram illustrates the relationship between NFTs, NFT holders, token bound accounts, and the Registry:
+The following diagram illustrates the relationship between NFTs, NFT holders, token bound accounts, and the Registry.
 
 ## Registry
 The registry is a singleton contract that serves as the entry point for all token bound account address queries. It has three functions:
