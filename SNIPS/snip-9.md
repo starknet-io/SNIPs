@@ -46,9 +46,26 @@ struct OutsideExecution {
 
 ### 2. Sign it using ERC-712 typed data hashing
 
-Reference implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts](https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts)
+#### 2.1. Version 1 `OutsideExecution` type hash
 
-See this SNIP for more info on offchain signatures on Starknet: [https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029](https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029)
+When the `domain_separator` version is set to 1 refer to this implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts](https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts)
+
+#### 2.2. Version 2 `OutsideExecution` type hash
+
+When the `domain_separator` version is set to 2 the type hash of `OutsideExecution` is computed as follows:
+
+**`H('OutsideExecution(caller:ContractAddress,nonce:felt,execute_after:u64,execute_before:u64,calls:Call*)')`**
+
+Version 2 `OutsideExecution` type hashing has the following changes compared to version 1:
+
+- **caller**: changed to type `ContractAddress`
+- **execute_{before,after}**: changed to type `u64` (based on `block_timestamp` in `BlockInfo`)
+- **calls_len**: removed from hash
+- **calls**: will be of type `Call*`
+
+
+
+See this SNIP for more info on offchain signatures on Starknet: [https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md)
 
 ### 3. Pass the structure and signature to the account
 
@@ -127,6 +144,7 @@ fn execute_from_outside(ref self: ContractState, outside_execution: OutsideExecu
     retdata
 }
 ```
+
 
 ### Copyright
 
