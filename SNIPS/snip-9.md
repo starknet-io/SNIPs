@@ -1,7 +1,7 @@
 ---
 snip: 9
 title: Outside execution
-authors: Argent Labs <argent.xyz>, AVNU <avnu.fi>
+authors: Argent Labs <argent.xyz>, AVNU <avnu.fi>, Braavos <braavos.app>
 discussions-to: https://community.starknet.io/t/snip-outside-execution/101058
 status: Draft
 type: Standards Track
@@ -44,11 +44,83 @@ struct OutsideExecution {
 - **execute_{before,after}**: timestamp range in which the execution is allowed.
 - **calls**: the usual calls to be executed by the account.
 
-### 2. Sign it using ERC-712 typed data hashing
+### 2. Sign it using SNIP-12 typed data hashing
 
-Reference implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts](https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts)
+#### 2.1. Version 1
 
-See this SNIP for more info on offchain signatures on Starknet: [https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029](https://community.starknet.io/t/snip-off-chain-signatures-a-la-eip712/98029)
+With [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameters:
+- `name` is set to  `Account.execute_from_outside`
+- `version` is set to  `1`
+
+and `OutsideExecution` type defined as:
+```rust
+  OutsideExecution: [
+    { name: "caller", type: "felt" },
+    { name: "nonce", type: "felt" },
+    { name: "execute_after", type: "felt" },
+    { name: "execute_before", type: "felt" },
+    { name: "calls_len", type: "felt" },
+    { name: "calls", type: "OutsideCall*" },
+  ],
+  OutsideCall: [
+    { name: "to", type: "felt" },
+    { name: "selector", type: "felt" },
+    { name: "calldata_len", type: "felt" },
+    { name: "calldata", type: "felt*" },
+  ]
+```
+
+The type hash of `OutsideExecution` is then:
+**`H('OutsideExecution(caller:felt,nonce:felt,execute_after:felt,execute_before:felt,calls_len:felt,calls:OutsideCall*)OutsideCall(to:felt,selector:felt,calldata_len:felt,calldata:felt*)')`**
+
+which results in `0x11ff76fe3f640fa6f3d60bbd94a3b9d47141a2c96f87fdcfbeb2af1d03f7050`
+
+And the type hash of `OutsideCall` is:
+**`H('OutsideCall(to:felt,selector:felt,calldata_len:felt,calldata:felt*)')`**
+
+which results in `0xf00de1fccbb286f9a020ba8821ee936b1deea42a5c485c11ccdc82c8bebb3a`
+
+Refer to this implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts](https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts)
+
+#### 2.2. Version 2
+
+In [domain_seperator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator):
+- `version` is set to `2`
+
+In `OutsideExecution` type definition:
+
+- **caller**: changed to type `ContractAddress`
+- **execute_{before,after}**: changed to type `u64` (based on `block_timestamp` in `BlockInfo`)
+- **calls_len**: **removed** from hash
+- **calls**: changed to Corelib's type `Call*`
+
+So the version `2` type definition to sign is:
+```rust
+  OutsideExecution: [
+    { name: "caller", type: "ContractAddress" },
+    { name: "nonce", type: "felt" },
+    { name: "execute_after", type: "u64" },
+    { name: "execute_before", type: "u64" },
+    { name: "calls", type: "Call*" },
+  ],
+  Call: [
+    { name: "to", type: "ContractAddress" },
+    { name: "selector", type: "selector" },
+    { name: "calldata", type: "felt*" },
+  ]
+```
+The type hash of `OutsideExecution` is then:
+
+**`H('OutsideExecution(caller:ContractAddress,nonce:felt,execute_after:u64,execute_before:u64,calls:Call*)Call(to:ContractAddress,selector:selector,calldata:felt*)')`**
+
+which results in `0x3a4bbc96898f5397b9e6109f4e22330940a14eb99038d720cac12c094b9e276`
+
+And the type hash of `Call` is:
+**`H('Call(to:ContractAddress,selector:selector,calldata:felt*)')`**
+
+which results in `0x2f404df42f5b80cf45e77de0ee0288f40ae5ab8e83159b6b8186583f6298937`
+
+See [SNIP 12](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md) for more info on offchain signatures on Starknet
 
 ### 3. Pass the structure and signature to the account
 
