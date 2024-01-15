@@ -90,35 +90,35 @@ In [domain_seperator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-
 In `OutsideExecution` type definition:
 
 - **caller**: changed to type `ContractAddress`
-- **execute_{before,after}**: changed to type `u64` (based on `block_timestamp` in `BlockInfo`)
+- **execute_{before,after}**: changed to type `u128`
 - **calls_len**: **removed** from hash
 - **calls**: changed to Corelib's type `Call*`
 
 So the version `2` type definition to sign is:
 ```rust
   OutsideExecution: [
-    { name: "caller", type: "ContractAddress" },
-    { name: "nonce", type: "felt" },
-    { name: "execute_after", type: "u64" },
-    { name: "execute_before", type: "u64" },
-    { name: "calls", type: "Call*" },
+    { name: "Caller", type: "ContractAddress" },
+    { name: "Nonce", type: "felt" },
+    { name: "Execute After", type: "u128" },
+    { name: "Execute Before", type: "u128" },
+    { name: "Calls", type: "Call*" },
   ],
   Call: [
-    { name: "to", type: "ContractAddress" },
-    { name: "selector", type: "selector" },
-    { name: "calldata", type: "felt*" },
+    { name: "To", type: "ContractAddress" },
+    { name: "Selector", type: "selector" },
+    { name: "Calldata", type: "felt*" },
   ]
 ```
 The type hash of `OutsideExecution` is then:
 
-**`H('OutsideExecution(caller:ContractAddress,nonce:felt,execute_after:u64,execute_before:u64,calls:Call*)Call(to:ContractAddress,selector:selector,calldata:felt*)')`**
+**`H('"OutsideExecution"("Caller":"ContractAddress","Nonce":"felt","Execute After":"u128","Execute Before":"u128","Calls":"Call*")"Call"("To":"ContractAddress","Selector":"selector","Calldata":"felt*")')`**
 
-which results in `0x3a4bbc96898f5397b9e6109f4e22330940a14eb99038d720cac12c094b9e276`
+which results in `0x312b56c05a7965066ddbda31c016d8d05afc305071c0ca3cdc2192c3c2f1f0f`
 
 And the type hash of `Call` is:
-**`H('Call(to:ContractAddress,selector:selector,calldata:felt*)')`**
+**`H('"Call"("To":"ContractAddress","Selector":"selector","Calldata":"felt*")')`**
 
-which results in `0x2f404df42f5b80cf45e77de0ee0288f40ae5ab8e83159b6b8186583f6298937`
+which results in `0x3635c7f2a7ba93844c0d064e18e487f35ab90f7c39d00f186a781fc3f0c2ca9`
 
 See [SNIP 12](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md) for more info on offchain signatures on Starknet
 
