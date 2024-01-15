@@ -142,7 +142,9 @@ let results = account.execute_from_outside(outside_execution, signature);
 
 ### For account builders
 
-To accept such outside transactions, the account contract must implement the following interface:
+#### Version 1
+
+To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `1`, the account contract must implement the following interface:
 
 ```rust
 /// Interface ID: 0x68cfd18b92d1907b8ba3cc324900277f5a3622099431ea85dd8089255e4181
@@ -165,6 +167,33 @@ trait IOutsideExecution<TContractState> {
     ) -> bool;
 }
 ```
+
+#### Version 2
+
+To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `2`, the account contract must implement the following interface:
+
+```rust
+/// Interface ID: 0x2fc193f5097f9a064d597fd3877371ba92d5faa9333a5ec51985bc889dbbc08
+#[starknet::interface]
+trait IOutsideExecution_V2<TContractState> {
+    /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures. This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`. The implementation should expect version to be set to 2 in the domain separator.
+    /// # Arguments
+    /// * `outside_execution ` - The parameters of the transaction to execute.
+    /// * `signature ` - A valid signature on the ERC-712 message encoding of `outside_execution`.
+    fn execute_from_outside_v2(
+        ref self: TContractState,
+        outside_execution: OutsideExecution,
+        signature: Array<felt252>,
+    ) -> Array<Span<felt252>>;
+
+    /// Get the status of a given nonce, true if the nonce is available to use
+    fn is_valid_outside_execution_nonce(
+        self: @TContractState,
+        nonce: felt252
+    ) -> bool;
+}
+```
+
 
 Indicative implementation outline:
 
