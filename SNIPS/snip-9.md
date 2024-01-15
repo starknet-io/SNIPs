@@ -144,7 +144,7 @@ let results = account.execute_from_outside(outside_execution, signature);
 
 #### Version 1
 
-To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `1`, the account contract must implement the following interface:
+This version implements [SNIP-12 revision 0](https://github.com/maorveitsman/SNIPs/blob/snip-9-update/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `1`, the account contract must implement the following interface:
 
 ```rust
 /// Interface ID: 0x68cfd18b92d1907b8ba3cc324900277f5a3622099431ea85dd8089255e4181
@@ -170,7 +170,7 @@ trait IOutsideExecution<TContractState> {
 
 #### Version 2
 
-To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `2`, the account contract must implement the following interface:
+This version implements [SNIP-12 revision 1](https://github.com/maorveitsman/SNIPs/blob/snip-9-update/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `2`, the account contract must implement the following interface:
 
 ```rust
 /// Interface ID: 0x2fc193f5097f9a064d597fd3877371ba92d5faa9333a5ec51985bc889dbbc08
