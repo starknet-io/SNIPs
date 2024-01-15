@@ -148,6 +148,15 @@ This version implements [SNIP-12 revision 0](https://github.com/maorveitsman/SNI
 
 ```rust
 /// Interface ID: 0x68cfd18b92d1907b8ba3cc324900277f5a3622099431ea85dd8089255e4181
+#[derive(Copy, Drop, Serde)]
+struct OutsideExecution {
+    caller: ContractAddress,
+    nonce: felt252,
+    execute_after: u64,
+    execute_before: u64,
+    calls: Span<Call>
+}
+
 #[starknet::interface]
 trait IOutsideExecution<TContractState> {
     /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures. This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`.
@@ -174,6 +183,17 @@ This version implements [SNIP-12 revision 1](https://github.com/maorveitsman/SNI
 
 ```rust
 /// Interface ID: 0x2fc193f5097f9a064d597fd3877371ba92d5faa9333a5ec51985bc889dbbc08
+#[derive(Copy, Drop, Serde)]
+struct OutsideExecution {
+    caller: ContractAddress,
+    nonce: felt252,
+    // note that the type here is u64 and not u128 as defined in the type hash definition
+    // u64 matches the type of block_timestamp in Corelib's BlockInfo struct
+    execute_after: u64,
+    execute_before: u64,
+    calls: Span<Call>
+}
+
 #[starknet::interface]
 trait IOutsideExecution_V2<TContractState> {
     /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures. This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`. The implementation should expect version to be set to 2 in the domain separator.
