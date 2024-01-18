@@ -105,6 +105,26 @@ Is the transaction message to be signed represented as an object.
 
 **Note that** the `type_hash` is constant for a given object/enum and does not need to be calculated when running a transaction in the smart contract.
 
+### Type identification
+
+There are three kinds of types:
+- Basic types: defined in this spec for a given revisions. Ex: felt, ClassHash, timestamp, u128
+- Preset types: they are structs defined in the spec. Ex: TokenAmount, NftId, u256. They also depend on the revision used
+- User defined types: The ones in the "types" field of the request. They also include the domain separator (Ex. `StarknetDomain`)
+
+User defined types must follow some rules, if they are not met the request must be rejected:
+- The domain separator must strictly follow the format defined in the "Domain separator" section
+- No empty name
+- Name can't match basic types like felt, ClassHash, timestamp, u128
+- Name can't match preset types like TokenAmount, NftId, u256
+- Name can't end in *
+- Name can't be enclosed in parenthesis
+- There can't be duplicated types defined
+- All enum variants types must be enclosed in parenthesis, other types can't be enclosed in parenthesis
+- A type must be either a basic type, a preset or a user defined type, other types are not allowed
+- All the types defined must be referenced by another type (no dangling types)
+
+
 ### When X is an Object
 
 #### **encoding**
