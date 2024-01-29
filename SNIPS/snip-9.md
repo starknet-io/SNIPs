@@ -127,8 +127,8 @@ See [SNIP 12](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md) f
 Check if the account supports this SNIP:
 
 ```rust
-let account = IErc165Dispatcher { contract_address: acount_address };
-let is_supported = account.supports_interface(ERC165_OUTSIDE_EXECUTION_INTERFACE_ID); // see below for actual value
+let account = ISRC5Dispatcher { contract_address: acount_address };
+let is_supported = account.supports_interface(SRC5_OUTSIDE_EXECUTION_INTERFACE_ID); // see below for actual value
 ```
 
 Call the `execute_from_outside` method on the account:
@@ -144,7 +144,7 @@ let results = account.execute_from_outside(outside_execution, signature);
 
 #### Version 1
 
-This version implements [SNIP-12 revision 0](https://github.com/maorveitsman/SNIPs/blob/snip-9-update/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `1`, the account contract must implement the following interface:
+This version implements [SNIP-12 revision 0](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `1`, the account contract must implement the following interface:
 
 ```rust
 /// Interface ID: 0x68cfd18b92d1907b8ba3cc324900277f5a3622099431ea85dd8089255e4181
@@ -159,10 +159,11 @@ struct OutsideExecution {
 
 #[starknet::interface]
 trait IOutsideExecution<TContractState> {
-    /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures. This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`.
+    /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures.
+    /// This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside` thus the implementation MUST verify that the provided `signature` matches the hash of `outside_execution`.
     /// # Arguments
     /// * `outside_execution ` - The parameters of the transaction to execute.
-    /// * `signature ` - A valid signature on the ERC-712 message encoding of `outside_execution`.
+    /// * `signature ` - A valid signature on the SNIP-12 message encoding of `outside_execution`.
     fn execute_from_outside(
         ref self: TContractState,
         outside_execution: OutsideExecution,
@@ -179,10 +180,10 @@ trait IOutsideExecution<TContractState> {
 
 #### Version 2
 
-This version implements [SNIP-12 revision 1](https://github.com/maorveitsman/SNIPs/blob/snip-9-update/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `2`, the account contract must implement the following interface:
+This version implements [SNIP-12 revision 1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `2`, the account contract must implement the following interface:
 
 ```rust
-/// Interface ID: 0x2fc193f5097f9a064d597fd3877371ba92d5faa9333a5ec51985bc889dbbc08
+/// Interface ID: 0x1d1144bb2138366ff28d8e9ab57456b1d332ac42196230c3a602003c89872
 #[derive(Copy, Drop, Serde)]
 struct OutsideExecution {
     caller: ContractAddress,
@@ -196,14 +197,16 @@ struct OutsideExecution {
 
 #[starknet::interface]
 trait IOutsideExecution_V2<TContractState> {
-    /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures. This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside`. The implementation should expect version to be set to 2 in the domain separator.
+    /// This method allows anyone to submit a transaction on behalf of the account as long as they have the relevant signatures.
+    /// This method allows reentrancy. A call to `__execute__` or `execute_from_outside` can trigger another nested transaction to `execute_from_outside` thus the implementation MUST verify that the provided `signature` matches the hash of `outside_execution`.
+    /// The implementation should expect version to be set to 2 in the domain separator.
     /// # Arguments
     /// * `outside_execution ` - The parameters of the transaction to execute.
-    /// * `signature ` - A valid signature on the ERC-712 message encoding of `outside_execution`.
+    /// * `signature ` - A valid signature on the SNIP-12 message encoding of `outside_execution`.
     fn execute_from_outside_v2(
         ref self: TContractState,
         outside_execution: OutsideExecution,
-        signature: Array<felt252>,
+        signature: Span<felt252>,
     ) -> Array<Span<felt252>>;
 
     /// Get the status of a given nonce, true if the nonce is available to use
@@ -213,6 +216,8 @@ trait IOutsideExecution_V2<TContractState> {
     ) -> bool;
 }
 ```
+
+**NOTE**: The interface id for version 2 is computed with a Cairo v2.5.0 compatible `Call` struct where `calldata` is a `Span<felt252>`
 
 
 Indicative implementation outline:
