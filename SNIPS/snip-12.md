@@ -119,6 +119,7 @@ User defined types must follow some rules, if they are not met the request must 
 - Name can't match preset types like TokenAmount, NftId, u256
 - Name can't end in *
 - Name can't be enclosed in parenthesis
+- Name can't contain the comma (,) character (since it is used as a delimiter in the enum type)
 - There can't be duplicated types defined
 - All enum variants types must be enclosed in parenthesis, other types can't be enclosed in parenthesis
 - A type must be either a basic type, a preset or a user defined type, other types are not allowed
