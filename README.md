@@ -15,7 +15,7 @@
   <a href="https://github.com/starknet-io/SNIPs/discussions">Ask a Question</a>       
   </p>
   
-  <h3 align="center">StarkNet Improvement Proposal repository.</h3>
+  <h3 align="center">Starknet Improvement Proposal repository.</h3>
 </div>
 
 <div align="center">
@@ -43,13 +43,13 @@
 
 ## About
 
-The goal of the SNIP project is to document standardized protocols for StarkNet related softwares and to document them in a high quality and implementable way.
+The goal of the SNIP project is to document standardized protocols for Starknet related softwares and to document them in a high quality and implementable way.
 
 ## SNIP Process
 
 ### Overview
 
-The SNIP process is the process that a contributor goes through to propose a change to the StarkNet ecosystem. It is inspired by the [EIP process](https://eips.ethereum.org/EIPS/eip-1).
+The SNIP process is the process that a contributor goes through to propose a change to the Starknet ecosystem. It is inspired by the [EIP process](https://eips.ethereum.org/EIPS/eip-1).
 
 Here is the process that a contributor should follow:
 
