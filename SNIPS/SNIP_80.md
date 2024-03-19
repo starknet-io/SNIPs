@@ -1,3 +1,14 @@
+---
+snip: 80
+title: L1 block hash syscall
+authors: Marcello <marcello@herodotus.dev>
+discussions-to: N/A
+status: Draft
+type: Core
+created: 2024-03-19
+---
+
+
 # Simple summary
 A syscall to access current and historical L1 block hashes, removing the need for using the messaging bridge.
 
