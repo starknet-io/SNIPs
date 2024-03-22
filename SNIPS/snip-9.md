@@ -180,7 +180,7 @@ trait IOutsideExecution<TContractState> {
 
 #### Version 2
 
-This version implements [SNIP-12 revision 1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to  `2`, the account contract must implement the following interface:
+This version implements [SNIP-12 revision 1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#specification). To accept such outside transactions with [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator) parameter `version` set to the integer `2` (and not the shortstring `'2'` despite having this type ), the account contract must implement the following interface:
 
 ```rust
 /// Interface ID: 0x1d1144bb2138366ff28d8e9ab57456b1d332ac42196230c3a602003c89872
