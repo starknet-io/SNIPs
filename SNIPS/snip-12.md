@@ -78,7 +78,7 @@ This object ensures the uniqueness of messages based on:
 - **chainId**: The chain ID used by the Dapp is represented as a shortstring. Prevents replay attacks from one network to another.
 - **revision (optional)**: the revision of the specification to be used. If the value is omitted it will default to `0` .
     - Revision `0`: Represents the de facto spec before this SNIP was published. The purpose is to help with backwards compatibility. It’s not recommended to use it.
-    - Revision `1`: Will be the initial version of the specification. Note that for this revision the value in this field should be the integer `1` and not the shortstring `"1"`. See the [example](#json-example) below.
+    - Revision `1`: Will be the initial version of the specification. Note that for this revision the value in this field should be the integer `1` and not the shortstring `"1"` despite being defined as shortstring. This exception is made to support an inconsistency in the Braavos wallet implementation. See the [example](#json-example) below.
 
 Introduced in revision `0`, changed in revision `1`  
 In revision `0` the fields `name` , `version` and `chainId` are of type `felt` .  
