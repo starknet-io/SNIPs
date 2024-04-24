@@ -1,7 +1,7 @@
 ---
 snip: $SNIP_ID
 title: Tokenized Vaults
-author: Nils Bundi <nbundi@proton.me>, Johannes Escherich
+author: Nils Bundi <nbundi@proton.me>, Johannes Escherich <0xJohannes@pm.me>
 status: Draft
 type: SRC
 created: $SNIP_DATE
