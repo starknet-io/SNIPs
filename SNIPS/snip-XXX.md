@@ -351,7 +351,10 @@ struct Withdraw {
 
 ## Implementation
 
-TBD
+An implementation of the standard can be found here https://github.com/vesuxyz/protocol/blob/dev/src/v_token.cairo.
+
+Note that this implementation needs to be adjusted for your specific use case.
+
 
 ## Backwards Compatibility
 
