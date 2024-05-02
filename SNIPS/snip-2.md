@@ -37,7 +37,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 ### Methods
 
 **NOTES**:
- - The following specifications use syntax from Cairo `2.6.3` (or above)
+ - The following specifications use syntax from Cairo `0.12.0` (or above)
 
 
 #### name
@@ -90,7 +90,7 @@ fn total_supply(self: @TContractState) -> u256
 Returns the account balance of another account with address `account`.
 
 ``` cairo
-fn balanceOf(self: @TContractState, account: ContractAddress) -> u256
+fn balance_of(self: @TContractState, account: ContractAddress) -> u256
 ```
 
 
@@ -113,7 +113,7 @@ fn transfer(
 
 Transfers `amount` amount of tokens from address `sender` to address `recipient`, and MUST fire the `Transfer` event.
 
-The `transferFrom` method is used for a withdraw workflow, allowing contracts to transfer tokens on your behalf.
+The `transfer_from` method is used for a withdraw workflow, allowing contracts to transfer tokens on your behalf.
 
 This can be used for example to allow a contract to transfer tokens on your behalf and/or to charge fees in sub-currencies.
 
@@ -159,10 +159,10 @@ fn allowance(
 
 MUST trigger when tokens are transferred, including zero value transfers.
 
-A token contract which creates new tokens SHOULD trigger a Transfer event with the `from_` address set to `0x0` when tokens are created.
+A token contract which creates new tokens SHOULD trigger a Transfer event with the `from` address set to `0x0` when tokens are created.
 
 ``` cairo
-#[derive(Drop, starknet::Event)]
+#[derive(Drop, PartialEq, starknet::Event)]
 struct Transfer {
     #[key]
     from: ContractAddress,
@@ -175,10 +175,10 @@ struct Transfer {
 
 #### Approval
 
-MUST trigger on any successful call to `approve(address _spender, uint256 _value)`.
+MUST trigger on any successful call to `approve(address spender, uint256 value)`.
 
 ``` cairo
-#[derive(Drop, starknet::Event)]
+#[derive(Drop, PartialEq, starknet::Event)]
 struct Approval {
     #[key]
     owner: ContractAddress,
@@ -197,7 +197,7 @@ struct Approval {
 
 ## Backwards Compatibility
 
-For backwards compatibility, it is RECOMMENDED that the `total_supply`, `balance_of`, and `transfer_from` methods are also exposed using _camel case_ notation.
+For backwards compatibility, it is RECOMMENDED that the `total_supply`, `balance_of`, and `transfer_from` methods are also exposed using _camel case_ notation, or `totalSupply`, `balanceOf`, `transferFrom` respectively.
 
 This is OPTIONAL and MUST NOT replace the methods using _snake case_ notation.
 
@@ -209,8 +209,9 @@ Note that some smart contract systems rely on the _camel case_ notation for the 
 
 ## History
 
-- 2022-06-03: Initial publication
-- 2024-05-02: Updated publication introducing _snake case_ notation, _camel case_ compatibility, and Cairo 2.6.3 syntax
+__2022-06-03__: Initial publication
+
+__2024-05-02__: Updated publication introducing _snake case_ notation, _camel case_ compatibility, and Cairo 0.12.0 syntax
 
 
 ## Copyright
