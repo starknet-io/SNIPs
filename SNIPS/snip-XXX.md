@@ -13,15 +13,22 @@ A standard interface for tokenized vaults.
 
 Inspired by [EIP-4626](https://eips.ethereum.org/EIPS/eip-4626).
 
+Extends [SNIP-2](./snip-2.md).
+
+
 ## Abstract
 
-The following standard allows for the implementation of a standard API for tokenized vaults representing shares of a single underlying [SNIP-2](./snip-2.md) asset. This standard extends the SNIP-2 token and provides basic functionality for depositing and withdrawing underlying assets, minting and burning vault shares and reading balances and other basic information. It is inspired by the [EIP-4626](https://eips.ethereum.org/EIPS/eip-4626) standard for EVM chains.
+The following standard allows for the implementation of a standard API for tokenized vaults representing shares of a single underlying [SNIP-2](./snip-2.md) asset. 
+
+This standard extends the SNIP-2 token and provides basic functionality for depositing and withdrawing underlying assets, minting and burning vault shares and reading balances and other basic information.
+
 
 ## Motivation
 
 Tokenized vaults are a widely used pattern across many DeFi applications including lending markets, aggregators, and interest bearing tokens. It is enabled by the standardization of simple tokens with the SNIP-2 standard. However, other than SNIP-2 tokens, current vaults expose diverse interfaces making integration difficult for protocols, aggregators and wallets which have to implement adapters for each standard. This is inefficient and error prone.
 
 The proposed "tokenized vaults" standard will lower the integration effort for yield-bearing vaults and tokens, result in better UX and increase security for users.
+
 
 ## Specification
 
@@ -40,6 +47,7 @@ The SNIP-2 optional operations `name` and `symbol` SHOULD reflect the underlying
 
 All tokenized vaults MUST implement a set of additional functions enabling the management of the vault's underlying assets.
 
+
 ### Definitions:
 
 - _asset_: The underlying token managed by the vault
@@ -48,6 +56,8 @@ All tokenized vaults MUST implement a set of additional functions enabling the m
   (e.g. deposit/withdraw/mint/burn/etc).
 - _slippage_: Any difference between computed share price and economic realities of
   a vault deposit/withdrawal, which is not accounted by fees.
+- _caller_: the contract initiating a method call on the tokenized vault
+
 
 ### Methods
 
@@ -113,7 +123,7 @@ fn convert_to_assets(self: @TContractState, shares: u256) -> u256;
 
 Returns the maximum amount of the underlying token that can be deposited into the vault for the `receiver`, through a `deposit` call.
 
-MUST NOT take into account caller's available asset balance (i.e. `balanceOf` of `asset` for caller).
+MUST NOT take into account caller's available asset balance (i.e. `balance_of` of `asset` for caller).
 
 MUST factor in both global and user-specific limits, like if deposits are entirely disabled (even temporarily) it MUST return 0.
 
@@ -149,7 +159,7 @@ Mints `shares` vault shares to `receiver` by depositing exactly `assets` of unde
 
 MUST emit the `Deposit` event.
 
-MUST support SNIP-2 `approve` / `transferFrom` on `asset` as a deposit flow.
+MUST support SNIP-2 `approve` / `transfer_From` on `asset` as a deposit flow.
 MAY support additoinal deposit flows.
 
 MUST revert if all of `assets` cannot be deposited (due to deposit limit being reached, slippage, the user not approving enough underlying tokens to the vault contract, etc).
@@ -162,7 +172,7 @@ fn deposit(ref self: @TContractState, assets: u256, receiver: ContractAddress) -
 
 Returns the maximum amount of shares that can be minted from the vault for the `receiver`, through a `mint` call.
 
-MUST NOT take into account caller's available asset balance (i.e. `balanceOf` of `asset` for caller).
+MUST NOT take into account caller's available asset balance (i.e. `balance_of` of `asset` for caller).
 
 MUST factor in both global and user-specific limits, like if mints are entirely disabled (even temporarily) it MUST return 0.
 
@@ -198,7 +208,7 @@ Mints exactly `shares` vault shares to `receiver` by depositing `assets` of unde
 
 MUST emit the `Deposit` event.
 
-MUST support SNIP-2 `approve` / `transferFrom` on `asset` as a mint flow.
+MUST support SNIP-2 `approve` / `transfer_from` on `asset` as a mint flow.
 MAY support additional mint flows.
 
 MUST revert if all of `shares` cannot be minted (due to deposit limit being reached, slippage, the user not approving enough underlying tokens to the vault contract, etc).
@@ -223,7 +233,7 @@ fn max_withdraw(self: @TContractState, owner: ContractAddress) -> u256
 
 Simulate the effects of an asset withdrawal, at the current block.
 
-MUST return as close to and no fewer than the exact amount of Vault shares that would be burned in a `withdraw` call in the same transaction. I.e. `withdraw` should return the same or fewer `shares` as `previewWithdraw` if called in the same transaction.
+MUST return as close to and no fewer than the exact amount of Vault shares that would be burned in a `withdraw` call in the same transaction. I.e. `withdraw` should return the same or fewer `shares` as `preview_withdraw` if called in the same transaction.
 
 MUST NOT account for withdrawal limits like those returned from maxWithdraw and should always act as though the withdrawal would be accepted, regardless if the user has enough shares, etc.
 
@@ -231,7 +241,7 @@ MUST be inclusive of withdrawal fees.
 
 MUST NOT revert due to vault specific user/global limits. MAY revert due to other conditions that would also cause `withdraw` to revert.
 
-Note that any unfavorable discrepancy between `convertToShares` and `previewWithdraw` SHOULD be considered slippage in share price or some other type of condition, meaning the depositor will lose assets by depositing.
+Note that any unfavorable discrepancy between `convert_to_Shares` and `preview_withdraw` SHOULD be considered slippage in share price or some other type of condition, meaning the depositor will lose assets by depositing.
 
 ```cairo
 fn preview_withdraw(self: @TContractState, assets: u256) -> u256
@@ -243,9 +253,9 @@ Burns `shares` from `owner` and sends exactly `assets` of underlying token to `r
 
 MUST emit the `Withdraw` event.
 
-MUST support a withdraw flow where the shares are burned from `owner` directly where `owner` is `msg.sender`.
+MUST support a withdraw flow where the shares are burned from `owner` directly where `owner` is _caller_.
 
-MUST support a withdraw flow where the shares are burned from `owner` directly where `msg.sender` has SNIP-2 approval over the shares of `owner`.
+MUST support a withdraw flow where the shares are burned from `owner` directly where _caller_ has SNIP-2 approval over the shares of `owner`.
 
 MAY support additional withdraw flows.
 
@@ -283,7 +293,7 @@ MUST be inclusive of withdrawal fees.
 
 MUST NOT revert due to vault specific user/global limits. MAY revert due to other conditions that would also cause `redeem` to revert.
 
-Note that any unfavorable discrepancy between `convertToAssets` and `previewRedeem` SHOULD be considered slippage in share price or some other type of condition, meaning the depositor will lose assets by redeeming.
+Note that any unfavorable discrepancy between `convert_to_assets` and `preview_redeem` SHOULD be considered slippage in share price or some other type of condition, meaning the depositor will lose assets by redeeming.
 
 ```cairo
 fn preview_redeem(self: @TContractState, shares: u256) -> u256
@@ -295,9 +305,9 @@ Burns exactly `shares` from `owner` and sends `assets` of underlying tokens to `
 
 MUST emit the `Withdraw` event.
 
-MUST support a redeem flow where the shares are burned from `owner` directly where `owner` is `msg.sender`.
+MUST support a redeem flow where the shares are burned from `owner` directly where `owner` is _caller_.
 
-MUST support a redeem flow where the shares are burned from `owner` directly where `msg.sender` has EIP-20 approval over the shares of `owner`.
+MUST support a redeem flow where the shares are burned from `owner` directly where _caller_ has EIP-20 approval over the shares of `owner`.
 
 MAY support additional redeem flows.
 
@@ -351,7 +361,7 @@ struct Withdraw {
 
 ## Implementation
 
-An implementation of the standard can be found here https://github.com/vesuxyz/protocol/blob/dev/src/v_token.cairo.
+An implementation of the standard can be found here: [Vesu v_token](https://github.com/vesuxyz/protocol/blob/dev/src/v_token.cairo).
 
 Note that this implementation needs to be adjusted for your specific use case.
 
