@@ -11,7 +11,7 @@ created: 2024-05-05
 
 Events in Starknet consist of two felt arrays, `keys` and `data`, the former is analogous to topics on Ethereum. Similarly to Ethereum, Starknet’s json-rpc allows you to filter over event keys via the `starknet_getEvents` method.
 
-In this SNIP we suggest updating StarkGate's ERC20s (including ETH, STRK, USDC [and others](https://github.com/starknet-io/starknet-addresses/blob/master/bridged_tokens/mainnet.json)) to index more fields the `Transfer` and `Approval` events in order to allow filtration over the sender or receiver.
+In this SNIP we suggest updating StarkGate's ERC20s (including ETH, STRK, USDC [and others](https://github.com/starknet-io/starknet-addresses/blob/master/bridged_tokens/mainnet.json)) to index more fields in the `Transfer` and `Approval` events in order to allow filtration over the sender or receiver.
 
 ## Motivation
 
