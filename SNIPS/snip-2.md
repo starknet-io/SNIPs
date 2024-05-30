@@ -37,7 +37,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 ### Methods
 
 **NOTES**:
- - The following specifications use syntax from Cairo `0.12.0` (or above)
+ - The following specifications use syntax from Cairo `2.6.0` (or above)
 
 
 #### name
