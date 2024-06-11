@@ -1,12 +1,12 @@
 ---
-snip: 72
+snip: 14
 title: Non-fungible Tokenbound Accounts
 author: Darlington Nnam <darlingtonnnam@gmail.com>, Ademola Kelvin <adegbiteademola1999@gmail.com>
 discussions-to: https://community.starknet.io/t/snip-72-non-fungible-tokenbound-accounts/112479
 status: Draft
 type: Standards Track
 category: SRC
-created: 2024--01-08
+created: 2024-01-08
 ---
 
 ## Simple Summary
@@ -48,7 +48,7 @@ The system outlined in this proposal has two main components:
 - A singleton registry for tokenbound accounts
 - A common interface for tokenbound account implementations
 
-<img src="https://eips.ethereum.org/assets/eip-6551/diagram.png" width="100%" alt="ERC6551 illustration">
+<img src="../assets/snip-14/snip-14.png" width="100%" alt="ERC6551 illustration">
 
 The following diagram illustrates the relationship between NFTs, NFT holders, tokenbound accounts, and the Registry.
 
