@@ -23,7 +23,7 @@ At Kakarot, we utilize `replace_class_hash` syscall for upgrades at the contract
 
 We would benefit from a syscall that would enable a contract to check a particular class hash at an address.
 
-#### Simple use-case for Kakarot: enable the contract-level orchestration of versioning and auto-upgrade of our swarm of Kakarot Account Contracts.
+#### Simple use-case for Kakarot: enable the contract-level orchestration of versioning and auto-upgrade of our swarm of Kakarot Account Contracts
 
 How?
 
@@ -55,7 +55,7 @@ contract_address: The contract address one wants to know the class hash of.
 
 ### Returns
 
-Returns the `ClassHash` if the contract is deployed, an `Result::Error` if the contract is not deployed
+Returns the `ClassHash` if the contract is deployed, an `Result::Error` if the contract is not deployed. Note that the syscall should never panic. Calling `get_class_hash_at_syscall` on an address where no contract is deployed will result in a catchable error (equivalent to returning a sentinel value null), not a CairoVM error.
 
 ## Implementation
 
