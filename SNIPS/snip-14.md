@@ -23,6 +23,14 @@ At Kakarot, we utilize `replace_class_hash` syscall for upgrades at the contract
 
 We would benefit from a syscall that would enable a contract to check a particular class hash at an address.
 
+#### Simple use-case for Kakarot: enable the contract-level orchestration of versioning and auto-upgrade of our swarm of Kakarot Account Contracts.
+
+How?
+
+1. Set the new version (a class hash) in the Core EVM Kakarot Contract
+2. Every contract is now able to compare their class hash with the current correct version (situated in Kakarot Core EVM) and decide to self upgrade
+3. Before calling a contract, one may check that it is in the correct version.
+
 ## Specification
 
 One might want to name the syscall in the same way as the corresponding RPC method.
