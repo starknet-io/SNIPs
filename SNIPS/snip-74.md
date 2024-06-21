@@ -1,6 +1,6 @@
 ---
 snip: 74
-title: New Sign in with Starknet Standard
+title: Sign-in-with-Starknet (SIWS) Standard
 author: Yudhishthra Sugumaran <yudhishthra.sugumaran@nethermind.io>
 discussions-to: https://community.starknet.io/t/sign-in-with-starknet-technical-proposal/95683/9
 status: Draft
@@ -9,21 +9,25 @@ category: SRC
 created: 2024-05-23
 ---
 
-## Simple Summary
+## Summary
 
-A new Sign-in-with-Starknet (SIWS) standard that removes the 31-char limit on the `StarknetDomain` and `Message` fields.
-
-Inspired by [Starknet.js v6.8.0](https://github.com/starknet-io/starknet.js/blob/66a5c0341eccfef0dcdf1312c15627b7d4f6b675/src/utils/typedData.ts#L50-L65).
+The Sign-in with Starknet Standard (SIWS) enhances the flexibility and security of user authentication across Starknet by leveraging account abstraction and extended data fields. This standard supports a wider range of authentication scenarios, thereby improving user experience and expanding application development possibilities on Starknet.
 
 ## Abstract
 
-The current SIWS standard introduces a lot of limitations when signing messages by enforcing a 31-char limit on the `StarknetDomain` and `Message` fields. This proposal suggests the removal of this limitation to allow for more flexibility in the use of the SIWS standard and increase adoption of the new standard for more dApps built on Starknet.
+The proposed SIWS standard introduces an advanced framework for authentication that enables signing of messages of any length, removing character limitations. This enhancement is made possible through the integration of the Poseidon hash function, which supports larger data sizes. The standard aims to facilitate broader adoption across decentralized applications by offering enhanced flexibility and robust security features.
 
 ## Motivation
 
-Initially, it was noticed that the reason why the a string of more than 31 characters could not be signed was because it exceeded the curve limit of the Pedersen hash. Further scoping into the latest starknet.js codebase (hyperlinked above) revealed another hash standard (Poseidon hash) that could be used to sign messages of any length. This proposal aims to leverage this new hash standard to remove the 31-char limit on the `StarknetDomain` and `Message` fields.
+SIWS aims to enhance user security by utilizing Starknet's account abstraction feature, allowing dynamic handling of signatures where any hash passing an account's `is_valid_signature` method is considered valid. This significantly improves security by enabling users to revoke signatures by changing account keys and supports future-proofing against advances in cryptographic methods. Additionally, by removing the character limit and employing structured JSON data for authentication requests, SIWS improves the clarity and detail of communication between users and services, making interactions more straightforward and secure. The flexibility offered by SIWS encourages developers to create innovative applications with diverse authentication needs, further enriching the Starknet ecosystem.
 
 ## Specification
+
+### Sign-In Schema Structure
+
+- Domain Object: Represents the application requesting the authentication. It includes fields like chainId, name, version, and revision. These help in identifying the application context and managing different versions or revisions of the sign-in protocol.
+  
+- Message Object: Contains the actual data needed for user authentication, including the user's contract address, a nonce to prevent replay attacks, a timestamp, and optionally, expirationTime and notBefore fields to define the validity period of the authentication request.
 
 ### Sign-in Schema
 
@@ -106,14 +110,7 @@ Initially, it was noticed that the reason why the a string of more than 31 chara
           "errorMessage": "NotBefore, if present, must be a valid date-time string"
         }
       },
-      "required": [
-        "address",
-        "issuedAt",
-        "nonce",
-        "statement",
-        "uri",
-        "version"
-      ],
+      "required": ["address", "issuedAt", "nonce", "statement", "uri", "version"],
       "additionalProperties": false,
       "errorMessage": "Message must include address, issuedAt, nonce, statement, uri, version"
     },
@@ -132,16 +129,7 @@ Initially, it was noticed that the reason why the a string of more than 31 chara
             "properties": {
               "name": {
                 "type": "string",
-                "enum": [
-                  "version",
-                  "address",
-                  "statement",
-                  "uri",
-                  "nonce",
-                  "issuedAt",
-                  "expirationTime",
-                  "notBefore"
-                ],
+                "enum": ["version", "address", "statement", "uri", "nonce", "issuedAt", "expirationTime", "notBefore"],
                 "errorMessage": "Name must be one of 'version', 'address', 'statement', 'uri', 'nonce', 'issuedAt', 'expirationTime', 'notBefore'"
               },
               "type": {
@@ -182,7 +170,7 @@ Initially, it was noticed that the reason why the a string of more than 31 chara
           "minItems": 4,
           "maxItems": 4,
           "uniqueItems": true,
-          "errorMessage": "StarknetDomain must contain exactly 3 unique items"
+          "errorMessage": "StarknetDomain must contain exactly 4 unique items"
         }
       },
       "required": ["Message", "StarknetDomain"],
@@ -196,19 +184,62 @@ Initially, it was noticed that the reason why the a string of more than 31 chara
 }
 ```
 
-### Changes
-
-This new schema introduces a few key changes
-
-- New `revision` field in the `domain` object to allow for future updates to the SIWS standard. Use `1` for the latest revision that allows for signing messages using the Poseidon hash.
-
-- `StarknetDomain` replaces `StarkNetDomain` to align with the Starknet naming convention.
-
-- `SN_SEPOLIA` replaced `SN_GOERLI2` to align with the latest chain IDs as per this [constant file](https://github.com/starknet-io/starknet.js/blob/develop/src/constants.ts).
-
 ## Implementation
 
-This new standard was tested on this demo [repository](https://github.com/NethermindEth/sign-in-with-starknet). Do run the frontend repo with `npm run dev` to quickly test the new standard.
+### Full Flow of Sign-In Process
+
+1. Challenge Preparation: A Starknet application (the challenger) prepares a sign-in request based on the specified schema. This request includes the domain and message objects.
+
+2. Signature Request: The user's wallet application displays the sign-in request, ensuring the user understands what they are signing.
+
+3. User Consent and Signature: If the user consents to the sign-in request, they sign the message using their Starknet account. This signature is then sent back to the challenger.
+
+4. Verification: The challenger uses an RPC call to a Starknet node to verify the signature against the user's account using the isValidSignature method. Due to account abstraction, the exact signature scheme doesn’t need to be known by the challenger; it only needs to ensure that the signature is valid for the given account.
+
+### Verification Example
+
+```typescript
+import { Contract, RpcProvider, BigNumberish } from "starknet";
+import abiAccountContract from "./account-contract-abi.json";
+
+class SiwsTypedData {
+  // ... other methods and properties
+
+  async verifyMessageHash(
+    hash: BigNumberish,
+    signature: string[],
+    provider: RpcProvider
+  ): Promise<boolean> {
+    try {
+      const accountContract = new Contract(
+        abiAccountContract,
+        this.message.address,
+        provider
+      );
+      await accountContract.call("is_valid_signature", [hash, signature]);
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+
+  async verifyMessage(
+    data: TypedData,
+    signature: string[],
+    provider: RpcProvider
+  ): Promise<boolean> {
+    const hash = await getMessageHash(data, this.message.address);
+    return this.verifyMessageHash(hash, signature, provider);
+  }
+}
+```
+
+### Demonstration Repository
+A demonstration of this sign-in protocol is available at [Sign-in with Starknet GitHub Repository](https://github.com/NethermindEth/sign-in-with-starknet). This repository includes example code and documentation that illustrates how to implement and test the sign-in protocol in a Starknet application.
+
+### History
+Discussion and development of this SNIP were inspired by the community's demand for more flexible and secure authentication methods within the Starknet ecosystem as dicussed in this [forum](https://community.starknet.io/t/sign-in-with-starknet-technical-proposal/95683/1)
 
 ## Copyright
 
