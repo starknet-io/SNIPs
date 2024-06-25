@@ -28,7 +28,7 @@ The [SNIP-89](SNIP-89.md) receiver interface ID MUST be defined as follows:
 
 ```cairo
 /// Extended function selector as defined in SRC-5
-const ISNIP88_RECEIVER_ID: felt252 = selector!("fn_on_erc20_received(ContractAddress,ContractAddress,u256,Span<felt252>)->felt252)");
+const ISNIP89_RECEIVER_ID: felt252 = selector!("fn_on_erc20_received(ContractAddress,ContractAddress,u256,Span<felt252>)->felt252)");
 ```
 
 An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUST:
@@ -38,11 +38,11 @@ An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUS
 An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token recipient MUST satisfy one of the following criteria:
 
 - Through [SNIP-5](snip-5.md), self-identify as an account with an [SNIP-6](snip-6.md) interface ID.
-- Through [SNIP-5](snip-5.md), confirm support for [SNIP-89](SNIP-89.md) interface ID and implement the following `ISNIP88Receiver` trait.
+- Through [SNIP-5](snip-5.md), confirm support for [SNIP-89](SNIP-89.md) interface ID and implement the following `ISNIP89Receiver` trait.
 
 ```cairo
 #[starknet::interface]
-trait ISNIP88Receiver<TContractState> {
+trait ISNIP89Receiver<TContractState> {
     fn on_erc20_received(
         self: @TContractState,
         operator: ContractAddress,
@@ -87,11 +87,11 @@ fn _check_on_erc20_received(
     data: Span<felt252>,
 ) -> bool {
     let src5_dispatcher = ISRC5Dispatcher { contract_address: recipient };
-    if src5_dispatcher.supports_interface(ISNIP88_RECEIVER_ID) {
-        ISNIP88ReceiverDispatcher { contract_address: recipient }
+    if src5_dispatcher.supports_interface(ISNIP89_RECEIVER_ID) {
+        ISNIP89ReceiverDispatcher { contract_address: recipient }
             .on_erc20_received(
                 get_caller_address(), sender, amount, data
-            ) == ISNIP88_RECEIVER_ID
+            ) == ISNIP89_RECEIVER_ID
     } else {
         src5_dispatcher.supports_interface(ISRC6_ID)
     }
