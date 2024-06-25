@@ -24,21 +24,21 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 _"ERC-20" is used interchangeably with "SNIP-2" due to its prevalence within the Starknet ecosystem._
 
-The [SNIP-88](snip-88.md) receiver interface ID MUST be defined as follows:
+The [SNIP-89](SNIP-89.md) receiver interface ID MUST be defined as follows:
 
 ```cairo
 /// Extended function selector as defined in SRC-5
 const ISNIP88_RECEIVER_ID: felt252 = selector!("fn_on_erc20_received(ContractAddress,ContractAddress,u256,Span<felt252>)->felt252)");
 ```
 
-An [SNIP-88](snip-88.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUST:
+An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUST:
 
-- Call `on_erc20_received` or `onERC20Received` on the recipient and compare the return value against the [SNIP-88](snip-88.md) interface ID. If there is a mismatch, the transfer has failed. Revert, return false, or perform any other appropriate actions for failed token transfers.
+- Call `on_erc20_received` or `onERC20Received` on the recipient and compare the return value against the [SNIP-89](SNIP-89.md) interface ID. If there is a mismatch, the transfer has failed. Revert, return false, or perform any other appropriate actions for failed token transfers.
 
-An [SNIP-88](snip-88.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token recipient MUST satisfy one of the following criteria:
+An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token recipient MUST satisfy one of the following criteria:
 
 - Through [SNIP-5](snip-5.md), self-identify as an account with an [SNIP-6](snip-6.md) interface ID.
-- Through [SNIP-5](snip-5.md), confirm support for [SNIP-88](snip-88.md) interface ID and implement the following `ISNIP88Receiver` trait.
+- Through [SNIP-5](snip-5.md), confirm support for [SNIP-89](SNIP-89.md) interface ID and implement the following `ISNIP88Receiver` trait.
 
 ```cairo
 #[starknet::interface]
