@@ -73,6 +73,12 @@ trait ISRC5 {
 
 Notice that, if the signature is valid, the return value for `is_valid_signature` MUST be the short string literal `VALID`.
 
+## Security
+
+To guarantee the signature cannot be replayed in other accounts or other chains, the data hashed must be unique to the account and the chain.
+This is true for starknet transaction signatures and SNIP-12 signatures. However, it's worth noting that this may not necessarily hold for other types of signatures.
+Wallets are advised not to sign any data unless they know that it includes the account address and the chain ID
+
 ## Rationale
 
 (To Do...)
