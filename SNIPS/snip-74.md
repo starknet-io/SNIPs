@@ -1,5 +1,5 @@
 ---
-snip: 74
+snip: 86
 title: Sign-in-with-Starknet (SIWS) Standard
 author: Yudhishthra Sugumaran <yudhishthra.sugumaran@nethermind.io>
 discussions-to: https://community.starknet.io/t/sign-in-with-starknet-technical-proposal/95683/9
