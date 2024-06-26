@@ -25,9 +25,23 @@ SIWS aims to enhance user security by utilizing Starknet's account abstraction f
 
 ### Sign-In Schema Structure
 
-- Domain Object: Represents the application requesting the authentication. It includes fields like chainId, name, version, and revision. These help in identifying the application context and managing different versions or revisions of the sign-in protocol.
-  
-- Message Object: Contains the actual data needed for user authentication, including the user's contract address, a nonce to prevent replay attacks, a timestamp, and optionally, expirationTime and notBefore fields to define the validity period of the authentication request.
+Domain Object:
+
+- chainId: Identifies the Starknet network to confirm the correct context for authentication, aligning with protocol-level standards for network identification.
+- name: The application's name, clarifying for users which service is initiating a sign-in request, thus ensuring transparency.
+- version: Indicates the version of the application, ensuring that the authentication interaction adheres to compatible protocols.
+- revision: The Typed Data revision, '0' marks legacy Typed Data, while '1' indicates the active Typed Data standard.
+
+Message Object:
+
+- address: Specifies the wallet address responsible for verifying the user’s signature.
+- nonce: A one-time, unique number that makes each authentication request distinct to prevent replay attacks.
+- issuedAt: Timestamp indicating when the authentication request was generated, helping to establish its temporal validity.
+- statement: A user-readable message that the signer is agreeing to by providing their signature. This increases transparency and informs users about the purpose of their authentication.
+- uri: The identifier of the resource or the specific service that the authentication request is associated with, helping to contextualize the sign-in attempt.
+- version: The protocol version used in the message, ensuring compatibility between the user’s client and the dApp.
+- expirationTime (optional): The timestamp until which the authentication request remains valid, securing the process by limiting the time frame for a valid sign-in.
+- notBefore (optional): The earliest timestamp at which the authentication request can be considered valid, preventing its use before a certain time.
 
 ### Sign-in Schema
 
@@ -110,7 +124,14 @@ SIWS aims to enhance user security by utilizing Starknet's account abstraction f
           "errorMessage": "NotBefore, if present, must be a valid date-time string"
         }
       },
-      "required": ["address", "issuedAt", "nonce", "statement", "uri", "version"],
+      "required": [
+        "address",
+        "issuedAt",
+        "nonce",
+        "statement",
+        "uri",
+        "version"
+      ],
       "additionalProperties": false,
       "errorMessage": "Message must include address, issuedAt, nonce, statement, uri, version"
     },
@@ -129,7 +150,16 @@ SIWS aims to enhance user security by utilizing Starknet's account abstraction f
             "properties": {
               "name": {
                 "type": "string",
-                "enum": ["version", "address", "statement", "uri", "nonce", "issuedAt", "expirationTime", "notBefore"],
+                "enum": [
+                  "version",
+                  "address",
+                  "statement",
+                  "uri",
+                  "nonce",
+                  "issuedAt",
+                  "expirationTime",
+                  "notBefore"
+                ],
                 "errorMessage": "Name must be one of 'version', 'address', 'statement', 'uri', 'nonce', 'issuedAt', 'expirationTime', 'notBefore'"
               },
               "type": {
@@ -236,9 +266,11 @@ class SiwsTypedData {
 ```
 
 ### Demonstration Repository
+
 A demonstration of this sign-in protocol is available at [Sign-in with Starknet GitHub Repository](https://github.com/NethermindEth/sign-in-with-starknet). This repository includes example code and documentation that illustrates how to implement and test the sign-in protocol in a Starknet application.
 
 ### History
+
 Discussion and development of this SNIP were inspired by the community's demand for more flexible and secure authentication methods within the Starknet ecosystem as dicussed in this [forum](https://community.starknet.io/t/sign-in-with-starknet-technical-proposal/95683/1)
 
 ## Copyright
