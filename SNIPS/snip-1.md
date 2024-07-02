@@ -161,7 +161,7 @@ At least one author must use a GitHub username, in order to get notified on chan
 
 While a SNIP is a draft, a `discussions-to` header will indicate the URL where the SNIP is being discussed.
 
-The preferred discussion URL is a topic on [StarkNet Magicians](https://ethereum-magicians.org/). The URL cannot point to Github pull requests, any URL which is ephemeral, and any URL which can get locked over time (i.e. Reddit topics).
+The preferred discussion URL is a topic on [the StarkNet community forum](https://community.starknet.io/) The URL cannot point to Github pull requests, any URL which is ephemeral, and any URL which can get locked over time (i.e. Reddit topics).
 
 #### `type` header
 
@@ -220,8 +220,8 @@ If the SNIP isn't ready, the editor will send it back to the author for revision
 Once the SNIP is ready for the repository, the SNIP editor will:
 
 - Assign a SNIP number (generally the PR number, but the decision is with the editors)
-- Merge the corresponding [pull request](https://github.com/ethereum/SNIPs/pulls)
-- Send a message back to the SNIP author with the next step.
+- Merge the corresponding [pull request](https://github.com/starknet-io/SNIPs/pulls)
+- Send a message back to the SNIP author with the next step
 
 Many SNIPs are written and maintained by developers with write access to the StarkNet codebase. The SNIP editors monitor SNIP changes, and correct any structure, grammar, spelling, or markup mistakes we see.
 
@@ -255,7 +255,7 @@ SNIPs are encouraged to follow [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt) 
 
 ## History
 
-This document was derived heavily from [Ethereum's BIP-0001](https://github.com/ethereum/EIPs) which in turn was derived from [Bitcoin's BIP-0001](https://github.com/bitcoin/bips) written by Amir Taaki which in turn was derived from [Python's PEP-0001](https://www.python.org/dev/peps/). In many places text was simply copied and modified. Although the PEP-0001 text was written by Barry Warsaw, Jeremy Hylton, and David Goodger, they are not responsible for its use in the StarkNet Improvement Process, and should not be bothered with technical questions specific to StarkNet or the SNIP. Please direct all comments to the SNIP editors.
+This document was derived heavily from [Ethereum's EIP-1](https://eips.ethereum.org/EIPS/eip-1) which in turn was derived from [Bitcoin's BIP-0001](https://github.com/bitcoin/bips) written by Amir Taaki which in turn was derived from [Python's PEP-0001](https://www.python.org/dev/peps/). In many places text was simply copied and modified. Although the PEP-0001 text was written by Barry Warsaw, Jeremy Hylton, and David Goodger, they are not responsible for its use in the StarkNet Improvement Process, and should not be bothered with technical questions specific to StarkNet or the SNIP. Please direct all comments to the SNIP editors.
 
 ## Copyright
 
