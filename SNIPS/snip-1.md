@@ -255,7 +255,7 @@ SNIPs are encouraged to follow [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt) 
 
 ## History
 
-This document was derived heavily from [Ethereum's EIP-1](https://eips.ethereum.org/EIPS/eip-1) which in turn was derived from [Bitcoin's BIP-0001](https://github.com/bitcoin/bips) written by Amir Taaki which in turn was derived from [Python's PEP-0001](https://www.python.org/dev/peps/). In many places text was simply copied and modified. Although the PEP-0001 text was written by Barry Warsaw, Jeremy Hylton, and David Goodger, they are not responsible for its use in the StarkNet Improvement Process, and should not be bothered with technical questions specific to StarkNet or the SNIP. Please direct all comments to the SNIP editors.
+This document was derived heavily from [Ethereum's EIP-1](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1.md) which in turn was derived from [Bitcoin's BIP-0001](https://github.com/bitcoin/bips) written by Amir Taaki which in turn was derived from [Python's PEP-0001](https://www.python.org/dev/peps/). In many places text was simply copied and modified. Although the PEP-0001 text was written by Barry Warsaw, Jeremy Hylton, and David Goodger, they are not responsible for its use in the StarkNet Improvement Process, and should not be bothered with technical questions specific to StarkNet or the SNIP. Please direct all comments to the SNIP editors.
 
 ## Copyright
 
