@@ -23,7 +23,7 @@ At Kakarot, we utilize `replace_class_hash` syscall for upgrades at the contract
 
 We would benefit from a syscall that would enable a contract to check a particular class hash at an address.
 
-#### Simple use-case for Kakarot: enable the contract-level orchestration of versioning and auto-upgrade of our swarm of Kakarot Account Contracts
+### Simple use-case for Kakarot: enable the contract-level orchestration of versioning and auto-upgrade of our swarm of Kakarot Account Contracts
 
 How?
 
