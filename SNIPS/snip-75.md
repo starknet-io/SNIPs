@@ -19,9 +19,9 @@ This SNIP answers the network's strong desire to create a Security Council.
 
 **A Security Council is a committee of Ethereum L1 (possibly Starknet L2) multi-sig signers. It is empowered to perform certain actions on behalf of the network: Emergency Action and Non-Emergency Actions.**
 
-The specific ways in which the Security Council functions are defined by a set of SNIPs.
+The specific ways in which the Security Council functions are defined by a set of upcoming SNIPs.
 
-Emergency Actions are the last line of defense against bugs and earthshattering events. They are defined in a specific SNIP. Similarly, Non-Emergency actions frame the normal flow of upgrade and lifetime of the network. They are scoped in a specific SNIP. The Starknet Security Council is elected by the Starknet community, the Starknet Foundation, Starkware and the STRK token holders. The election process is described in a subsequent SNIP. The composition of the council is also defined in a unique SNIP.
+Emergency Actions are the last line of defense against bugs and earthshattering events. They are defined in a specific SNIP. Similarly, Non-Emergency actions frame the normal flow of upgrade and lifetime of the network. They are scoped in a specific SNIP. The Starknet Security Council is elected with the help of the Starknet community, the Starknet Foundation, Starkware and the STRK token holders. The election process and composition of the council is described in a subsequent SNIP.
 
 We rely on the following set of resources:
 
@@ -47,7 +47,7 @@ We suggest a series of 3 SNIPs, one for each important characteristic of the Sec
 ## Examples and hypothetical future
 
 As a bi-product of the Security Council creation, all upgrades on the Starknet network would be delayed by an amount of time chosen by the Security Council, e.g. 1 month.
-Simple minimal examples of how the Security Council could look like:
+Simple minimal examples of how the Security Council could look like (inspired the current states of other rollups):
 
 - Emergency Actions: the Security Council can reduce the upgrade delay time to zero for an emergency.
 - Non-Emergency Action: the Security Council can vote to accept an upgrade proposed by Starkware.
