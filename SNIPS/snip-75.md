@@ -44,10 +44,6 @@ We suggest a series of 3 SNIPs, one for each important characteristic of the Sec
 - Non-Emergency Actions
 - Election and Composition of the council
 
-## Implementation
-
-## History
-
 ## Copyright
 
 Copyright and related rights waived via [MIT](../LICENSE).
