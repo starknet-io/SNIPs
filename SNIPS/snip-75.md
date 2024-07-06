@@ -11,6 +11,8 @@ created: $SNIP_DATE
 
 Meta SNIP to lay out the structure, motivation and decisions of the Starknet Security Council.
 
+The goal of the Security Council is to entrust admin keys for the Starknet protocol's core smart contracts (core contract, bridge, verifier, etc.), over to a public, distributed set of people accountable to Starknet Governance.
+
 Today, [Arbitrum](https://docs.arbitrum.foundation/dao-constitution#section-3-the-security-council), [Optimism](https://github.com/ethereum-optimism/OPerating-manual/blob/main/Security%20Council%20Charter%20v0.1.md) and [zkSync](https://blog.matter-labs.io/security-council-2-0-2337a555f17a) have created and are continously improving a security committee, a so-called "Security Council".
 
 This SNIP answers the network's strong desire to create a Security Council.
