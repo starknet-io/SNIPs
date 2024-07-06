@@ -38,12 +38,11 @@ Currently, Starkware operates the Starknet network and oversees its upgrades, as
 
 ## Specification
 
-We suggest a series of 4 SNIPs, one for each important characteristic of the Security Council:
+We suggest a series of 3 SNIPs, one for each important characteristic of the Security Council:
 
 - Emergency Actions
 - Non-Emergency Actions
-- Election of the council
-- Composition of the council
+- Election and Composition of the council
 
 ## Implementation
 
