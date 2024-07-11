@@ -1,12 +1,12 @@
 ---
-snip: -
+snip: 89
 title: Safe Transfer for Fungible Tokens
 author: Jack Boyuan Xu <jxu@ethsign.xyz>
-discussions-to: -
+discussions-to: https://community.starknet.io/t/snip-89-safe-transfer-for-fungible-tokens
 status: Draft
 type: Standards Track
 category: SRC
-created: 2024-6-24
+created: 2024-06-24
 requires: SNIP-2, SNIP-5, SNIP-6, SNIP-64
 ---
 
@@ -33,7 +33,28 @@ const ISNIP89_RECEIVER_ID: felt252 = selector!("fn_on_erc20_received(ContractAdd
 
 An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUST:
 
-- Call `on_erc20_received` or `onERC20Received` on the recipient and compare the return value against the [SNIP-89](SNIP-89.md) interface ID. If there is a mismatch, the transfer has failed. Revert, return false, or perform any other appropriate actions for failed token transfers.
+- Implement `safe_transfer_from` as shown in the code snippet below.
+- When performing a safe transfer, call `on_erc20_received` or `onERC20Received` on the recipient and compare the return value against the [SNIP-89](SNIP-89.md) interface ID. If there is a mismatch, the transfer has failed. Revert, return false, or perform any other appropriate actions for failed token transfers.
+
+```cairo
+#[starknet::interface]
+trait ISNIP89Contract<TContractState> {
+    fn safeTransferFrom(
+        ref self: TContractState,
+        sender: ContractAddress,
+        recipient: ContractAddress,
+        amount: u256,
+        data: Span<felt252>
+    );
+    fn safe_transfer_from(
+        ref self: TContractState,
+        sender: ContractAddress,
+        recipient: ContractAddress,
+        amount: u256,
+        data: Span<felt252>
+    );
+}
+```
 
 An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token recipient MUST satisfy one of the following criteria:
 
@@ -61,9 +82,19 @@ trait ISNIP89Receiver<TContractState> {
 }
 ```
 
+## Rationale
+
+This SNIP draws inspiration from [EIP-4524](https://eips.ethereum.org/EIPS/eip-4524). [EIP-1363](https://eips.ethereum.org/EIPS/eip-1363) was also considered, but ultimately decided keeping the API consistent with existing safe transfer mechanisms is more important.
+
+## Backwards Compatibility
+
+This SNIP is incompatible with existing [SNIP-2](snip-2.md)/ERC-20 contracts as the specification requires the addition of new functions and logic through an upgrade.
+
+Legacy unupgradeable recipients are incompatible with this SNIP and requires transferring tokens using the existing unsafe `transfer` function.
+
 ## Implementation
 
-Below is a snippet of an OpenZeppelin-based example implementation of a `safe_transfer_from` function:
+Below is a snippet of an OpenZeppelin-based example implementation of this SNIP:
 
 ```cairo
 fn safe_transfer_from(
