@@ -53,7 +53,7 @@ Simple minimal examples of how the Security Council could look like (inspired th
 
 - Emergency Actions: the Security Council can reduce the upgrade delay time to zero for an emergency.
 - Non-Emergency Action: the Security Council can vote to accept an upgrade proposed by Starkware, or veto upgrades that go through timelocks.
-- Composition: the Security Council is composed of 12 to 15 people from broad set of sectors (Builders, Users, DeFi, Gaming, Wallet, Cryptography, Infra, etc.), covering a large amount of timezones (always 75% of the council is susceptible to be awake at all time "The Sun never sets on the Security Council" 👑 👀). Each person in the council has at least 1M vSTRK delegated to them (they must have either skin in the game or a "vote of confidence" from token holders). Council members are reelected by the Starknet Foundation and can be removed by their peers should they misbehave.
+- Composition: the Security Council is composed of 12 to 15 people from broad set of sectors (Builders, Users, DeFi, Gaming, Wallet, Cryptography, Infra, etc.), covering a large amount of timezones (always 75% of the council is susceptible to be awake at all time "The Sun never sets on the Security Council" 👑 👀). Each person in the council has at least 1M vSTRK delegated to them (they must have either skin in the game or a "vote of confidence" from token holders). Council members are managed from within, using their multisig, for reelection or removal by their peers should they misbehave.
 
 ## Copyright
 
