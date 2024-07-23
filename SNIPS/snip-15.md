@@ -19,21 +19,21 @@ This proposal defines a protocol-level restriction that will be imposed on calle
 
 Users act through their accounts via the `execute` entrypoint. Being able to access the execute of someone's account is tantamount to acting on their behalf. The default behavior should defend naive users and developers against such vulnerabilities.
 
-On the other hand, the current status quo is that every account's `execute` explicitly contains a line which enforces the call is not internal. Accounts without this line are exposed.
+On the other hand, the current status quo is that all safe account implementations explicitly contain a line in their `execute` entrypoint which enforces that the call is not internal. Accounts without this line are exposed to having others act on their behalf.
 
 ## Specification
 
-Execution clients will track the caller address, and fail a transaction as soon as there is a call to an `execute` entrypoint whose caller address is not the associated account.
+Execution clients will track the caller address and fail a transaction as soon as there is a call to an `execute` entrypoint whose caller address is not the associated account.
 
-The OS will enforce this restriction, rendering any calls which violate this restriction unprovable.
+The OS will enforce this restriction, rendering any calls that violate this restriction unprovable.
 
 ## Drawbacks
 
-The proposed restriction will break any applicative flows which call an account's `execute` from a proxy contract.
+The proposed restriction will break any applicative flows that call an account's `execute` from a proxy contract.
 
-Searching the recent history, there are several dozen transactions with such a flow. After the introduction of the restriction, such transactions will be reverted (in particular, their senders will pay fees).
+In recent history, there have been several dozen transactions with such a flow. After the introduction of the restriction, such transactions will be reverted (in particular, their senders will pay fees).
 
-In our opinion this drawback is acceptable because flows in which contracts act on behalf of accounts are possible e.g by SNIP 9 ("outside execution") https://community.starknet.io/t/snip-outside-execution/101058.
+In our opinion, this drawback is acceptable because flows in which contracts act on behalf of accounts are possible e.g by SNIP 9 ("outside execution") https://community.starknet.io/t/snip-outside-execution/101058.
 
 ## Copyright
 
