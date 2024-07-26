@@ -33,7 +33,7 @@ SNIPs **MUST** follow the process described in [SNIP-1](https://github.com/stark
 
 SNIPs introducing breaking changes will be coupled to a Starknet version. Each Starknet version **SHOULD** come with a meta upgrade SNIP. The meta upgrade SNIP should specify the changes included in the hard fork and contains the following fields `codename`, `activation` (comes with target block on mainnet / testnet)`included SNIPS`. Versions with significant changes **MUST** require a community vote. All SNIPs associated with the version will be part of the same vote, and if the vote passes, all changes are introduced together.
 
-> [name=nicolas consigny][color=#aa4337]precision on the vote mechanism to be added & precise definition of "significant breaking change needed" (IMO any breaking change is significant)
+> precision on the vote mechanism to be added & precise definition of "significant breaking change needed" (IMO any breaking change is significant)
 
 
 
@@ -68,14 +68,14 @@ The timeline proposed here reflects a minimal time to allow all relevant parties
 
 As the Starknet network is still in a growing phase a "fast track" is needed for more agility. Thus non-protocol-level SNIPs and SNIPs that do not introduce breaking changes can be "fast-tracked" but **SHOULD** still undergo a regular process to ensure sufficient coverage and comments from relevant community members. Fast-tracked EIPs can go from `draft` to `last call` directly per editor request. However as the network matures more decentralisation will be required and the "fast-track" **MUST** end in 87,600 blocks. 
 
-> [name=nicolas consigny][color=#aa4337] I chose this randomnly (87,600 one year at 6 min / block) should it target a block ?
+> I chose this randomnly (87,600 one year at 6 min / block) should it target a block ?
 
 ## **Roles and Responsibilities**
 
 ### **SNIP Editor**
 In addition to the responsibilities described in [SNIP-1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-1.md#snip-editor-responsibilities)
 - Assess which non-core SNIPs are worthy to be fast-tracked
-> [name=nicolas consigny][color=#aa4337]Should the SNIP editor be the one in charge ? 
+> Should the SNIP editor be the one in charge ? 
 ### **SNIP Proposer**
 
 You are the SNIP’s owner. Seeing it through is your goal!
