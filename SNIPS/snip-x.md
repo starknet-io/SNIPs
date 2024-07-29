@@ -40,6 +40,9 @@ pub trait IFeeOnTransferToken<TContractState> {
     fn pay_fees_from(
         ref self: TContractState, from: ContractAddress, sender: ContractAddress
     ) -> u128;
+    
+    // Same as pay_fees_from but always pays from the caller address
+    fn pay_fees(ref self: TContractState, sender: ContractAddress) -> u128;
 
     // Withdraws any fees paid for the given sender to the specified recipient address.
     // This can be called  by anyone for any address--fees are a transient payment location to enable transfers for a given address. Leftover fees should always be withdrawn in the same transaction.
