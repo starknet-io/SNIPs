@@ -1,10 +1,10 @@
 ---
-snip: $SNIP_ID
+snip: 19
 title: Contract Class Hash Syscall
-author: $SNIP_AUTHOR <$SNIP_AUTHOR_EMAIL>
-status: Living
-type: Meta
-created: $SNIP_DATE
+author: Elias Tazartes <@Eikix>
+status: Draft
+type: Core
+created: 2024-06-12
 ---
 
 ## Simple Summary
