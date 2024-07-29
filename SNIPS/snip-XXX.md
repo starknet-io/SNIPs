@@ -31,7 +31,7 @@ SNIPs **MUST** follow the process described in [SNIP-1](https://github.com/stark
 
 ### **Starknet version & Voting**
 
-SNIPs introducing breaking changes will be coupled to a Starknet version. Each Starknet version **SHOULD** come with a meta upgrade SNIP. The meta upgrade SNIP should specify the changes included in the hard fork and contains the following fields `codename`, `activation` (comes with target block on mainnet / testnet)`included SNIPS`. Versions with significant changes **MUST** require a community vote. All SNIPs associated with the version will be part of the same vote, and if the vote passes, all changes are introduced together.
+SNIPs introducing breaking changes will be coupled to a Starknet version. Each Starknet version **SHOULD** come with a meta upgrade SNIP. The meta upgrade SNIP should specify the changes included in the hard fork and contains the following fields `codename`, `activation` (comes with target block on mainnet / testnet), `included SNIPS`. Versions with significant changes **MUST** require a community vote. All SNIPs associated with the version will be part of the same vote, and if the vote passes, all changes are introduced together.
 
 > precision on the vote mechanism to be added & precise definition of "significant breaking change needed" (IMO any breaking change is significant)
 
