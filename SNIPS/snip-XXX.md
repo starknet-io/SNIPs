@@ -23,7 +23,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### **Starting with SNIPs**
 
-Every core update **MUST** start with a SNIP. The author creates a PR in the Starknet SNIPs repository. And the editor performs syntactic checks as described in [SNIP-1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-1.md#snip-editor-responsibilities). After the SNIP is merged to the main branch, the SNIP proposal **SHOULD** change the status to `review` and start a discussion on the [Starknet Community Forum](https://community.starknet.io/).This is the opportunity for the community to discuss whether the SNIP is desired, whether it solves the problems it set out to solve, and whether there are better solutions.
+Every core update **MUST** start with a SNIP. The author creates a PR in the Starknet SNIPs repository. And the editor performs syntactic checks as described in [SNIP-1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-1.md#snip-editor-responsibilities). After the SNIP is merged to the main branch, the SNIP proposal **SHOULD** change the status to `review` and start a discussion on the [Starknet Community Forum](https://community.starknet.io/). This is the opportunity for the community to discuss whether the SNIP is desired, whether it solves the problems it set out to solve, and whether there are better solutions.
 
 ### **SNIP Acceptance**
 
