@@ -31,18 +31,17 @@ The utmost priority for a rollup is to never lose user funds. The decentralizati
 Let's first define what type of actions fall under emergency action: a critical vulnerability that could significantly compromise the integrity, confidentiality, or availability of a chain governed by the Starknet DAO.
 After performing any Emergency Action, the Security Council must issue a full transparency report (at an appropriate time after the security emergency has passed) to explain what was done and why such Emergency Action was justified.
 The security council holds a huge responsibility, and should take emergency actions in a timely manner, after an incident, such as described previously.
-We propose to have two major milestones for the council in order to ensure the stability of the transition from Starkware to the Starknet community.
-The first step is to add a timelock to smart-contract upgrades of the Starknet core contracts on L1, for Starkware to propose upgrades. This timelock will be skippable by the security council in case of emergency, with a super majority (75% for) to push the update immediately.
-The second step, when Starkware won't be the only one able to propose upgrades to the L1 smart-contracts, is to add a pausable function on the Starknet core smart-contracts on L1, to enable the security council to stop the bridge and state upgrade contracts. This will enable to stop any potential loss of funds, and enable the L2 consensus to decide on the best path forward for the community.
-The security council has the obligation to communicate, provide a post-mortem and be transparent about the reason of potential actions taken.
+We propose the following design in order to ensure decisions are made in a timely manner if an emergency arises, while not compromising the security of user's funds.
+
+- A pause function should be added on the core Starknet smart-contracts, and should be callable by Starkware in a centralized and timely way (and also pausable by the security council by a majority vote)
+- The security council can unpause the core smart-contracts at any time following a majority vote on L1.
 
 ## Implementation
 
 For this SNIP we need:
 
 - an L1 multisig
-- Add a timelock to Starknet core contracts on L1 + the ability for the security council's multisig to bypass it (for phase 1)
-- Add a pausable function only callable by the security council's multisig (for phase 2)
+- Add a pausable function only callable by Starkware or the security council, and unpausable only by the security council.
 
 ## Copyright
 
