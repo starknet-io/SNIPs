@@ -13,7 +13,7 @@ This SNIP will deal with the emergency powers the Security Council will have and
 
 ## Abstract
 
-The snip answers the following questions:
+This SNIP answers the following questions:
 
 - What type of actions fall under “emergency action”?
 - When should such actions be used?
