@@ -19,7 +19,7 @@ This SNIP answers the following questions:
 - When should such actions be used?
 - What is the legal quorum to make such a decision?
 - Is there any mandatory delay in the action?
-- How and when (before action ? after action?) to communicate this to the network?
+- How and when (before or after action?) to communicate this to the network?
 - Does anyone have veto powers over their decision ?
 
 ## Motivation
