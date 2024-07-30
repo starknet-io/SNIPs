@@ -24,7 +24,7 @@ This SNIP answers the following questions:
 
 ## Motivation
 
-We want to not lose user funds.
+The utmost priority for a rollup is to never lose user funds. The decentralization of rollup control (e.g. 7-day delay on network upgrade) might go hinder the speed of reaction needed in case of emergency. The Security Council therefore should have the power to act quickly to mitigate a critical failure.
 
 ## Specification
 
