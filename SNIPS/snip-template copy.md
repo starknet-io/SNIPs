@@ -9,7 +9,7 @@ created: $SNIP_DATE
 
 ## Simple Summary
 
-This snip will deal with the emergency powers the security council will have and how they need to communicate these emergency actions to the broader community.
+This SNIP will deal with the emergency powers the Security Council will have and how they need to communicate these emergency actions to the broader community.
 
 ## Abstract
 
