@@ -49,7 +49,7 @@ Recommendation: That the candidates should provide enough proofs of due backgrou
 
 At time of election, candidates must declare:
 1. What organizations they are part of;
-2. Their awarness and acceptance for the role and its responsibilities, should they be elected;
+2. Their awareness and acceptance for the role and its responsibilities, should they be elected;
 3. What it means to them to be in alignment with the values of Starknet Foundation.
 4. Their technical background and experience, in accordance with the role's requirements;
 
