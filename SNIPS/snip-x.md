@@ -35,14 +35,14 @@ interface. This is possible because of Starknet's native account abstraction and
 #[starknet::interface]
 pub trait IFeeOnTransferToken<TContractState> {
     // Gets the amount of fees already paid for the given sender
-    fn get_fees_paid(self: @TContractState, sender: ContractAddress) -> ContractAddress;
+    fn get_fees_paid(self: @TContractState, sender: ContractAddress) -> u128;
 
     // Returns the amount of fees required to transfer the specified amount of tokens from the given sender to the receiver.
     fn compute_fees_required(
         self: @TContractState, sender: ContractAddress, receiver: ContractAddress, amount: u128
     ) -> u128;
 
-    // Pay fees from the given address for the specified sender.
+    // Pays fees from the given address for the specified sender.
     // If `from` is the caller, then it pays from the caller's balance.
     // Otherwise, it pays from the allowance of the `from` address to the caller as the spender.
     // Returns the total amount of fees paid for the sender
