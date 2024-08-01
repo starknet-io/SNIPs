@@ -1,7 +1,7 @@
 ---
 snip: 75
 title: Starknet Security Council (SSC)
-author: Elias Tazartes <@Eikix>, Mattéo Georges <@mattegoat>, Patrícia Gil de Brolezzi <@pat_zip>, Luca Donno <@lucadonnoh>
+author: Elias Tazartes <@Eikix>, Mattéo Georges <@mattegoat>, Patrícia Gil de Brolezzi <@pat_zip>, luiz-lvj <lvj253@gmail.com>, Luca Donno <@lucadonnoh>
 status: Draft
 type: Meta
 created: 2024-07-06
