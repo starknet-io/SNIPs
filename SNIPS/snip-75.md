@@ -73,7 +73,7 @@ We propose the following design in order to ensure decisions are made in a timel
 - Upgrades on the core Starknet smart-contracts should now be delayed by 7-days. 
     - Every major upgrade should be approved by the Starknet Security Council with a super-majority vote.
     - The Starknet Security Council can reduce this time to zero, with a super-majority vote.
-- Upgrades on the core Starknet smart-contracts should be approved by the Security Council, and can be submitted for an approval vote up to 3 months prior to being added on-chain. The on-chain approval vote triggers the 7-day time-delay on the specific upgrade.
+- Upgrades on the core Starknet smart-contracts should be approved by the Security Council off-chain, and can be submitted for an approval vote up to 3 months prior to being added on-chain. Upgrades on the core Starknet smart-contracts can be vetoed by the Starknet Security Council.
 
 #### Implementation
 
@@ -84,6 +84,7 @@ Actionables list:
     - An administrator role of the pauseable toggle right: the Starknet Security Council multi-sig.
     - A time-delay on major upgrades for the core Starknet smart contracts.
     - An administrator role of the time-delay: the Starknet Security Council multi-sig.
+    - The ability to veto a Starknet upgrade by the Starknet Security Council multi-sig.
 
 Before performing any action, we highly recommend to ask for help to Optimism and Arbitrum Security Council to learn from their operational experiences in setting up such a sensitive governance body.
 
@@ -134,12 +135,11 @@ Finally, the community and the Starknet Foundation should look to apply best of 
 
 ## Examples and hypothetical future
 
-As a bi-product of the Security Council creation, all upgrades on the Starknet network would be delayed by an amount of time chosen by the Security Council, e.g. 1 month.
 Simple minimal examples of how the Security Council could look like (inspired the current states of other rollups):
 
-- Emergency Actions: the Security Council can reduce the upgrade delay time to zero for an emergency.
-- Non-Emergency Action: the Security Council can vote to accept an upgrade proposed by Starkware, or veto upgrades that go through timelocks.
-- Composition: the Security Council is composed of 12 to 15 people from broad set of sectors (Builders, Users, DeFi, Gaming, Wallet, Cryptography, Infra, etc.), covering a large amount of timezones (always 75% of the council is susceptible to be awake at all time "The Sun never sets on the Security Council" 👑 👀). Each person in the council has at least 1M vSTRK delegated to them (they must have either skin in the game or a "vote of confidence" from token holders). Council members are managed from within, using their multi-sig, for reelection or removal by their peers should they misbehave.
+- Emergency Actions: Upgrades on Starknet are delayed by 1 week after being proposed. The Security Council can reduce the upgrade delay time to zero for an emergency. Starkware, the network operator as well as the Security Council can pause Starknet in case of a "black swan event" (major hack, bug on the proof system), and the Security Council can unpause it.
+- Non-Emergency Actions: The Security Council can veto upgrades that go through time delays.
+- Composition: the Security Council is composed of 12 to 15 people from broad set of sectors (Builders, Users, DeFi, Gaming, Wallet, Cryptography, Infra, etc.), covering a large amount of timezones. Each person in the council has at least 1M vSTRK delegated to them (they must have either skin in the game or a "vote of confidence" from token holders). Council members are managed from within, using their multi-sig, for reelection or removal by their peers should they misbehave.
 
 ## Appendix
 
