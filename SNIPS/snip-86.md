@@ -1,6 +1,6 @@
 ---
 snip: 86
-title: Sign-in-with-Starknet (SIWS) Standard
+title: Sign-In with Starknet (SIWS) Standard
 author: Yudhishthra Sugumaran <yudhishthra.sugumaran@nethermind.io>
 discussions-to: https://community.starknet.io/t/sign-in-with-starknet-technical-proposal/95683/9
 status: Draft
@@ -23,27 +23,42 @@ SIWS aims to enhance user security by utilizing Starknet's account abstraction f
 
 ## Specification
 
-### Sign-In Schema Structure
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119 and RFC 8174.
 
-Domain Object:
+### Overview
 
-- chainId: Identifies the Starknet network to confirm the correct context for authentication, aligning with protocol-level standards for network identification.
-- name: The application's name, clarifying for users which service is initiating a sign-in request, thus ensuring transparency.
-- version: Indicates the version of the application, ensuring that the authentication interaction adheres to compatible protocols.
-- revision: The Typed Data revision, '0' marks legacy Typed Data, while '1' indicates the active Typed Data standard.
+Sign-In with Starknet (SIWS) works as follows:
 
-Message Object:
+1. A Starknet application (the challenger) prepares a sign-in request based on the specified schema. This request includes the domain and message objects.
+2. The user's wallet application displays the sign-in request, ensuring the user understands what they are signing.
+3. If the user consents to the sign-in request, they sign the message using their Starknet account. This signature is then sent back to the challenger.
+4. The challenger uses an RPC call to a Starknet node to verify the signature against the user’s account using the `is_valid_signature` method. Due to account abstraction, the exact signature scheme doesn’t need to be known by the challenger; it only needs to ensure that the signature is valid for the given account.
 
-- address: Specifies the wallet address responsible for verifying the user’s signature.
-- nonce: A one-time, unique number that makes each authentication request distinct to prevent replay attacks.
-- issuedAt: Timestamp indicating when the authentication request was generated, helping to establish its temporal validity.
-- statement: A user-readable message that the signer is agreeing to by providing their signature. This increases transparency and informs users about the purpose of their authentication.
-- uri: The identifier of the resource or the specific service that the authentication request is associated with, helping to contextualize the sign-in attempt.
-- version: The protocol version used in the message, ensuring compatibility between the user’s client and the dApp.
-- expirationTime (optional): The timestamp until which the authentication request remains valid, securing the process by limiting the time frame for a valid sign-in.
-- notBefore (optional): The earliest timestamp at which the authentication request can be considered valid, preventing its use before a certain time.
+### Message Format
 
-### Sign-in Schema
+#### Structured JSON Message Format
+
+A SIWS message _MUST_ follow the following JavaScript Object Notation (JSON) schema.
+
+##### Schema Glossary:
+
+- `$schema`: This keyword specifies the JSON Schema version being used.
+
+- `type`: Defines the expected data type of a value.
+
+- `enum`: Specifies a list of allowed values for a property.
+
+- `pattern`: Defines a regular expression that a string value must match.
+
+- `format`: Specifies a predefined format that a string value should conform to.
+
+- `minLength` and `maxLength`: Specify the minimum and maximum length for string values.
+
+- `const`: Specifies that a value must be exactly equal to the provided constant.
+
+- `additionalProperties`: When set to `false`, it disallows any properties not explicitly defined in the schema.
+
+- `errorMessage`: Provides custom error messages for validation failures.
 
 ```json
 {
@@ -214,6 +229,157 @@ Message Object:
 }
 ```
 
+### Message Fields
+
+This specification defines the following SIWS Message fields that can be parsed from a SIWS Message by following the rules in [Structured JSON Message Format](#structured-json-message-format).
+
+- `domain` REQUIRED. An object containing information about the domain requesting the signing.
+
+  - `chainId` REQUIRED. The Starknet network identifier. Its value MUST be either "SN_SEPOLIA" or "SN_MAIN".
+  - `name` REQUIRED. The name of the application requesting the signing.
+  - `version` REQUIRED. The version of the application. Its value MUST be a string in the format x.y.z and cannot exceed 31 characters.
+  - `revision` REQUIRED. The Typed Data revision. Its value MUST be a string and MUST be either '0' or '1'.
+
+- `message` REQUIRED. An object containing the core components of the SIWS message.
+
+  - `version` REQUIRED. The version of the SIWS message. Its value MUST be a string in the format x.y.z and cannot exceed 31 characters.
+  - `address` REQUIRED. The Starknet address performing the signing. Its value MUST be a hexadecimal string with 66 characters, including the '0x' prefix.
+  - `statement` REQUIRED. A human-readable ASCII assertion that the user will sign.
+  - `uri` REQUIRED. An RFC 3986 URI referring to the resource that is the subject of the signing.
+  - `nonce` REQUIRED. A random string used to prevent replay attacks, at least 8 alphanumeric characters and no more than 31 characters.
+  - `issuedAt` REQUIRED. The time when the message was generated. Its value MUST be an ISO 8601 datetime string.
+  - `expirationTime` OPTIONAL. The time when the signed authentication message is no longer valid. Its value MUST be an ISO 8601 datetime string.
+  - `notBefore` OPTIONAL. The time when the signed authentication message will become valid. Its value MUST be an ISO 8601 datetime string.
+
+- `primaryType` REQUIRED. Specifies the primary type of the structured data. Its value MUST be "Message".
+
+- `types` REQUIRED. Defines the structure and types of the message and domain objects.
+
+  - `Message` REQUIRED. An array defining the structure of the message object.
+  - `StarknetDomain` REQUIRED. An array defining the structure of the domain object.
+
+### Examples
+
+The following is an example of a basic SIWS message:
+
+```json
+{
+  "domain": {
+    "chainId": "SN_MAIN",
+    "name": "Example DApp",
+    "version": "1.0.0",
+    "revision": "1"
+  },
+  "message": {
+    "version": "1.0.0",
+    "address": "0x1234567890123456789012345678901234567890123456789012345678901234",
+    "statement": "Sign in with Starknet to Example DApp",
+    "uri": "https://example.com",
+    "nonce": "32891756",
+    "issuedAt": "2024-05-24T12:34:56Z",
+    "expirationTime": "2024-05-24T13:34:56Z"
+  },
+  "primaryType": "Message",
+  "types": {
+    "Message": [
+      { "name": "version", "type": "string" },
+      { "name": "address", "type": "felt" },
+      { "name": "statement", "type": "string" },
+      { "name": "uri", "type": "string" },
+      { "name": "nonce", "type": "string" },
+      { "name": "issuedAt", "type": "string" },
+      { "name": "expirationTime", "type": "string" }
+    ],
+    "StarknetDomain": [
+      { "name": "name", "type": "string" },
+      { "name": "chainId", "type": "string" },
+      { "name": "version", "type": "string" },
+      { "name": "revision", "type": "string" }
+    ]
+  }
+}
+```
+
+The following is an example of a SIWS message with optional fields:
+
+```json
+{
+  "domain": {
+    "chainId": "SN_SEPOLIA",
+    "name": "Test Application",
+    "version": "0.1.0",
+    "revision": "0"
+  },
+  "message": {
+    "version": "1.0.0",
+    "address": "0x0987654321098765432109876543210987654321098765432109876543210987",
+    "statement": "Sign in with Starknet to access Test Application",
+    "uri": "https://test.example.org",
+    "nonce": "abcdef123456",
+    "issuedAt": "2024-05-24T14:00:00Z",
+    "notBefore": "2024-05-24T14:05:00Z",
+    "expirationTime": "2024-05-24T15:00:00Z"
+  },
+  "primaryType": "Message",
+  "types": {
+    "Message": [
+      { "name": "version", "type": "string" },
+      { "name": "address", "type": "felt" },
+      { "name": "statement", "type": "string" },
+      { "name": "uri", "type": "string" },
+      { "name": "nonce", "type": "string" },
+      { "name": "issuedAt", "type": "string" },
+      { "name": "notBefore", "type": "string" },
+      { "name": "expirationTime", "type": "string" }
+    ],
+    "StarknetDomain": [
+      { "name": "name", "type": "string" },
+      { "name": "chainId", "type": "string" },
+      { "name": "version", "type": "string" },
+      { "name": "revision", "type": "string" }
+    ]
+  }
+}
+```
+
+The following is an example of a SIWS message with all minimal fields:
+
+```json
+{
+  "domain": {
+    "chainId": "SN_MAIN",
+    "name": "Minimal App",
+    "version": "1.0.0",
+    "revision": "1"
+  },
+  "message": {
+    "version": "1.0.0",
+    "address": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+    "statement": "Sign in to Minimal App",
+    "uri": "https://minimal.app",
+    "nonce": "minimalnonce123",
+    "issuedAt": "2024-05-24T16:00:00Z"
+  },
+  "primaryType": "Message",
+  "types": {
+    "Message": [
+      { "name": "version", "type": "string" },
+      { "name": "address", "type": "felt" },
+      { "name": "statement", "type": "string" },
+      { "name": "uri", "type": "string" },
+      { "name": "nonce", "type": "string" },
+      { "name": "issuedAt", "type": "string" }
+    ],
+    "StarknetDomain": [
+      { "name": "name", "type": "string" },
+      { "name": "chainId", "type": "string" },
+      { "name": "version", "type": "string" },
+      { "name": "revision", "type": "string" }
+    ]
+  }
+}
+```
+
 ## Implementation
 
 ### Full Flow of Sign-In Process
@@ -268,6 +434,18 @@ class SiwsTypedData {
 ### Demonstration Repository
 
 A demonstration of this sign-in protocol is available at [Sign-in with Starknet GitHub Repository](https://github.com/NethermindEth/sign-in-with-starknet). This repository includes example code and documentation that illustrates how to implement and test the sign-in protocol in a Starknet application.
+
+## Rationale
+
+## Backwards Compatibility
+
+Current wallet implementations in Starknet, such as Braavos and ArgentX, use EIP-712 for structured data signing. This SIWS standard builds upon these existing practices while introducing enhancements specific to Starknet's capabilities.
+
+Requirements were gathered from existing implementations of similar sign-in workflows, including statements to allow the user to accept a Terms of Service, nonces for replay protection, and inclusion of the Starknet account contract address itself in the message.
+
+The SIWS standard leverages Starknet's unique features, such as account abstraction, and supports larger message sizes through the use of the Poseidon hash function. These enhancements provide a more flexible and secure authentication method tailored to Starknet's ecosystem.
+
+## Security Considerations
 
 ### History
 
