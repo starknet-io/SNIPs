@@ -1,7 +1,7 @@
 ---
 snip: XX
 title: Procedure for Introducing Starknet Breaking Changes
-author: Nicolas Consigny 
+author: Nicolas Consigny <@nconsigny>
 discussions-to:
 status: Draft
 type: Meta
