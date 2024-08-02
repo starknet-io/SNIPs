@@ -229,7 +229,7 @@ A SIWS message _MUST_ follow the following JavaScript Object Notation (JSON) sch
 }
 ```
 
-### Message Fields
+#### Message Fields
 
 This specification defines the following SIWS Message fields that can be parsed from a SIWS Message by following the rules in [Structured JSON Message Format](#structured-json-message-format).
 
@@ -258,7 +258,7 @@ This specification defines the following SIWS Message fields that can be parsed 
   - `Message` REQUIRED. An array defining the structure of the message object.
   - `StarknetDomain` REQUIRED. An array defining the structure of the domain object.
 
-### Examples
+#### Examples
 
 The following is an example of a basic SIWS message:
 
@@ -380,60 +380,79 @@ The following is an example of a SIWS message with all minimal fields:
 }
 ```
 
-## Implementation
+### Signing and Verifiying Messages with Starknet Accounts
 
-### Full Flow of Sign-In Process
+#### Signing Messages with Starknet Accounts
 
-1. Challenge Preparation: A Starknet application (the challenger) prepares a sign-in request based on the specified schema. This request includes the domain and message objects.
+1. **Message Preparation**:
 
-2. Signature Request: The user's wallet application displays the sign-in request, ensuring the user understands what they are signing.
+   - **Structured Data**: Messages are structured in JSON format for clarity and integrity.
+   - **Poseidon Hash Function**: Used to handle larger data sizes, enabling the signing of messages of any length.
 
-3. User Consent and Signature: If the user consents to the sign-in request, they sign the message using their Starknet account. This signature is then sent back to the challenger.
+2. **Generating the Signature**:
 
-4. Verification: The challenger uses an RPC call to a Starknet node to verify the signature against the user's account using the isValidSignature method. Due to account abstraction, the exact signature scheme doesn’t need to be known by the challenger; it only needs to ensure that the signature is valid for the given account.
+   - **Account Abstraction**: Signature logic is defined by the account’s smart contract.
+   - **Signing Process**: User’s private key signs the hashed message securely within Starknet.
 
-### Verification Example
+#### Verifying Messages with Starknet Accounts
 
-```typescript
-import { Contract, RpcProvider, BigNumberish } from "starknet";
-import abiAccountContract from "./account-contract-abi.json";
+1. **Verification Method for EOAs**:
 
-class SiwsTypedData {
-  // ... other methods and properties
+   - **EIP-712**: Verification involves reconstructing the signed message and comparing it against the provided signature.
 
-  async verifyMessageHash(
-    hash: BigNumberish,
-    signature: string[],
-    provider: RpcProvider
-  ): Promise<boolean> {
-    try {
-      const accountContract = new Contract(
-        abiAccountContract,
-        this.message.address,
-        provider
-      );
-      await accountContract.call("is_valid_signature", [hash, signature]);
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  }
+2. **Verification Method for Contract Accounts**:
 
-  async verifyMessage(
-    data: TypedData,
-    signature: string[],
-    provider: RpcProvider
-  ): Promise<boolean> {
-    const hash = await getMessageHash(data, this.message.address);
-    return this.verifyMessageHash(hash, signature, provider);
-  }
-}
-```
+   - **EIP-4361**: Smart contract defines `is_valid_signature` function for verification.
+   - **Chain-ID Resolution**: Ensures verification is done in the correct blockchain context.
 
-### Demonstration Repository
+3. **State-Dependent Verification**:
 
-A demonstration of this sign-in protocol is available at [Sign-in with Starknet GitHub Repository](https://github.com/NethermindEth/sign-in-with-starknet). This repository includes example code and documentation that illustrates how to implement and test the sign-in protocol in a Starknet application.
+   - Verification results can depend on blockchain state. Services might use webhooks to receive notifications when state changes affect verification, invalidating matching sessions to maintain security.
+
+### Relying Party Implementer Steps
+
+#### Preparing the Sign-In Request
+
+The relying party must prepare a sign-in request following the specified JSON schema. This request should include the `domain` and `message` objects as detailed in the Message Format section.
+
+#### Specifying the Request Origin
+
+The `domain` object in the SIWS Message MUST correspond to the origin from where the signing request is made. This includes the `chainId`, `name`, `version`, and `revision` of the application.
+
+#### Verifying a Signed Message
+
+After receiving the signed message from the user's wallet, the relying party MUST:
+
+- Check for conformance to the Structured JSON Message Format.
+- Verify expected values after parsing (e.g., `expirationTime`, `nonce`, `uri`, etc.).
+- Check the signature using the `is_valid_signature` method.
+
+#### Chain ID Resolution
+
+Ensure verification is done in the correct blockchain context by checking the `chainId` in the `domain` object.
+
+#### Creating Sessions
+
+Sessions MUST be bound to the `address` field in the message and not to further resolved resources that can change.
+
+#### Interpreting and Resolving Resources
+
+- Ensure that URIs in the `uri` field are human-friendly when expressed in plaintext form.
+- The interpretation of any additional resources listed in the SIWS Message is out of scope for this specification.
+
+#### Handling Optional Fields
+
+Be prepared to handle optional fields such as `expirationTime` and `notBefore` when present in the message.
+
+#### State-Dependent Verification
+
+Be aware that verification results can depend on blockchain state. Consider implementing mechanisms (such as webhooks) to receive notifications when state changes affect verification, potentially invalidating matching sessions to maintain security.
+
+### Wallet Implementer Steps
+
+### Reference Implementation
+
+A demonstration of this sign-in protocol is available at [Sign-In with Starknet GitHub Repository](https://github.com/NethermindEth/sign-in-with-starknet).
 
 ## Rationale
 
