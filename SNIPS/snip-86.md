@@ -7,6 +7,7 @@ status: Draft
 type: Standards Track
 category: SRC
 created: 2024-05-23
+requires: SNIP-12
 ---
 
 ## Summary
