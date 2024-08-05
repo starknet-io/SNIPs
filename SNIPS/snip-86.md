@@ -450,6 +450,30 @@ Be aware that verification results can depend on blockchain state. Consider impl
 
 ### Wallet Implementer Steps
 
+#### Verifying the Message Format
+
+Wallet implementers MUST ensure the full Sign-In with Starknet (SIWS) message conforms to the structured JSON data format specified in the proposal. This includes verifying fields like domain, address, statement, version, chain-id, URI, nonce, and issued-at timestamp.
+
+#### Verifying the Request Origin
+
+Wallet implementers MUST prevent phishing attacks by verifying the origin of the request against the scheme and domain fields in the SIWS message. For example, if the message begins with "example.com wants you to sign in...", the wallet checks that the request originated from https://example.com. The origin SHOULD be read from a trusted data source such as the browser window or over WalletConnect (ERC-1328) sessions for comparison against the signing message contents. Wallet implementers MAY warn instead of rejecting the verification if the origin points to localhost.
+
+#### Algorithm for Request Origin Verification:
+
+- Assign defaultScheme if the scheme is not provided.
+- Reject the request if the scheme is not in allowedSchemes.
+- Reject the request if the scheme does not match the origin scheme.
+- Reject the request if the domain and origin host do not match, unless in developer mode.
+- Warn if the port does not match the origin port.
+
+#### Creating Sign-In with Starknet Interfaces
+
+Wallet implementers MUST display to the user the following fields from the SIWS message request by default and prior to signing: scheme, domain, address, statement, and resources. Wallet implementers displaying a plaintext SIWS message to the user SHOULD require the user to scroll to the bottom of the text area prior to signing. Custom SIWS user interfaces can be constructed by parsing the JSON terms into data elements for use in the interface.
+
+#### Supporting Internationalization (i18n)
+
+After parsing the message into JSON terms, translation MAY happen at the UX level per human language.
+
 ### Reference Implementation
 
 A demonstration of this sign-in protocol is available at [Sign-In with Starknet GitHub Repository](https://github.com/NethermindEth/sign-in-with-starknet).
