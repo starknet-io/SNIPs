@@ -111,7 +111,7 @@ A SIWS message _MUST_ follow the following JavaScript Object Notation (JSON) sch
         "issuedAt": {
           "type": "string",
           "format": "date-time",
-          "errorMessage": "IssuedAt must be a valid date-time string"
+          "errorMessage": "IssuedAt must be a valid ISO 8601 date-time string"
         },
         "nonce": {
           "type": "string",
@@ -239,7 +239,7 @@ This specification defines the following SIWS Message fields that can be parsed 
   - `chainId` REQUIRED. The Starknet network identifier. Its value MUST be either "SN_SEPOLIA" or "SN_MAIN".
   - `name` REQUIRED. The name of the application requesting the signing.
   - `version` REQUIRED. The version of the application. Its value MUST be a string in the format x.y.z and cannot exceed 31 characters.
-  - `revision` REQUIRED. The Typed Data revision. Its value MUST be a string and MUST be either '0' or '1'.
+  - `revision` REQUIRED. The Typed Data revision. Its value MUST be a string and MUST be "1" for this specification.
 
 - `message` REQUIRED. An object containing the core components of the SIWS message.
 
@@ -309,7 +309,7 @@ The following is an example of a SIWS message with optional fields:
     "chainId": "SN_SEPOLIA",
     "name": "Test Application",
     "version": "0.1.0",
-    "revision": "0"
+    "revision": "1"
   },
   "message": {
     "version": "1.0.0",
@@ -481,6 +481,63 @@ A demonstration of this sign-in protocol is available at [Sign-In with Starknet 
 
 ## Rationale
 
+### Requirements
+
+The specification for Sign-In with Starknet (SIWS) should be clear and align with existing standards, focusing on simplicity and broad usability. It should be a decentralized, open, and non-proprietary solution with long-term viability, avoiding unnecessary features that might complicate the implementation. The goal is to ensure a streamlined approach that enhances the user experience and security without catering to lesser-used projects seeking adoption through specification inclusion.
+
+Additional Functional Requirements:
+
+1. The interface presented to the user should be human-understandable and mostly free of machine-targeted artifacts, except for the necessary Starknet account address.
+2. Application Server Implementation: The application server must support the SIWS specification without necessitating changes in wallet implementations.
+3. Upgrade Path: Both applications and wallets already using account-based signing should have a clear and straightforward upgrade path to SIWS.
+4. Security Measures: Include facilities and guidelines to adequately mitigate Man-in-the-Middle (MITM) attacks, replay attacks, and malicious signing requests.
+
+### Design Goals
+
+1. Human-Friendly: Ensure the system is easy to understand and interact with for end-users.
+2. Simple to Implement: Developers should find the specification straightforward to implement without unnecessary complexity.
+3. Secure: The authentication method must provide robust security against common threats and vulnerabilities.
+4. Machine Readable: Messages should be structured so that machines can easily parse and validate them.
+5. Extensible: The specification should be flexible enough to accommodate future enhancements and extensions.
+
+### Technical Decisions
+
+#### Why Revision 1 Over 0
+
+- Poseidon Hash Function:
+
+  - Reason: Revision 1 leverages the Poseidon hash function, which allows handling larger message values. This decision addresses the 31-character limit in message fields, enabling the SIWS specification to support more comprehensive and detailed messages.
+  - Impact: Enhances the flexibility and utility of the SIWS protocol, allowing for more extensive use cases and improving overall functionality.
+
+#### Why Structured Data Format (EIP-712) Over Alternative Methods
+
+- EIP-712 for Compatibility and Security:
+  - Reason: Adopting the EIP-712 structured data format for message signing ensures compatibility with existing Starknet wallet implementations like Braavos and ArgentX. EIP-712 provides a standardized and secure way to handle structured data.
+  - Impact: Enhances interoperability, security, and ease of integration for developers and users.
+
+#### Why Include Starknet Account Contract Address
+
+- Precise Identification and Validation:
+  - Reason: Embedding the Starknet account contract address in the signed message allows for precise identification and validation of the user’s account. This ensures that the sign-in request is securely linked to the correct account.
+  - Impact: Improves security and traceability of the authentication process.
+
+### Out of Scope
+
+The SIWS specification will not cover:
+
+- Changes to the Starknet protocol are handled through separate Starknet Improvement Proposals (SNIPs) and require community and core team consensus.
+- The specification will not cover non-standard account implementations that do not follow the proposed Starknet Standard Account SNIP.
+- Features specific to individual applications that do not align with the core goals of simplicity, security, and interoperability will be excluded.
+- The focus is solely on the Starknet ecosystem, excluding integrations or interoperability with non-Starknet systems.
+
+### Considerations for Future Compatibility
+
+To ensure the Sign-In with Starknet (SIWS) specification remains relevant and adaptable, the following considerations for future compatibility are proposed. These items may be supported in future iterations of this specification or through new work items using this specification as a dependency:
+
+- Implementing versioning rules that allow for signing with minor revisions while maintaining compatibility with major versions. This will ensure that the specification can evolve without breaking existing implementations.
+- Incorporating other authentication mechanisms, such as biometric or hardware-based authentication, to provide more robust security options.
+- Supporting more advanced and customizable user interfaces for sign-in requests, improving user experience and clarity.
+
 ## Backwards Compatibility
 
 Current wallet implementations in Starknet, such as Braavos and ArgentX, use EIP-712 for structured data signing. This SIWS standard builds upon these existing practices while introducing enhancements specific to Starknet's capabilities.
@@ -491,7 +548,51 @@ The SIWS standard leverages Starknet's unique features, such as account abstract
 
 ## Security Considerations
 
-### History
+### Identifier Reuse
+
+- To achieve optimal privacy, it is ideal to use a new, uncorrelated Starknet address for each interaction. This minimizes the information disclosed and enhances privacy. While early adopters may prefer identifier reuse for consistency across services, this becomes more critical with broader adoption.
+
+- Future specifications could explore advanced privacy techniques such as HD wallets, signed delegations, and zero-knowledge proofs.
+
+- The `address` field in the message object allows the use of a new Starknet address for each interaction.
+
+### Key Management
+
+- Users must manage their keys, which can be challenging, especially for mainstream users who are not used to handling private keys. Early adopters are likely more adept at key management, but this issue will grow with adoption. Wallets using smart contracts and multisigs can improve key usage and recovery, leveraging Starknet's account abstraction features.
+
+- The `domain` field includes details like `chainId` and `name` which can be leveraged by smart contract wallets for key recovery mechanisms.
+
+### Preventing Replay Attacks
+
+- Include a unique nonce with each sign-in request to prevent replay attacks. The nonce should have enough entropy to ensure each session initiation is unique and secure. Privacy-preserving nonce values, such as those derived from recent Starknet block hashes or Unix timestamps, can be used.
+
+- The `nonce` field in the message object is used to prevent replay attacks, ensuring each sign-in request is unique.
+
+### Minimizing Wallet and Server Interaction
+
+- To protect user privacy, generate the SIWS message client-side to reduce server interaction. When server interaction is necessary, take precautions to safeguard user information. The wallet may consult the user for preferences before signing.
+
+- Fields like `version`, `address`, and `nonce` in the message object are filled client-side, reducing the need for server interaction.
+
+### Preventing Phishing Attacks
+
+- Wallets must verify the origin of the sign-in request against the domain specified in the message to prevent phishing attacks. This ensures the request comes from a trusted source.
+
+- The `domain` field in the message object is used by wallets to verify the origin of the sign-in request, ensuring it matches the expected domain.
+
+### Channel Security
+
+- Use secure channels like HTTPS for all communications between the wallet and the application server to prevent man-in-the-middle attacks. Employ appropriate measures for other protocols to ensure confidentiality, data integrity, and authenticity.
+
+- The `uri` field in the message object specifies the resource URI, ensuring secure communication channels are used.
+
+### Session Invalidation
+
+- Implement mechanisms to invalidate sessions when there are relevant state changes. If an account's state or any specified resources in the message change, the server should invalidate the affected sessions to maintain security and integrity.
+
+Example: The issuedAt and expirationTime fields in the message object help manage session validity, allowing for automatic session invalidation when necessary.
+
+## History
 
 Discussion and development of this SNIP were inspired by the community's demand for more flexible and secure authentication methods within the Starknet ecosystem as dicussed in this [forum](https://community.starknet.io/t/sign-in-with-starknet-technical-proposal/95683/1)
 
