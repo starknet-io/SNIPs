@@ -2,10 +2,12 @@
 ---
 snip: 16
 title: Deprecation of transaction versions 0,1,2
+description: This SNIP proposes to deprecate transaction versions 0,1,2 and stop support for them around the end of Q1 of 2025.
 author: Ilia Volokh <iliav@starkware.co>
 discussions-to: 
 status: Draft
-type: Core
+type: Standards Track
+category: Core
 created: July 2, 2024
 ---
 
@@ -43,6 +45,9 @@ Below we present some alternative proposals and our reasoning against them.
 1. Reserved but gradually decreasing block space for transaction versions ≤2, with temporary support for a designated FIFO queue.
 
 2. Concurrent fee markets on transactions paying in ETH and in STRK, with the sequencer taking on ETH↔STRK conversion. Note it's unclear how to implement a fee market for transaction versions 0,1,2 since merely sorting according to max fee disregards the computational resources expended by the tx.
+
+## Backwards Compatibility
+This proposal kills off the currently supported flows of sending transaction versions 0,1,2. Moreover, a separate proposal is required to address access to old accounts.
 
 ## Copyright
 
