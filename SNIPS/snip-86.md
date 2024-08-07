@@ -129,12 +129,12 @@ A SIWS message _MUST_ follow the following JavaScript Object Notation (JSON) sch
           "format": "uri",
           "errorMessage": "Uri must be a valid URI string"
         },
-        "expirationTime": {
+        "validUntil": {
           "type": "string",
           "format": "date-time",
           "errorMessage": "ExpirationTime, if present, must be a valid date-time string"
         },
-        "notBefore": {
+        "validAfter": {
           "type": "string",
           "format": "date-time",
           "errorMessage": "NotBefore, if present, must be a valid date-time string"
@@ -173,10 +173,10 @@ A SIWS message _MUST_ follow the following JavaScript Object Notation (JSON) sch
                   "uri",
                   "nonce",
                   "issuedAt",
-                  "expirationTime",
-                  "notBefore"
+                  "validUntil",
+                  "validAfter"
                 ],
-                "errorMessage": "Name must be one of 'version', 'address', 'statement', 'uri', 'nonce', 'issuedAt', 'expirationTime', 'notBefore'"
+                "errorMessage": "Name must be one of 'version', 'address', 'statement', 'uri', 'nonce', 'issuedAt', 'validUntil', 'validAfter'"
               },
               "type": {
                 "type": "string",
@@ -249,8 +249,8 @@ This specification defines the following SIWS Message fields that can be parsed 
   - `uri` REQUIRED. An RFC 3986 URI referring to the resource that is the subject of the signing.
   - `nonce` REQUIRED. A random string used to prevent replay attacks, at least 8 alphanumeric characters and no more than 31 characters.
   - `issuedAt` REQUIRED. The time when the message was generated. Its value MUST be an ISO 8601 datetime string.
-  - `expirationTime` OPTIONAL. The time when the signed authentication message is no longer valid. Its value MUST be an ISO 8601 datetime string.
-  - `notBefore` OPTIONAL. The time when the signed authentication message will become valid. Its value MUST be an ISO 8601 datetime string.
+  - `validUntil` OPTIONAL. The time when the signed authentication message is no longer valid. Its value MUST be an ISO 8601 datetime string.
+  - `validAfter` OPTIONAL. The time when the signed authentication message will become valid. Its value MUST be an ISO 8601 datetime string.
 
 - `primaryType` REQUIRED. Specifies the primary type of the structured data. Its value MUST be "Message".
 
@@ -278,7 +278,7 @@ The following is an example of a basic SIWS message:
     "uri": "https://example.com",
     "nonce": "32891756",
     "issuedAt": "2024-05-24T12:34:56Z",
-    "expirationTime": "2024-05-24T13:34:56Z"
+    "validUntil": "2024-05-24T13:34:56Z"
   },
   "primaryType": "Message",
   "types": {
@@ -289,7 +289,7 @@ The following is an example of a basic SIWS message:
       { "name": "uri", "type": "string" },
       { "name": "nonce", "type": "string" },
       { "name": "issuedAt", "type": "string" },
-      { "name": "expirationTime", "type": "string" }
+      { "name": "validUntil", "type": "string" }
     ],
     "StarknetDomain": [
       { "name": "name", "type": "string" },
@@ -318,8 +318,8 @@ The following is an example of a SIWS message with optional fields:
     "uri": "https://test.example.org",
     "nonce": "abcdef123456",
     "issuedAt": "2024-05-24T14:00:00Z",
-    "notBefore": "2024-05-24T14:05:00Z",
-    "expirationTime": "2024-05-24T15:00:00Z"
+    "validAfter": "2024-05-24T14:05:00Z",
+    "validUntil": "2024-05-24T15:00:00Z"
   },
   "primaryType": "Message",
   "types": {
@@ -330,8 +330,8 @@ The following is an example of a SIWS message with optional fields:
       { "name": "uri", "type": "string" },
       { "name": "nonce", "type": "string" },
       { "name": "issuedAt", "type": "string" },
-      { "name": "notBefore", "type": "string" },
-      { "name": "expirationTime", "type": "string" }
+      { "name": "validAfter", "type": "string" },
+      { "name": "validUntil", "type": "string" }
     ],
     "StarknetDomain": [
       { "name": "name", "type": "string" },
@@ -425,7 +425,7 @@ The `domain` object in the SIWS Message MUST correspond to the origin from where
 After receiving the signed message from the user's wallet, the relying party MUST:
 
 - Check for conformance to the Structured JSON Message Format.
-- Verify expected values after parsing (e.g., `expirationTime`, `nonce`, `uri`, etc.).
+- Verify expected values after parsing (e.g., `validUntil`, `nonce`, `uri`, etc.).
 - Check the signature using the `is_valid_signature` method.
 
 #### Chain ID Resolution
@@ -443,7 +443,7 @@ Sessions MUST be bound to the `address` field in the message and not to further 
 
 #### Handling Optional Fields
 
-Be prepared to handle optional fields such as `expirationTime` and `notBefore` when present in the message.
+Be prepared to handle optional fields such as `validUntil` and `validAfter` when present in the message.
 
 #### State-Dependent Verification
 
@@ -590,7 +590,7 @@ The SIWS standard leverages Starknet's unique features, such as account abstract
 
 - Implement mechanisms to invalidate sessions when there are relevant state changes. If an account's state or any specified resources in the message change, the server should invalidate the affected sessions to maintain security and integrity.
 
-Example: The issuedAt and expirationTime fields in the message object help manage session validity, allowing for automatic session invalidation when necessary.
+Example: The issuedAt and validUntil fields in the message object help manage session validity, allowing for automatic session invalidation when necessary.
 
 ## History
 
