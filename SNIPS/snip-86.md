@@ -399,11 +399,11 @@ The following is an example of a SIWS message with all minimal fields:
 
 1. **Verification Method for EOAs**:
 
-   - **EIP-712**: Verification involves reconstructing the signed message and comparing it against the provided signature.
+   - **SNIP-12**: Verification involves reconstructing the signed message and comparing it against the provided signature.
 
 2. **Verification Method for Contract Accounts**:
 
-   - **EIP-4361**: Smart contract defines `is_valid_signature` function for verification.
+   - **SNIP-6**: Smart contract defines `is_valid_signature` function for verification.
    - **Chain-ID Resolution**: Ensures verification is done in the correct blockchain context.
 
 3. **State-Dependent Verification**:
@@ -509,10 +509,10 @@ Additional Functional Requirements:
   - Reason: Revision 1 leverages the Poseidon hash function, which allows handling larger message values. This decision addresses the 31-character limit in message fields, enabling the SIWS specification to support more comprehensive and detailed messages.
   - Impact: Enhances the flexibility and utility of the SIWS protocol, allowing for more extensive use cases and improving overall functionality.
 
-#### Why Structured Data Format (EIP-712) Over Alternative Methods
+#### Why Structured Data Format (SNIP-12) Over Alternative Methods
 
-- EIP-712 for Compatibility and Security:
-  - Reason: Adopting the EIP-712 structured data format for message signing ensures compatibility with existing Starknet wallet implementations like Braavos and ArgentX. EIP-712 provides a standardized and secure way to handle structured data.
+- SNIP-12 for Compatibility and Security:
+  - Reason: Adopting the SNIP-12 structured data format for message signing ensures compatibility with existing Starknet wallet implementations like Braavos and ArgentX. SNIP-12 provides a standardized and secure way to handle structured data.
   - Impact: Enhances interoperability, security, and ease of integration for developers and users.
 
 #### Why Include Starknet Account Contract Address
@@ -540,7 +540,7 @@ To ensure the Sign-In with Starknet (SIWS) specification remains relevant and ad
 
 ## Backwards Compatibility
 
-Current wallet implementations in Starknet, such as Braavos and ArgentX, use EIP-712 for structured data signing. This SIWS standard builds upon these existing practices while introducing enhancements specific to Starknet's capabilities.
+Current wallet implementations in Starknet, such as Braavos and ArgentX, use SNIP-12 for structured data signing. This SIWS standard builds upon these existing practices while introducing enhancements specific to Starknet's capabilities.
 
 Requirements were gathered from existing implementations of similar sign-in workflows, including statements to allow the user to accept a Terms of Service, nonces for replay protection, and inclusion of the Starknet account contract address itself in the message.
 
