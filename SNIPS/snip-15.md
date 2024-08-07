@@ -1,10 +1,12 @@
 # Draft---
 snip: 15
 title: Only an account can call its `execute`
+description: This SNIP proposes restrict calls to an account's `execute` method to externals calls and calls coming from the account itself.
 author: Ilia Volokh <iliav@starkware.co>
-discussions-to: 
+discussions-to: TBD
 status: Draft
-type: Core
+type: Standards Track
+category: Core
 created: 2024-01-08
 ---
 
@@ -34,6 +36,14 @@ The proposed restriction will break any applicative flows that call an account's
 In recent history, there have been several dozen transactions with such a flow. After the introduction of the restriction, such transactions will be reverted (in particular, their senders will pay fees).
 
 In our opinion, this drawback is acceptable because flows in which contracts act on behalf of accounts are possible e.g by SNIP 9 ("outside execution") https://community.starknet.io/t/snip-outside-execution/101058.
+
+## Backwards Compatibility
+
+This proposal will break any flow that involves foreign internal calls to an account's `execute` method.
+
+## Security Considerations
+
+This proposal aims to improve security by relieving account writers of the responsibility to prevent foreign internal calls to `execute`. In general, we want to give freedom to account writers. In this case, however, we think the consequences of a developer being unaware of the threat of foreign control of the account justifies a protocol-level restriction.
 
 ## Copyright
 
