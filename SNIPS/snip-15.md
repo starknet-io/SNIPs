@@ -1,7 +1,7 @@
 # Draft---
 snip: 15
 title: Only an account can call its `execute`
-description: This SNIP proposes restrict calls to an account's `execute` method to externals calls and calls coming from the account itself.
+description: This SNIP proposes to restrict calls to an account's `execute` method to externals calls and calls coming from the account itself.
 author: Ilia Volokh <iliav@starkware.co>
 discussions-to: TBD
 status: Draft
