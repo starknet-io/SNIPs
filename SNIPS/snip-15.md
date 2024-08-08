@@ -19,9 +19,13 @@ This proposal defines a protocol-level restriction that will be imposed on calle
 
 ## Motivation
 
-Users act through their accounts via the `execute` entrypoint. Being able to access the execute of someone's account is tantamount to acting on their behalf. The default behavior should defend naive users and developers against such vulnerabilities.
+Users act through their accounts via the `execute` entrypoint. Being able to access the execute of someone's account is tantamount to acting on their behalf.
 
-On the other hand, the current status quo is that all safe account implementations explicitly contain a line in their `execute` entrypoint which enforces that the call is not internal. Accounts without this line are exposed to having others act on their behalf.
+The current status quo is that all safe account implementations explicitly contain a line in their `execute` entrypoint which enforces that the call is not internal. Accounts without this line are exposed to having others act on their behalf.
+
+## Rationale
+
+We submit that the default behavior should defend naive users and developers against such a counterintuitive vulnerability that lets anyone act on behalf of another's account.
 
 ## Specification
 
