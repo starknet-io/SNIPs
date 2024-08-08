@@ -1,4 +1,4 @@
-# Draft---
+---
 snip: 15
 title: Only an account can call its `execute`
 description: This SNIP proposes to restrict calls to an account's `execute` method to externals calls and calls coming from the account itself.
