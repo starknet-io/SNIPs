@@ -1,4 +1,3 @@
-# Draft
 ---
 snip: 16
 title: Deprecation of transaction versions 0,1,2
@@ -26,9 +25,12 @@ Transaction versions 0,1,2 only support fee payment in ETH. Moreover, they have 
 
 ## Proposal
 
-We propose for the sequencer to stop support for transaction versions 0,1,2 in an upcoming version in preparation for integrating the mempool and fee market, which is expected to happen within 12 months.
+We propose for the sequencer to stop support for transaction versions 0,1,2 in an upcoming version in preparation for integrating the mempool and fee market, which is expected to happen within 6-8 months.
 
 To facilitate continuation of fee payment in ETH, we propose to adopt paymasters. The decision between applicative paymasters such as the one by [AVNU](https://doc.avnu.fi/starknet-paymaster/architecture-overview) or protocol-level paymasters will be left to applications/wallets. (A detailed SNIP for a protocol-level paymaster is in the works.)
+
+## Rationale
+We submit that paymasters are the correct solution for multiple fee tokens. Consequently there is no justification for contrived solution to facilitate continued support for old transaction versions.
 
 ## Drawbacks
 
@@ -48,6 +50,9 @@ Below we present some alternative proposals and our reasoning against them.
 
 ## Backwards Compatibility
 This proposal kills off the currently supported flows of sending transaction versions 0,1,2. Moreover, a separate proposal is required to address access to old accounts.
+
+## Security Considerations
+This proposal introduces no vulnerabilities, but necessitates a separate discussion about accounts which predate the separation of `validate` and `execute`.
 
 ## Copyright
 
