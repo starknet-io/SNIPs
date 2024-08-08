@@ -23,15 +23,15 @@ Users act through their accounts via the `execute` entrypoint. Being able to acc
 
 The current status quo is that all safe account implementations explicitly contain a line in their `execute` entrypoint which enforces that the call is not internal. Accounts without this line are exposed to having others act on their behalf.
 
-## Rationale
-
-We submit that the default behavior should defend naive users and developers against such a counterintuitive vulnerability that lets anyone act on behalf of another's account.
-
 ## Specification
 
 Execution clients will track the caller address and fail a transaction as soon as there is a call to an `execute` entrypoint whose caller address is not the associated account.
 
 The OS will enforce this restriction, rendering any calls that violate this restriction unprovable.
+
+## Rationale
+
+We submit that the default behavior should defend naive users and developers against such a counterintuitive vulnerability that lets anyone act on behalf of another's account.
 
 ## Drawbacks
 
