@@ -7,7 +7,7 @@ discussions-to: TBD
 status: Draft
 type: Standards Track
 category: Core
-created: 2024-01-08
+created: 2024-07-01
 ---
 
 ## Simple Summary
@@ -39,7 +39,7 @@ The proposed restriction will break any applicative flows that call an account's
 
 In recent history, there have been several dozen transactions with such a flow. After the introduction of the restriction, such transactions will be reverted (in particular, their senders will pay fees).
 
-In our opinion, this drawback is acceptable because flows in which contracts act on behalf of accounts are possible e.g by SNIP 9 ("outside execution") https://community.starknet.io/t/snip-outside-execution/101058.
+In our opinion, this drawback is acceptable because flows in which contracts act on behalf of accounts are possible e.g by SNIP 9 ("outside execution").
 
 ## Backwards Compatibility
 
