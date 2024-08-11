@@ -7,7 +7,7 @@ discussions-to:
 status: Draft
 type: Standards Track
 category: Core
-created: 2024/07/02
+created: 2024-07-02
 ---
 
 ## Simple Summary
