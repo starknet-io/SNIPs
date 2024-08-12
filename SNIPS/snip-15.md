@@ -3,8 +3,8 @@ snip: 15
 title: Only an account can call its `execute`
 description: This SNIP proposes to restrict calls to an account's `execute` method to externals calls and calls coming from the account itself.
 author: Ilia Volokh <iliav@starkware.co>
-discussions-to: TBD
-status: Draft
+discussions-to: https://community.starknet.io/t/snip-15-only-an-account-can-call-its-execute/114444
+status: Review
 type: Standards Track
 category: Core
 created: 2024-07-01
