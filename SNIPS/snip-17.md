@@ -1,8 +1,8 @@
 ---
-snip: 89
+snip: 17
 title: Safe Transfer for Fungible Tokens
 author: Jack Boyuan Xu <jxu@ethsign.xyz>
-discussions-to: https://community.starknet.io/t/snip-89-safe-transfer-for-fungible-tokens
+discussions-to: https://community.starknet.io/t/snip-17-safe-transfer-for-fungible-tokens
 status: Draft
 type: Standards Track
 category: SRC
@@ -24,21 +24,21 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 _"ERC-20" is used interchangeably with "SNIP-2" due to its prevalence within the Starknet ecosystem._
 
-The [SNIP-89](SNIP-89.md) receiver interface ID MUST be defined as follows:
+The [SNIP-17](SNIP-17.md) receiver interface ID MUST be defined as follows:
 
 ```cairo
 /// Extended function selector as defined in SRC-5
-const ISNIP89_RECEIVER_ID: felt252 = selector!("fn_on_erc20_received(ContractAddress,ContractAddress,u256,Span<felt252>)->felt252)");
+const ISNIP17_RECEIVER_ID: felt252 = selector!("fn_on_erc20_received(ContractAddress,ContractAddress,u256,Span<felt252>)->felt252)");
 ```
 
-An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUST:
+An [SNIP-17](SNIP-17.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token contract MUST:
 
 - Implement `safe_transfer_from` as shown in the code snippet below.
-- When performing a safe transfer, call `on_erc20_received` or `onERC20Received` on the recipient and compare the return value against the [SNIP-89](SNIP-89.md) interface ID. If there is a mismatch, the transfer has failed. Revert, return false, or perform any other appropriate actions for failed token transfers.
+- When performing a safe transfer, call `on_erc20_received` or `onERC20Received` on the recipient and compare the return value against the [SNIP-17](SNIP-17.md) interface ID. If there is a mismatch, the transfer has failed. Revert, return false, or perform any other appropriate actions for failed token transfers.
 
 ```cairo
 #[starknet::interface]
-trait ISNIP89Contract<TContractState> {
+trait ISNIP17Contract<TContractState> {
     fn safeTransferFrom(
         ref self: TContractState,
         sender: ContractAddress,
@@ -56,14 +56,14 @@ trait ISNIP89Contract<TContractState> {
 }
 ```
 
-An [SNIP-89](SNIP-89.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token recipient MUST satisfy one of the following criteria:
+An [SNIP-17](SNIP-17.md)-compliant [SNIP-2](snip-2.md)/ERC-20 token recipient MUST satisfy one of the following criteria:
 
 - Through [SNIP-5](snip-5.md), self-identify as an account with an [SNIP-6](snip-6.md) interface ID.
-- Through [SNIP-5](snip-5.md), confirm support for [SNIP-89](SNIP-89.md) interface ID and implement the following `ISNIP89Receiver` trait.
+- Through [SNIP-5](snip-5.md), confirm support for [SNIP-17](SNIP-17.md) interface ID and implement the following `ISNIP17Receiver` trait.
 
 ```cairo
 #[starknet::interface]
-trait ISNIP89Receiver<TContractState> {
+trait ISNIP17Receiver<TContractState> {
     fn on_erc20_received(
         self: @TContractState,
         operator: ContractAddress,
@@ -92,7 +92,7 @@ This SNIP is incompatible with existing [SNIP-2](snip-2.md)/ERC-20 contracts as 
 
 Legacy unupgradeable recipients are incompatible with this SNIP and requires transferring tokens using the existing unsafe `transfer` function.
 
-## Implementation
+## Reference Implementation
 
 Below is a snippet of an OpenZeppelin-based example implementation of this SNIP:
 
@@ -118,11 +118,11 @@ fn _check_on_erc20_received(
     data: Span<felt252>,
 ) -> bool {
     let src5_dispatcher = ISRC5Dispatcher { contract_address: recipient };
-    if src5_dispatcher.supports_interface(ISNIP89_RECEIVER_ID) {
-        ISNIP89ReceiverDispatcher { contract_address: recipient }
+    if src5_dispatcher.supports_interface(ISNIP17_RECEIVER_ID) {
+        ISNIP17ReceiverDispatcher { contract_address: recipient }
             .on_erc20_received(
                 get_caller_address(), sender, amount, data
-            ) == ISNIP89_RECEIVER_ID
+            ) == ISNIP17_RECEIVER_ID
     } else {
         src5_dispatcher.supports_interface(ISRC6_ID)
     }
@@ -137,7 +137,7 @@ fn _throw_invalid_receiver(self: @ContractState, receiver: ContractAddress) {
 
 See the full repository [here](https://github.com/boyuanx/starknet-erc20-safetransfer).
 
-## Security
+## Security Considerations
 
 As with calling any external contract, calling this receive hook may result in reentrancy attacks. Use proper design patterns and/or reentrancy guards if needed.
 
