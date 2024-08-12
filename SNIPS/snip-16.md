@@ -3,8 +3,8 @@ snip: 16
 title: Deprecation of transaction versions 0,1,2
 description: This SNIP proposes to deprecate transaction versions 0,1,2 and stop support for them around the end of Q1 of 2025.
 author: Ilia Volokh <iliav@starkware.co>
-discussions-to: 
-status: Draft
+discussions-to: https://community.starknet.io/t/snip-16-deprecation-of-transaction-versions-0-1-2/114443
+status: Review
 type: Standards Track
 category: Core
 created: 2024-07-02
