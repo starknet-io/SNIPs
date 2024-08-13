@@ -1,10 +1,14 @@
 ---
-snip: $SNIP_ID
+snip: 17
 title: Tokenized Vaults
+description: The standard defines an API for tokenized, yield-bearing vaults of a single underlying SNIP-2 asset including functions for depositing and withdrawing the underlying
 author: Nils Bundi <nbundi@proton.me>, Johannes Escherich <0xJohannes@pm.me>
+discussions-to: TODO
 status: Draft
-type: SRC
-created: $SNIP_DATE
+type: Standards Track
+category: SRC
+created: 2024-08-14
+requires: 2
 ---
 
 ## Simple Summary
@@ -25,7 +29,7 @@ This standard extends the SNIP-2 token and provides basic functionality for depo
 
 ## Motivation
 
-Tokenized vaults are a widely used pattern across many DeFi applications including lending markets, aggregators, and interest bearing tokens. It is enabled by the standardization of simple tokens with the SNIP-2 standard. However, other than SNIP-2 tokens, current vaults expose diverse interfaces making integration difficult for protocols, aggregators and wallets which have to implement adapters for each standard. This is inefficient and error prone.
+Tokenized, yield-bearing vaults are a widely used pattern across many DeFi applications including lending markets, aggregators, and interest bearing tokens. It is enabled by the standardization of simple tokens with the SNIP-2 standard. However, other than SNIP-2 tokens, current vaults expose diverse interfaces making integration difficult for protocols, aggregators and wallets which have to implement adapters for each standard. This is inefficient and error prone.
 
 The proposed "tokenized vaults" standard will lower the integration effort for yield-bearing vaults and tokens, result in better UX and increase security for users.
 
@@ -359,16 +363,23 @@ struct Withdraw {
 }
 ```
 
-## Implementation
+## Rationale
 
-An implementation of the standard can be found here: [Vesu v_token](https://github.com/vesuxyz/protocol/blob/dev/src/v_token.cairo).
+Tokenized vaults represent a common pattern across various DeFi protocols on Starknet and beyond. Interoperability across these protocols is greatly improved if based on common standards. The standard defines a minimal API that facilitates efficient and safe integrations while not restricting the domains of application.
 
-Note that this implementation needs to be adjusted for your specific use case.
+The API defines the concepts of `assets` and `shares` and a set of functions allowing for the management of these concepts. It does not extend to any domain specific function such as `rebalancing` across different strategies known e.g. from (yield) aggregators. This allows the standard to remain flexible in terms of its applications.
 
 
 ## Backwards Compatibility
 
-The tokenized vault standard is fully backward compatible with the SNIP-2 standard and has no known compatibility issues with other standards.
+The standard is fully backward compatible with the SNIP-2 standard and has no known compatibility issues with other standards.
+
+
+## Reference Implementation
+
+An implementation of the standard can be found here: [Vesu v_token](https://github.com/vesuxyz/vesu-v1/blob/main/src/v_token.cairo).
+
+Note that this implementation needs to be adjusted for your specific use case.
 
 
 ## Security Considerations
@@ -388,8 +399,6 @@ The `convert` methods estimate the values possibly in a non-exact manner. Thus, 
 
 When integrating a tokenized vault it is thus important to understand the use cases for the different methods and integrate these accordingly.
 
-
-## History
 
 ## Copyright
 
