@@ -1,0 +1,38 @@
+---
+snip: 
+title: Protocol-level Paymaster
+description: This SNIP proposes a design for a protocol-level paymaster contract and semantics for the 'paymaster' field in v3 transactions.
+author: Ilia Volokh <iliav@starkware.co>
+discussions-to: 
+status: Draft
+type: Standards Track
+category: Core
+created: 2024-08-12
+---
+
+## Simple Summary
+
+
+## Motivation
+
+
+## Proposal
+
+
+## Rationale
+
+
+## Drawbacks
+
+
+## Alternatives
+
+
+## Backwards Compatibility
+
+
+## Security Considerations
+
+
+## Copyright
+
