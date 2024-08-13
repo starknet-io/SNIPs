@@ -2,7 +2,7 @@
 snip: XX
 title: Procedure for Introducing Starknet Breaking Changes
 author: Nicolas Consigny <@nconsigny>
-discussions-to:
+discussions-to: https://community.starknet.io/t/snip-xxx-procedure-for-introducing-starknet-breaking-changes/114452?u=nico_jr
 status: Draft
 type: Meta
 created: 2024-06-28
