@@ -2,7 +2,7 @@
 snip: 18
 title: Staking’s First Stage on Starknet
 author: Natan Granit <natan@starkware.co>
-discussions-to:
+discussions-to: https://community.starknet.io/t/snip-18-staking-s-first-stage-on-starknet/114334
 status: Draft
 type: Standards Track
 category: Core
@@ -39,7 +39,7 @@ By adopting this step-by-step approach, with the proposed first stage, we can ga
 
 The proposed first stage protocol features permissionless staking of STRK on Starknet with two staking flavors:
 
-* **Staking:** As a Staker, you can stake any amount of STRK greater than X STRK (X is between 10K-100K). Currently, Stakers are expected to run full nodes in preparation for the following stages. In the future, they will also need to run additional software that sequences and validates Starknet blocks and possibly perform additional network liveness and security tasks.
+* **Staking:** As a Staker, you can stake any amount of STRK greater than 20K. Currently, Stakers are expected to run full nodes in preparation for the following stages. In the future, they will also need to run additional software that sequences and validates Starknet blocks and possibly perform additional network liveness and security tasks.
 * **Stake Delegation:** Delegators choose a Staker to whom they delegate their Stake, sharing rewards with said Staker. Stake Delegators do not need to run any software, as their chosen Staker runs it for them. This makes participation accessible to a broader audience, allowing users to participate in the Staking protocol without the technical and capital limitations.
 
 Both Stakers and Stake Delegators can unstake their funds, subject to protocol-defined latencies that ensure network stability and security. More details on these latencies can be found in the "Latencies" section.
@@ -81,13 +81,6 @@ Deciding on a global inflation cap and exact minting curve parameters is a compl
 
 *Although Stake Delegators are subject to a security lockup when withdrawing funds, they can move between Stakers without waiting the full lockup period, enhancing the delegation market's competitiveness.
 
-### Stake Delegation threshold
-
-The ratio between a Staker's own stake and the stake they receive from delegators is limited by a global Stake Delegation threshold (DT). The constraint is:
-
-`{self_stake} + {delegated_stake} < {self_stake} * DT`
-
-This requirement ensures that Stakers have a sufficient stake in the network, aligning their interests with network stability and security.
 
 ### Economical parameters
 
@@ -95,10 +88,9 @@ Here is a table summarising the economic parameters proposed in this version:
 
 | **Economical Parameter**          | **Proposed value**            |
 |-----------------------------------|-------------------------------|
-| Minimum STRK for Staking (X)      | 10K-100K STRK                 |
+| Minimum STRK for Staking (X)      | 20K STRK                 |
 | Withdrawal Security lock up (W)   | 21 days                       |
 | Minting curve yearly inflation cap (C) | 1.8-2.5%                   |
-| Delegation threshold (DT)         | 5                             |
 | Reward-sharing parameter (R)      | Set individually by the Staker (0-1) |
 
 These values are our proposed starting points for this version of the protocol. As part of the rationale behind this version, they are subject to change and may be adjusted to better suit the protocol's needs.
