@@ -3,7 +3,7 @@ snip: 17
 title: Tokenized Vaults
 description: The standard defines an API for tokenized, yield-bearing vaults of a single underlying SNIP-2 asset including functions for depositing and withdrawing the underlying
 author: Nils Bundi <nbundi@proton.me>, Johannes Escherich <0xJohannes@pm.me>
-discussions-to: TODO
+discussions-to: https://community.starknet.io/t/snip-17-tokenized-vaults/114457
 status: Draft
 type: Standards Track
 category: SRC
