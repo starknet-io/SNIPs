@@ -1,5 +1,5 @@
 ---
-snip: $SNIP_ID
+snip: 21
 title: Out-of-band fee-on-transfer tokens
 author: Moody Salem <moody@ekubo.org>
 status: Living
