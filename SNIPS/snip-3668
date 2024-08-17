@@ -1,0 +1,72 @@
+---
+snip: 3668
+title: Starknet CCIP Read
+author: Elias Tazartes <@Eikix>
+status: Draft
+type: SRC
+created: 2024-08-17
+---
+
+## Simple Summary
+
+Implementation of the CCIP-Read standard ([ERC-3668](https://eips.ethereum.org/EIPS/eip-3668)) specifically for the Starknet state, making it possible for L1 contracts (and later any L2 contracts) to fetch contract state data from Starknet.
+
+The intended use is for contracts on L1 to be able to verify data from contracts on Starknet in a read context via a Solidity contract able to verify Starknet inclusion proofs against the Starknet Core Contract's state root.
+
+## Abstract
+
+How does one query trustlessly a storage slot from Starknet at the time of writing (August 2024)? 
+1. Run a full node and query the `starknet_getStorageAt` RPC endpoint. 
+1. Query the `starknet_getStorageAt` RPC endpoint of an external provider and along with a merkle inclusion proof of that specific storage slot (`pathfinder_getProof` is the only way to achieve this at time of writing). Note that without the inclusion proof, your request is trusted and thus not trust-minimized.
+
+This standard is meant to provide an official and audited way to verify the state of Starknet on Ethereum mainnet, and eventually on any EVM-compatible chain. Note the difference is that any chain other than L1 needs to be able to read the Starknet Core Contract's state root in order to check the Merkle inclusion proof's integrity.
+
+
+## Motivation
+
+There are a few good reasons to read the Starknet state from L1 or another L2.
+1. Starknet appchains offering: keystore rollups (few sources: [Keystore Design](https://hackmd.io/@haichen/keystore) and [Scroll's writeup](https://scroll.io/blog/towards-the-wallet-endgame-with-keystore)) and other state dependent appchains (e.g. ENS v2 the appchain) essentially function through multi-chain reading of their state.
+    1. For keystore rollups, L2 or L1 contracts MUST read the user's wallet information in the keystore rollup's state.
+    1. For namespace appchains, L2 or L1 contracts MUST read the user's records in the appchain's state.
+1. Cross-chain capabilities of the Starknet state. Today, other L1 or other L2 onchain applications cannot read the state of Starknet, thus making it impossible to create smooth multi-chain experiences using the Starknet state. 
+1. A few Rollup Improvement Proposals (RIPs) are being prepared in Rollcall, the governance body of rollups. Two examples: L1SLOAD and L1STATICCALL enable any rollup contract to respectively (synchronously) read an L1 storage slot and statically call into an L1 contract. These two precompiles would greatly increase the composability of L2s states. 
+    1. Note that [Linea](https://github.com/Consensys/linea-ens/tree/main), Scroll, Optimism, Arbitrum and ZKSync Era already implemented this specific ERC for their state: https://github.com/ensdomains/evmgateway.
+
+This also opens the floor to further cross-L2 standardizations, as proposed by Vitalik Buterin:
+> One of the other idea that we're in the process of figuring out, btw, is moving the de-facto "config" of an L2 to _all_ being callable functions in the L2's core contract on L1.
+
+## Specification
+
+This SRC, if implemented, would result in:
+- The deployment of an official Solidity contract able to verify a Merkle inclusion proof for the Starknet state against the Starknet core contract's state root, on Ethereum L1.
+- An off-chain service, so-called "gateway", able to provide inclusion proofs for a specific storage slot.
+- (Optional): The inclusion of a view entrypoint in the Starknet core contract on L1 to verify a Merkle path (This was proposed in Rollcall - the governance body of rollups - by Vitalik Buterin).
+
+The main repositories to check as references are:
+- The ENS EVMGateway repository, that lists all the L1 and L2s verifier contracts and their code: https://github.com/ensdomains/evmgateway
+- The Nethermind Starknet State Verifier repository: https://github.com/NethermindEth/starknet-state-verifier
+    - An early project to adapt the CCIP-Read to the Starknet state.
+
+## Implementation
+
+The implementation must be thoroughly planned and specified with stakeholders. 
+For one, we must be reasonably certain that the Starknet storage layout is stable for the next quarter to implement the Solidity contracts that verifiying the Starknet state. 
+
+
+## History
+
+This SRC is inspired by the [ENS EVM Gateway monorepo](https://github.com/ensdomains/evmgateway), which introduction we reproduce here:
+> This repository implements a generic CCIP-Read gateway framework for fetching state proofs of data on other EVM chains. This allows L1 smart contracts to fetch and verify state from L2s. The library is built to be as modular and interchangeable as possible. This means:
+
+> - Anyone can operate their own gateway, but...
+> - Only one gateway needs to be operated for each chain, regardless of the applications requesting data from it.
+> - Gateways do not need to be trusted; their responses are fully verified on L1.
+> - Contracts can fetch L2 state using a simple builder interface and callbacks.
+> - Contracts can change targets (eg, a different L2) just by swapping out the address of a verifier contract for another.
+> - While this functionality is written primarily with read calls in mind, it also functions for transactions; using a compliant library like Ethers, a transaction that includes relevant L2 proofs can be generated and signed.
+
+
+
+## Copyright
+
+Copyright and related rights waived via [MIT](../LICENSE).
