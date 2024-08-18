@@ -14,7 +14,7 @@ As the Starknet network matures, breaking changes to the stack affect many proto
 
 ## **Motivation**
 
-The purpose of this SNIP is to formalize the process for proposing, discussing, and implementing core updates that are introducing breaking changes to the Starknet protocol. By providing a clear and structured approach, we aim to facilitate community engagement and transparency in the evolution of Starknet.
+The purpose of this SNIP is to formalize the process for proposing, discussing, and implementing core updates that are introducing breaking changes to the Starknet protocol. By providing a clear and structured approach, we aim to facilitate community engagement and transparency in the evolution of Starknet. This will allow the client teams (Madara, Papyrus, Juno, PathFinder) and CairoVM implementors (Lambdaclass' CairoVM rust, SW's CairoVM python, Nethermind's CairoVM go, Kakarot's CairoVM TS) to plan long term developement with certainty. 
 
 ## **Specification**
 
