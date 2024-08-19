@@ -3,8 +3,8 @@ snip: 16
 title: Deprecation of transaction versions 0,1,2
 description: This SNIP proposes to deprecate transaction versions 0,1,2 and stop support for them around the end of Q1 of 2025.
 author: Ilia Volokh <iliav@starkware.co>
-discussions-to: 
-status: Draft
+discussions-to: https://community.starknet.io/t/snip-16-deprecation-of-transaction-versions-0-1-2/114443
+status: Review
 type: Standards Track
 category: Core
 created: 2024-07-02
@@ -25,7 +25,7 @@ Transaction versions 0,1,2 only support fee payment in ETH. Moreover, they have 
 
 ## Proposal
 
-We propose for the sequencer to stop support for transaction versions 0,1,2 in an upcoming version in preparation for integrating the mempool and fee market, which is expected to happen within 6-8 months.
+We propose for the sequencer to stop support for transaction versions 0,1,2 in an upcoming version in preparation for integrating the mempool and fee market, which is expected to happen within 6-8 months. Concretely, we propose for these transaction versions to be rejected at the gateways to the mempool.
 
 To facilitate continuation of fee payment in ETH, we propose to adopt paymasters. The decision between applicative paymasters such as the one by AVNU or protocol-level paymasters will be left to applications/wallets. (A detailed SNIP for a protocol-level paymaster is in the works.)
 
