@@ -1,12 +1,13 @@
 ---
 snip: 18
 title: Staking’s First Stage on Starknet
+description: SW proposal for STRK Staking on Starknet
 author: Natan Granit <natan@starkware.co>
 discussions-to: https://community.starknet.io/t/snip-18-staking-s-first-stage-on-starknet/114334
-status: Draft
+status: Review
 type: Standards Track
 category: Core
-created: July 10, 2024
+created: 2024-07-10
 ---
 
 # Staking’s First Stage on Starknet
@@ -105,11 +106,19 @@ Locked tokens will initially be excluded from staking. When Stakers begin valida
 * Both Stakers and Stake Delegators can add to their stake.
 * There is no partial unstaking.
 
-### Security Considerations
+## Rationale
+
+The implementation of staking on Starknet is designed with a gradual approach to ensure network stability and security. Implementing staking incrementally allows for thorough testing and smooth integration of the PoS protocol, reducing risks associated with a sudden transition to decentralization. This phased rollout also gives Stakers time to prepare for their roles, ensuring they are ready to maintain and secure the network.
+
+The dynamic reward structure, particularly the minting curve, balances incentivizing participation with maintaining token availability for other network activities.
+
+In summary, the design outlined above ensures a secure, stable, and gradual transition within Starknet’s decentralized journey.
+
+## Security Considerations
 
 The staking protocol's design includes several key security measures to ensure its integrity and user safety.
 
-#### Modular architecture
+### Modular architecture
 
 The proposed protocol will be implemented using a modular architecture, where different functionalities are separated into distinct contracts, such as staking, delegation, rewards supply, and more. This approach offers several advantages:
 
@@ -117,7 +126,7 @@ The proposed protocol will be implemented using a modular architecture, where di
 * **Enhances Access Control:** By defining specific permissions for each contract, the risk of unauthorized access or misuse is reduced.
 * **Allows Targeted Upgrades and Changes:** Updating only the relevant contract minimizes the potential for introducing new vulnerabilities.
 
-#### Permissions and Key Management
+### Permissions and Key Management
 
 The Staking protocol allows users to define different addresses for different functionalities. Thus, cold addresses with minimal activity can control important functionalities, reducing exposure to threats and enhancing user security.
 
@@ -134,7 +143,7 @@ Stake Delegators register with two addresses:
 
 **Permissions:** The protocol uses a hierarchical approach between user roles. Colder addresses, which control larger funds, can replace more active ones if compromised. Specifically, Staker and Stake Delegator addresses can replace the rewards address.
 
-#### Security lockup period
+### Security lockup period
 
 When exiting, users face a 21-day lockup, during which no rewards are earned, and funds cannot be withdrawn. This disincentivises sudden large withdrawals that could destabilize the network. Future versions will tie the exit process to epochs, maintaining the lockup period for a secure exit mechanism.
 
