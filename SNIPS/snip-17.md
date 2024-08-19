@@ -3,7 +3,7 @@ snip: 17
 title: Safe Transfer for Fungible Tokens
 author: Jack Boyuan Xu <jxu@ethsign.xyz>
 discussions-to: https://community.starknet.io/t/snip-17-safe-transfer-for-fungible-tokens
-status: Draft
+status: Review
 type: Standards Track
 category: SRC
 created: 2024-06-24
