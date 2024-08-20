@@ -52,11 +52,11 @@ Staking rewards will be based on token minting. The rewards are calculated accor
 
 * **Stakers:** Earn rewards proportional to their own stake and the total stake delegated to them, adjusted by the reward-sharing constant. The formula is:
 
-    `({self_stake} + {total_stake_delegated} * (1 - R)) * {rewards_constant} * {time_interval}`
+    `({self_stake} + {total_stake_delegated} * (R)) * {rewards_constant} * {time_interval}`
 
 * **Stake Delegators:** Earn rewards proportional to their delegated stake and the reward-sharing constant. The formula is:
 
-    `{stake_delegated} * R * {rewards_constant} * {time_interval}`
+    `{stake_delegated} * (1 - R) * {rewards_constant} * {time_interval}`
 
 where `{rewards_constant}` is determined by the minting curve and depends on the total amount staked in the protocol. This reward structure incentivizes both staking, stake delegation, and competition among Stakers for delegators' stake.
 
@@ -83,6 +83,22 @@ Deciding on a global inflation cap and exact minting curve parameters is a compl
 *Although Stake Delegators are subject to a security lockup when withdrawing funds, they can move between Stakers without waiting the full lockup period, enhancing the delegation market's competitiveness.
 
 
+### Partial undelegate
+
+We are incorporating a partial undelegation functionality into our proposal. This will allow any delegator to invoke the exit_delegation_pool_intent function with an amount that is either equal to or less than their total delegation. When this function is called, an event will be emitted containing the delegator's address, the specified amount, and the time when the withdrawal will be allowed, considering the security lockup period of 21 days.
+
+Once the security lockup period has passed, the delegator can withdraw their stake by invoking the exit_delegation_pool_action function.
+
+If an undelegation intent is initiated but the corresponding undelegation action is not completed, any new undelegation intent will override the previous request, and the 21-day lockup period will reset from the time of the last call.
+
+
+### The reward-sharing parameter
+
+When a Staker joins the protocol, they can choose whether to be open to Delegation and set their rewards sharing parameter (R), i.e. their commission policy. A Staker can lower their commission rate but cannot increase it. This restriction is in place to prevent Stakers from attracting a large number of delegators with low commissions and then suddenly raising the rates.
+
+In future versions, we may explore more sophisticated commission policies, such as time locks for changes, maximum allowable changes per time interval, and additional features.
+
+
 ### Economical parameters
 
 Here is a table summarising the economic parameters proposed in this version:
@@ -104,7 +120,7 @@ Locked tokens will initially be excluded from staking. When Stakers begin valida
 
 * Rewards are claimed by actively sending a transaction.
 * Both Stakers and Stake Delegators can add to their stake.
-* There is no partial unstaking.
+* Although there is partial undelegating, there is no partial unstaking.
 
 ## Rationale
 
