@@ -1,5 +1,5 @@
 ---
-snip: 17
+snip: 22
 title: Tokenized Vaults
 description: The standard defines an API for tokenized, yield-bearing vaults of a single underlying SNIP-2 asset including functions for depositing and withdrawing the underlying
 author: Nils Bundi <nbundi@proton.me>, Johannes Escherich <0xJohannes@pm.me>
@@ -11,27 +11,15 @@ created: 2024-08-14
 requires: 2
 ---
 
-## Simple Summary
-
-A standard interface for tokenized vaults.
-
-Inspired by [EIP-4626](https://eips.ethereum.org/EIPS/eip-4626).
-
-Extends [SNIP-2](./snip-2.md).
-
 
 ## Abstract
 
-The following standard allows for the implementation of a standard API for tokenized vaults representing shares of a single underlying [SNIP-2](./snip-2.md) asset. 
-
-This standard extends the SNIP-2 token and provides basic functionality for depositing and withdrawing underlying assets, minting and burning vault shares and reading balances and other basic information.
+Extends the [SNIP-2](./snip-2.md) token standard and adds basic functionality for implementation of tokenized vaults representing shares of an underlying asset including deposit, withdraw, burn, mint and viewing balances. Is inspired by [EIP-4626](https://eips.ethereum.org/EIPS/eip-4626).
 
 
 ## Motivation
 
-Tokenized, yield-bearing vaults are a widely used pattern across many DeFi applications including lending markets, aggregators, and interest bearing tokens. It is enabled by the standardization of simple tokens with the SNIP-2 standard. However, other than SNIP-2 tokens, current vaults expose diverse interfaces making integration difficult for protocols, aggregators and wallets which have to implement adapters for each standard. This is inefficient and error prone.
-
-The proposed "tokenized vaults" standard will lower the integration effort for yield-bearing vaults and tokens, result in better UX and increase security for users.
+Tokenized vaults are a widely used pattern across many DeFi applications including lending markets, aggregators, and interest bearing tokens. Current vault implementations expose diverse interfaces. A standard API for tokenized vaults will lower the integration effort for protocols, aggregators and wallets, result in better UX and increase security for users.
 
 
 ## Specification
