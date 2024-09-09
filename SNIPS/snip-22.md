@@ -3,7 +3,7 @@ snip: 22
 title: Tokenized Vaults
 description: Extends SNIP-2 to support tokenized, yield-bearing vaults
 author: Nils Bundi <nbundi@proton.me>, Johannes Escherich <0xJohannes@pm.me>
-discussions-to: https://community.starknet.io/t/snip-17-tokenized-vaults/114457
+discussions-to: https://community.starknet.io/t/snip-22-tokenized-vaults/114457
 status: Draft
 type: Standards Track
 category: SRC
