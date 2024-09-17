@@ -57,7 +57,7 @@ Full nodes can either maintain such configs or indiscriminantly propagate paymas
 
 Now the flow:
 
-1. Syntactic checks (transaction is not a cat gif).
+1. Syntactic checks (transaction is properly formatted).
 2. User submitted rate should be at least client's locally configured rate. `min_STRK/TOKEN_rate ≤ r`
 3. Balance checks:
     * User token balance should cover their bid given their specified max exchange rate `balance(user) ≥ max_amount × r(base_price(current_block)+tip)`.
