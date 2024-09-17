@@ -37,7 +37,7 @@ We draw inspiration from [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), al
 
 We shall say a contract is a _paymaster_ if it has a `__validate_paymaster__` entrypoint. No computational restrictions are necessary for `__validate_paymaster__` as users will pay for its failure - this is explained in detail later.
 
-An example `__validate_paymaster__` would read an exchange rate from some chosen oracle(s) or AMM(s) and check the user's specified exchange rate is liberal enough, e.g $1.05 \times \mathtt{oracle}\_ \mathtt{rate}\leq r$.
+An example `__validate_paymaster__` would read an exchange rate from some chosen oracle(s) or AMM(s) and check the user's specified exchange rate is liberal enough, e.g $1.05 \times \mathtt{oracle}\{_} \mathtt{rate}\leq r$.
 
 A _paymaster transaction_ is one with a non-empty _paymaster field_. A valid paymaster transaction specifies three concatenated pieces of data in the `paymaster` field:
 1. Paymaster contract address
@@ -58,34 +58,34 @@ We propose that full nodes indiscriminantly propagate paymaster transactions wit
 Now the flow:
 
 1. Syntactic checks (transaction is not a cat gif).
-2. User submitted rate should be at least client's locally configured rate. $$\mathtt{min}\_ \mathtt{STRK/TOKEN}\_ \mathtt{rate}\leq r$$
+2. User submitted rate should be at least client's locally configured rate. $$\mathtt{min}\{_} \mathtt{STRK/TOKEN}\{_} \mathtt{rate}\leq r$$
 3. Balance checks:
-    * User token balance should cover their bid given their specified max exchange rate $$\mathtt{balance(user)}\geq \mathtt{max\_ amount}\times r(\mathtt{base}\_ \mathtt{price}(\mathtt{current}\_ \mathtt{block})+\mathtt{tip}).$$
-    * Paymaster STRK balance should cover user bid $$\mathtt{balance(paymaster)}\geq \mathtt{max}\_ \mathtt{amount}\times (\mathtt{base}\_ \mathtt{price}(\mathtt{current}\_ \mathtt{block})+\mathtt{tip}).$$
+    * User token balance should cover their bid given their specified max exchange rate $$\mathtt{balance(user)}\geq \mathtt{max\{_} amount}\times r(\mathtt{base}\{_} \mathtt{price}(\mathtt{current}\{_} \mathtt{block})+\mathtt{tip}).$$
+    * Paymaster STRK balance should cover user bid $$\mathtt{balance(paymaster)}\geq \mathtt{max}\{_} \mathtt{amount}\times (\mathtt{base}\{_} \mathtt{price}(\mathtt{current}\{_} \mathtt{block})+\mathtt{tip}).$$
 
 #### Block builder
 
 A paymaster contract should be used only by those who trust its code. Such users know the paymaster's exchange policies, and therefore know which rates they should submit to pass, and which rates are too frugal and may cause `__validate_paymaster__` to fail. Hence, we consider it justified to "blame" users for failed `__validate_paymaster__` and to consequently charge them. Now arises a problematic scenario: the user may hold zero STRK and the paymaster rejected the request to cover its transaction fee. In this particular case we allow the sequencer to charge the transaction fee directly in the user's designated token.
 
-In the naive example above, `__validate_paymaster__` will fail during block building if and only if $$\mathtt{min}\_ \mathtt{STRK/TOKEN}\_ \mathtt{rate} \leq r\leq 1.05 \times \mathtt{oracle}\_ \mathtt{rate},$$ meaning the user's rate was high enough to enter the client's mempool but too low for the paymaster.
+In the naive example above, `__validate_paymaster__` will fail during block building if and only if $$\mathtt{min}\{_} \mathtt{STRK/TOKEN}\{_} \mathtt{rate} \leq r\leq 1.05 \times \mathtt{oracle}\{_} \mathtt{rate},$$ meaning the user's rate was high enough to enter the client's mempool but too low for the paymaster.
 
 Now the flow:
 
 1. Balance checks:
-    * User token balance should cover their bid given their specified max rate $$\mathtt{balance(user)}\geq \mathtt{max}\_ \mathtt{amount}\times r(\mathtt{base}\_ \mathtt{price}(\mathtt{current}\_ \mathtt{block})+\mathtt{tip}).$$ If success, CONTINUE; else, REJECT.
-    * Paymaster STRK balance should cover user bid $$\mathtt{balance(paymaster)}\geq \mathtt{max\_ amount}\times (\mathtt{base\_ price(current}\_ \mathtt{block)}+\mathtt{tip}).$$ If success, CONTINUE; else, REJECT.
+    * User token balance should cover their bid given their specified max rate $$\mathtt{balance(user)}\geq \mathtt{max}\{_} \mathtt{amount}\times r(\mathtt{base}\{_} \mathtt{price}(\mathtt{current}\{_} \mathtt{block})+\mathtt{tip}).$$ If success, CONTINUE; else, REJECT.
+    * Paymaster STRK balance should cover user bid $$\mathtt{balance(paymaster)}\geq \mathtt{max\{_} amount}\times (\mathtt{base\{_} price(current\{_} block)}+\mathtt{tip}).$$ If success, CONTINUE; else, REJECT.
 2. Run account `__validate__`. If success CONTINUE, else REJECT.
 3. Run paymaster `__validate_paymaster__`. If success, CONTINUE; else, REVERT and skip to fee invocations below.
 4. Run account `__execute__`. If success, CONTINUE; else, REVERT and skip to fee invocations below.
 5. Fee invocations:
     * If failure was in `__validate_paymaster__`, user pays sequencer in designated fee token:
-        * Burn $\mathtt{used}\_ \mathtt{amount}\times r\cdot\mathtt{base}\_ \mathtt{price}$.
-        * Transfer $\mathtt{used}\_ \mathtt{amount}\times r\cdot\mathtt{tip}$.
+        * Burn $\mathtt{used}\{_} \mathtt{amount}\times r\cdot\mathtt{base}\{_} \mathtt{price}$.
+        * Transfer $\mathtt{used}\{_} \mathtt{amount}\times r\cdot\mathtt{tip}$.
     * If failure was later:
         1. Paymaster pays transaction fee to sequencer:
-            * Burn $\mathtt{used}\_ \mathtt{amount}\times \mathtt{base}\_ \mathtt{price}$.
-            * Transfer $\mathtt{used}\_ \mathtt{amount}\times \mathtt{tip}$.
-        2. User pays paymaster: transfer $\mathtt{used}\_ \mathtt{amount}\times r(\mathtt{base}\_ \mathtt{price}(\mathtt{current}\_ \mathtt{block})+\mathtt{tip})$.
+            * Burn $\mathtt{used}\{_} \mathtt{amount}\times \mathtt{base}\{_} \mathtt{price}$.
+            * Transfer $\mathtt{used}\{_} \mathtt{amount}\times \mathtt{tip}$.
+        2. User pays paymaster: transfer $\mathtt{used}\{_} \mathtt{amount}\times r(\mathtt{base}\{_} \mathtt{price}(\mathtt{current}\{_} \mathtt{block})+\mathtt{tip})$.
     * In case of failure during fee invocations, REVERT all state changes and return to it directly (skipping `__validate_paymaster__` and `execute`). This ensures both user and paymaster have sufficient balances due to both balance checks.
 
 ### Optimization: discounted paymaster rates
@@ -107,7 +107,7 @@ We submit that the above design facilitates simple and safe paymaster contracts 
 
 ## Drawbacks
 
-1. A user who set their max rate in the range $$ \mathtt{min} \_ \mathtt{STRK/TOKEN} \_ \mathtt{rate} \leq r \leq \mathtt{min} \_ \mathtt{STRK/TOKEN} \_ \mathtt{rate_accepted_by_paymaster} $$ will experience reverted `__validate_paymaster__` and pay for the reversion. As noted above, this is easily remedied by submitting high rates, especially for paymasters who charge at discounted rates.
+1. A user who set their max rate in the range $$ \mathtt{min} \{_} \mathtt{STRK/TOKEN} \{_} \mathtt{rate} \leq r \leq \mathtt{min} \{_} \mathtt{STRK/TOKEN} \{_} \mathtt{rate_accepted_by_paymaster} $$ will experience reverted `__validate_paymaster__` and pay for the reversion. As noted above, this is easily remedied by submitting high rates, especially for paymasters who charge at discounted rates.
 
 2. The functionality of the proposed design is limited to ERC-20 tokens, and does not achieve any loftier goals of fee abstraction. Of course this is not a drawback compared to having no functionality at all.
 
