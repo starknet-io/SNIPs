@@ -53,7 +53,7 @@ We now outline the steps for processing of a paymaster transaction by the sequen
 
 Users can submit unrealistically low rates; these should be interpreted as overvaluations of their designated payment tokens. Exaggerated claims should be rejected. However, we wish to avoid defining "reasonable rates" at the protocol level. To this end, each sequencer client locally defines reasonable rates via dictionary: `TOKEN → min_STRK/TOKEN_rate`. (The ratio follows exchange conventions: it is the price of one STRK in units of the TOKEN.) This dictionary can be static or dynamically updated e.g by some oracle feed. Sequencers can also choose to serve only some chosen whitelist of paymaster contracts.
 
-We propose that full nodes indiscriminantly propagate paymaster transactions without looking into the `paymaster` field; only sequencers will bar entry into their respective mempools.
+Full nodes can either maintain such configs or indiscriminantly propagate paymaster transactions without looking into the `paymaster` field. In the former case, each full node filters some paymaster transactions from the P2P network according to its local  configurations. If most nodes have similar configs to sequencers, this does a service by reducing the traffic of invalid transactions on the network, essentially defending sequencer mempools. On the other hand, if full nodes configure themselves too defensively, they may filter out paymaster transactions that sequencers are willing to process. In the latter case where full nodes do not maintain any configs, all invalid transactions will need to be rejected by some sequencer from entering its mempool.
 
 Now the flow:
 
