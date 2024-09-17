@@ -90,7 +90,7 @@ Now the flow:
 
 ### Optimization: discounted paymaster rates
 
-In the above flow, the paymaster always charges at the user's max rate `r`. This encourages strategic "bidding" on the rate. It's better to allow paymaster contracts to charge users at a smaller rate than their submitted max rate. To this end, we allow `__validate_paymaster__` to output a `charging_rate` satisfying `charging\_ rate ≤ r`. If `__validate_paymaster__` executes successfully, the fee invocation will proceed with the user's max rate replaced by the paymaster's `charging_rate`.
+In the above flow, the paymaster always charges at the user's max rate `r`. This encourages strategic "bidding" on the rate. It's better to allow paymaster contracts to charge users at a smaller rate than their submitted max rate. To this end, we allow `__validate_paymaster__` to output a `charging_rate` satisfying `charging_rate ≤ r`. If `__validate_paymaster__` executes successfully, the fee invocation will proceed with the user's max rate replaced by the paymaster's `charging_rate`.
 
 ### SDK and Wallet integration
 
