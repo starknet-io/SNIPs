@@ -19,7 +19,7 @@ In a nutshell, users send v3 transactions and specify three pieces of data in th
 3. Maximal allowed exchange rate between the above token and STRK. Specifically, the max rate $r$ means the user is willing to pay at most $r$ tokens for a single STRK.
 The target paymaster contract will receive funds from the user (denominated in their ERC-20 token of choice) and pay the transaction fee (in STRK) to the sequencer, at a rate $\leq r$. Economic calculation and choice of rate are left to each paymaster contract.
 
-The proposal involves no reputation systems, enshrined oracles, or other capital costs to deploy paymaster contracts.
+The proposal involves no reputation systems, enshrined oracles/AMMs, or other capital costs to deploy paymaster contracts.
 
 ## Motivation
 
@@ -33,14 +33,19 @@ We think the ability of users to transact on Starknet without owning STRK is an 
 
 We draw inspiration from [ERC-4337](https://eips.ethereum.org/EIPS/eip-4337), although we take a slightly different route.
 
-### Definitions and Flow
+### Definitions
 
-We shall say a contract is a _paymaster_ if it has a `__validate_paymaster__` entrypoint. A simple implementation would read an exchange rate from some oracle and check the user's specified exchange rate is liberal enough, e.g $1.05 \times \mathtt{oracle\_ rate}\leq r$. No computational restrictions are necessary for `__validate_paymaster__` as users will pay for its failure - this is explained in detail below.
+We shall say a contract is a _paymaster_ if it has a `__validate_paymaster__` entrypoint. No computational restrictions are necessary for `__validate_paymaster__` as users will pay for its failure - this is explained in detail later.
+
+An example `__validate_paymaster__` would read an exchange rate from some chosen oracle(s) or AMMs and check the user's specified exchange rate is liberal enough, e.g $1.05 \times \mathtt{oracle\_ rate}\leq r$.
 
 A _paymaster transaction_ is one with a non-empty _paymaster field_. A valid paymaster transaction specifies three concatenated pieces of data in the `paymaster` field:
 1. Paymaster contract address
 2. ERC-20 token contract address
 3. Maximal allowed exchange rate between the above token and STRK. Specifically, max rate $r$ means the user is willing to pay at most $r$ tokens for a single STRK.
+
+
+### Flow
 
 We now outline the steps for processing of a paymaster transaction by the sequencer. For simplicity, the initial flow will involve charging at the user's max rate $r$; the optimization of charging at discounted rates will be deferred to the next section.
 
@@ -81,6 +86,7 @@ Now the flow:
             * Burn $\mathtt{used\_ amount}\times \mathtt{base\_ price}$.
             * Transfer $\mathtt{used\_ amount}\times \mathtt{tip}$.
         2. User pays paymaster: transfer $\mathtt{used\_ amount}\times r(\mathtt{base\_ price(current\_ block)}+\mathtt{tip})$.
+    * In case of failure during fee invocations, REVERT all state changes and return to it directly (skipping `__validate_paymaster__` and `execute`). This ensures both user and paymaster have sufficient balances due to both balance checks.
 
 ### Optimization: discounted paymaster rates
 
@@ -101,7 +107,7 @@ We submit that the above design facilitates simple and safe paymaster contracts 
 
 ## Drawbacks
 
-1. A user who set their max rate in the range $$\mathtt{min\_ STRK/TOKEN\_ rate} \leq r\leq \mathtt{min\_ STRK/TOKEN\_ rate_accepted_by_paymaster}$$ will experience reverted `__validate_paymaster__` and pay for the reversion. As noted above, this is easily remedied by submitting high rates, especially for paymasters who charge at discounted rates.
+1. A user who set their max rate in the range $$ \mathtt{min \_ STRK/TOKEN \_ rate} \leq r \leq \mathtt{min \_ STRK/TOKEN \_ rate_accepted_by_paymaster} $$ will experience reverted `__validate_paymaster__` and pay for the reversion. As noted above, this is easily remedied by submitting high rates, especially for paymasters who charge at discounted rates.
 
 2. The functionality of the proposed design is limited to ERC-20 tokens, and does not achieve any loftier goals of fee abstraction. Of course this is not a drawback compared to having no functionality at all.
 
@@ -110,10 +116,12 @@ We submit that the above design facilitates simple and safe paymaster contracts 
 4. As with any protocol addition, the paymaster flow is another complication of Starknet. We think its benefits are worthwhile, and hope the drawback remains theoretical.
 
 ## Backwards Compatibility
+
 This proposal is backward compatible as it merely proposes semantics for transactions with a non-empty `paymaster` field, which was hitherto unused.
 
 ## Security Considerations
-We do not see any DoS vectors exposed or exacerbated by embracing the above design.
+
+If the sequencer's locally configured minimal rates are too low, it exposes itself to being potentially underpaid in case of failed `__validate_paymaster__`.
 
 ## Copyright
 
