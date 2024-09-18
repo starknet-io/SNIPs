@@ -3,7 +3,7 @@ snip: 20
 title: Enshrined Paymasters for ERC-20 tokens
 description: This SNIP proposes a design for enshrined paymasters for ERC-20 tokens
 author: Ilia Volokh <iliav@starkware.co>, Leonardo Lerer <leo@starkware.co>
-discussions-to: 
+discussions-to: https://community.starknet.io/t/snip-20-enshrined-paymasters-for-erc-20-tokens/114697
 status: Review
 type: Standards Track
 category: Core
