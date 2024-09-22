@@ -3,8 +3,8 @@ snip: 16
 title: Deprecation of transaction versions 0,1,2
 description: This SNIP proposes to deprecate transaction versions 0,1,2 and stop support for them around the end of Q1 of 2025.
 author: Ilia Volokh <iliav@starkware.co>
-discussions-to: 
-status: Draft
+discussions-to: https://community.starknet.io/t/snip-16-deprecation-of-transaction-versions-0-1-2/114443
+status: Review
 type: Standards Track
 category: Core
 created: 2024-07-02
@@ -25,7 +25,7 @@ Transaction versions 0,1,2 only support fee payment in ETH. Moreover, they have 
 
 ## Proposal
 
-We propose for the sequencer to stop support for transaction versions 0,1,2 in an upcoming version in preparation for integrating the mempool and fee market, which is expected to happen within 6-8 months.
+We propose for the sequencer to stop support for transaction versions 0,1,2 in an upcoming version in preparation for integrating the mempool and fee market, which is expected to happen within 6-8 months. Concretely, we propose for these transaction versions to be rejected at the gateways to the mempool.
 
 To facilitate continuation of fee payment in ETH, we propose to adopt paymasters. The decision between applicative paymasters such as the one by AVNU or protocol-level paymasters will be left to applications/wallets. (A detailed SNIP for a protocol-level paymaster is in the works.)
 
@@ -36,7 +36,7 @@ We submit that paymasters are the correct solution for multiple fee tokens. Cons
 
 1. Transaction versions 0,1,2 facilitate native fee payment in ETH. Their deprecation means ETH will no longer be a native fee token.
 
-2. At present a large portion of transactions pay fees in ETH. Consequently, a large portion of the demand will have to go through a different flow for fee payment, likely requiring changes from wallets and potentially (depending on the method of paymaster adoption) also DApps and infrastructre (SDKs).
+2. At present a large portion of transactions pay fees in ETH. Consequently, a large portion of the demand will have to go through a different flow for fee payment, likely requiring changes from wallets and potentially (depending on the method of paymaster adoption) also DApps and infrastructure (SDKs).
 
 3. Old accounts, namely those predating the separation of `validate` and `execute`, can only be accessed via transactions v0. Hence deprecating this transaction version renders all such accounts (and their assets) inaccessible. We will address this issue in a separate SNIP.
 
