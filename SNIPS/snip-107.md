@@ -21,7 +21,7 @@ without needing to save them in storage. Component providers can leverage this s
 keeping the constants hardcoded in the bytecode, removing the extra storage reads required if storage were to be used for
 this matter.
 
-## Motivation
+## Rationale
 
 Library and protocol developers often want to make components configurable over a set of parameters to leverage
 flexibility for the final users. In Solidity, immutable variables and/or virtual functions are often used to provide this
@@ -174,6 +174,9 @@ correctness of the set of constants.
 4. The `validate` function **MUST** be called in the component's initializer function if there's one.
 5. If there's no initializer function in the component, the function **MUST** be called in the implementing contracts' constructor.
 
+## Security Considerations
+
+This SNIP has no impact at all in terms of security.
 
 ## Copyright
 
