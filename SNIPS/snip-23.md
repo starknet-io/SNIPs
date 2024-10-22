@@ -1,5 +1,5 @@
 ---
-snip: XX
+snip: 23
 title: Procedure for Introducing Starknet Breaking Changes
 author: Nicolas Consigny <@nconsigny>
 discussions-to: https://community.starknet.io/t/snip-xxx-procedure-for-introducing-starknet-breaking-changes/114452?u=nico_jr
@@ -66,9 +66,8 @@ The timeline proposed here reflects a minimal time to allow all relevant parties
 
 ### **Fast track for Non-Breaking Changes**
 
-As the Starknet network is still in a growing phase a "fast track" is needed for more agility. Thus non-protocol-level SNIPs and SNIPs that do not introduce breaking changes can be "fast-tracked" but **SHOULD** still undergo a regular process to ensure sufficient coverage and comments from relevant community members. Fast-tracked EIPs can go from `draft` to `last call` directly per editor request. However as the network matures more decentralisation will be required and the "fast-track" **MUST** end in 87,600 blocks. 
+As the Starknet network is still in a growing phase a "fast track" is needed for more agility. Thus non-protocol-level SNIPs and SNIPs that do not introduce breaking changes can be "fast-tracked" but **SHOULD** still undergo a regular process to ensure sufficient coverage and comments from relevant community members. Fast-tracked EIPs can go from `draft` to `last call` directly per editor request. However as the network matures more decentralisation will be required and the "fast-track" should be deprecated. 
 
-> I chose this randomnly (87,600 one year at 6 min / block) should it target a block ?
 
 ## **Roles and Responsibilities**
 
