@@ -9,11 +9,27 @@ status: Discussion
 created: 2024-10-24
 ---
 
-# Specification
+## Abstract
+
+This SNIP proposes a checksum encoding for Starknet addresses.
+
+## Motivation
+
+Addresses are often mistyped, and this can lead to loss of funds or other issues. This SNIP aims to reduce the risk of mistyped addresses by encoding them in a way that makes it easier to detect typos. Furthermore, it enforces addresses to be represented as 32-bytes hex strings, which removes the risk of confusion between EVM and Starknet addresses.
+
+Benefits:
+
+- Enforce addresses to be represented as 32-bytes hex strings
+- Reduce the probability of mistyped addresses
+- Remove the risk to mix EVM and Starknet addresses
+
+See also the [ERC-55](https://github.com/ethereum/ERCs/blob/master/ERCS/erc-55.md) standard for reference.
+
+## Specification
 
 Code:
 
-``` python
+```python
 from starkware.starknet.public.abi import starknet_keccak
 
 def checksum_encode(addr: int): # Takes a 32-byte binary address as input
@@ -50,11 +66,10 @@ checksum_encode(0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc
 
 In English, convert the address to hex, but if the `i`th digit is a letter (ie. it's one of `abcdef`) print it in uppercase if the `4*i`th bit of the hash of the lowercase hexadecimal address is 1 otherwise print it in lowercase.
 
-# Rationale
+## Backwards Compatibility
 
-Benefits:
-- Enfore addresses to be represented as 32-bytes hex strings
-- Reduce the probability of mistyped addresses
-- Remove the risk to mix EVM and Starknet addresses
+This SNIP is fully backwards compatible: existing tools will accept both non-checksummed and checksummed addresses.
 
-See also https://github.com/ethereum/ERCs/blob/master/ERCS/erc-55.md where this SNIP and code snippet is mainly taken from.
+## Copyright
+
+Copyright and related rights waived via [MIT](../LICENSE).
