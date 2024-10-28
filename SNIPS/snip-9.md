@@ -80,7 +80,7 @@ And the type hash of `OutsideCall` is:
 
 which results in `0xf00de1fccbb286f9a020ba8821ee936b1deea42a5c485c11ccdc82c8bebb3a`
 
-Refer to this implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts](https://github.com/argentlabs/argent-contracts-starknet/blob/main/tests/lib/outsideExecution.ts)
+Refer to this implementation: [https://github.com/argentlabs/argent-contracts-starknet/blob/main/lib/outsideExecution.ts](https://github.com/argentlabs/argent-contracts-starknet/blob/main/lib/outsideExecution.ts)
 
 #### 2.2. Version 2
 
