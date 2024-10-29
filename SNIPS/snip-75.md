@@ -198,7 +198,7 @@ To design this proposal, we relied on the following set of resources:
 
 ## Security considerations
 
-The key security consideration for the Starknet Security Council centers on implementation and technical risks. It is crucial to ensure that the smart contracts involved in the Council's operations, and the upgrade processes are secure and free from vulnerabilities. To mitigate these risks, all critical code MUST be audited and, or formally verified.
+The key security consideration for the Starknet Security Council centers on implementation and technical risks. It is crucial to ensure that the smart contracts involved in the Council's operations, and the upgrade processes are secure and free from vulnerabilities. To mitigate these risks, all critical code MUST be audited and/or formally verified.
 
 ## Appendix
 
