@@ -32,7 +32,7 @@ Code:
 ```python
 from starkware.starknet.public.abi import starknet_keccak
 
-def checksum_encode(addr: int): # Takes a 32-byte binary address as input
+def checksum_encode(addr: int): -> str # Takes a 32-byte binary address as input
     addr_bytes = int.to_bytes(addr, 32, "big")
     hex_addr = addr_bytes.hex()
     checksummed_buffer = ""
@@ -64,11 +64,15 @@ checksum_encode(0x49d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc
 # '0x049D36570D4e46f48e99674bd3fcc84644DdD6b96F7C741B1562B82f9e004dC7'
 ```
 
-In English, convert the address to hex, but if the `i`th digit is a letter (ie. it's one of `abcdef`) print it in uppercase if the `4*i`th bit of the hash of the lowercase hexadecimal address is 1 otherwise print it in lowercase.
+In English, convert the address to hex, but if the `i`th digit is a letter (ie. it's one of `abcdef`) print it in uppercase if the `4*i`th bit of the keccak hash of the lowercase hexadecimal address is 1 otherwise print it in lowercase.
 
 ## Backwards Compatibility
 
 This SNIP is fully backwards compatible: existing tools will accept both non-checksummed and checksummed addresses.
+
+## Security considerations
+
+No security considerations.
 
 ## Copyright
 
