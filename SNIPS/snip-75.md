@@ -1,36 +1,16 @@
 ---
 snip: 75
 title: Starknet Security Council (SSC)
-author: Elias Tazartes <@Eikix>, Mattéo Georges <@mattegoat>, Patrícia Gil de Brolezzi <@pat_zip>, luiz-lvj <lvj253@gmail.com>, Luca Donno <@lucadonnoh>
+author: Elias Tazartes <@Eikix>, Mattéo Georges <@mattegoat>, Patrícia Gil de Brolezzi <@pat_zip>, luiz-lvj <lvj253@gmail.com>, Luca Donno <@lucadonnoh>, Nicolas Consigny <@nconsigny> & al
 status: Draft
 type: Meta
 created: 2024-07-06
 ---
 
-## Simple Summary
-
-Meta SNIP to lay out the structure, motivation and decisions of the Starknet Security Council.
-
-The goal of the Security Council is to entrust admin keys for the Starknet protocol's core smart contracts (core contract, bridge, verifier, etc.), over to a public, distributed set of people accountable to Starknet Governance.
-
-Today, [Arbitrum](https://docs.arbitrum.foundation/dao-constitution#section-3-the-security-council), [Optimism](https://github.com/ethereum-optimism/OPerating-manual/blob/main/Security%20Council%20Charter%20v0.1.md) and [ZKsync Lite](https://blog.matter-labs.io/security-council-2-0-2337a555f17a) have created and are continously improving a security committee, a so-called "Security Council".
-
-This SNIP answers the network's strong desire to create a Security Council.
-
 ## Abstract
+This Meta SNIP lays out the structure, motivation and decisions of the Starknet Security Council. It describes the process and rules that surronds the Starknet Security Council. 
 
-**A Security Council is a committee of Ethereum L1 (possibly Starknet L2) multi-sig signers. It is empowered to perform certain actions on behalf of the network: Emergency Action and Non-Emergency Actions.**
-
-The specific ways in which the Security Council functions are defined by a set of upcoming SNIPs.
-
-Emergency Actions are the last line of defense against bugs and earthshattering events. They are defined in a specific SNIP. Similarly, Non-Emergency actions frame the normal flow of upgrade and lifetime of the network. They are scoped in a specific SNIP. The Starknet Security Council is elected with the help of the Starknet community, the Starknet Foundation, Starkware and the STRK token holders. The election process and composition of the council is described in a subsequent SNIP.
-
-We rely on the following set of resources:
-
-- [Stages update: Security Council requirements, Luca Donno](https://medium.com/l2beat/stages-update-security-council-requirements-4c79cea8ef52)
-- [Introducing Stages — a framework to evaluate rollups maturity, Luca Donno](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe)
-- [The Security Council, Arbitrum](https://docs.arbitrum.foundation/dao-constitution#section-3-the-security-council)
-- [Security Council Charter v0.1](https://github.com/ethereum-optimism/OPerating-manual/blob/main/Security%20Council%20Charter%20v0.1.md)
+The Starknet Security Council is made up of 12 members who are both geographically and organizationally diverse. They are tasked with safeguarding the security of Starknet. The Council assesses proposed upgrades to the network’s core contracts and approves them if no security risks are identified. In the event of an emergency, the Council has the authority to expedite necessary actions.
 
 ## Motivation
 
@@ -39,107 +19,186 @@ Starknet has framed itself as a secure rollup from day 1. This is the core idea 
 Currently, Starkware operates the Starknet network and oversees its upgrades, as well as emergency processes in case of bug. The Starknet Foundation provides support through diverse "councils" (DeFi Council, Builder Council, etc.). While Starkware acts in good faith and aims to maximize transparency, it remains a single point of failure. Additionally, partly thanks to [L2Beats](https://l2beat.com/scaling/summary) spearheading the effort, the industry is moving towards common security standards. The concept of Security Council paves the way towards sound and standardized processes with regards to network security.
 
 ## Specification
+The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
 
-### Emergency and Non-Emergency Actions
+### Composition
+The council SHALL be composed of 12 security and blockchain experts and professionals, all of whom are committed to upholding Starknet's values and ensuring the platform's safety. They SHALL collectively be in possession of a multisig key that can take some actions detailed below.
 
-#### Abstract
+### Duties and Responsibilities
+- **Security Risk Assessment**: Evaluate upgrades to core contracts, ensuring no security risks.
+- **Emergency Response**: Act quickly during emergencies to safeguard the Starknet protocol.
+- **Approval Process**: Approve upgrades after thorough security vetting.
+- **Transparency**: Provide detailed reports on any decisions, especially for rejected upgrades or emergency interventions.
 
-The utmost priority for a rollup is to never lose user funds. The decentralization of rollup control (e.g. 7-day delay on network upgrade) might go hinder the speed of reaction needed in case of emergency. The Security Council therefore should have the power to act quickly to mitigate a critical failure.
+The Security Council’s role is limited to ensuring the security of the network, and MUST NOT reject upgrades for any reason outside of security.
 
-This paragraph aims to answer the following questions:
+### Operational Upgrade Flow
 
-- What type of actions fall under “emergency action”?
-- When should such actions be used?
-- What is the legal quorum to make such a decision?
-- Is there any mandatory delay in the action?
-- How and when (before or after action?) to communicate this to the network?
-- Does anyone have veto powers over their decision ?
+Each upgrade flow will include two functions:
+- **Add_new_implementation**: Declaring upgrade intent and context.
+- **upgrade_to**: Apply upgrade
 
-#### Specification 
+#### Flow 1: Vetted Time-Delayed (Regular)
+This flow is not initiated by the Security Council and therefore MUST pass the maturity condition (i.e., security vetting and time delay).
+- Someone suggests (`add_new_implementation`) an update to one of the security council-controlled contracts.
+- The security council vets the upgrade and votes on it. If it passes (>50% of members voted to approve), they send a transaction with a multi-sig, marking the vetting as passed.
+- The security council MUST put out a vetting report.
+- There is a 7-day time delay that starts once the upgrade was suggested.
+- If the time delay and the vetting have passed, the contract can be upgraded.
+- If the time delay has passed and the upgrade hasn’t been vetted, it is considered rejected, and the affected contracts can’t be upgraded.
 
-Let's first define what type of actions fall under emergency action: **a critical vulnerability that could significantly compromise the integrity, confidentiality, or availability of a chain governed by the Starknet DAO**.
+![SNIP asset_1](../assets/snip-75/asset_1.png)
 
-After performing any Emergency Action, the Security Council must issue a full transparency report (at an appropriate time after the security emergency has passed) to explain what was done and why such Emergency Action was justified.
-The security council holds a huge responsibility, and should take emergency actions in a timely manner, after an incident, such as described previously.
+#### Flow 2: Non-Vetted, No Time Delay (Emergency Action)
+This is an emergency flow, initiated by the security council; therefore, it is implicitly vetted as the issue was deemed by the security council to be time-sensitive, forgoing the time delay.
+- The security council votes on the proposed emergency upgrade. It needs 66% of Security Council members to approve it.
+- The Security Council suggests the upgrade as an emergency upgrade.
+- No vetting is needed, no time delay is in effect, and the upgrade takes effect immediately.
+- The security council will put out a report explaining why they took this action.
 
-We propose the following design in order to ensure decisions are made in a timely manner if an emergency arises, while not compromising the security of user's funds:
+![SNIP asset_2](../assets/snip-75/asset_2.png)
 
-- A pause function should be added on the core Starknet smart-contracts.
-    - The `pause` toggle function and should be callable by:
-        - the network operator (Starkware) in a centralized and timely way
-        - the security council by a super-majority vote (75% of the votes)
-    - The `unpause` function can only be called by the security council.
-    - The right to call the `pause` toggle function can be given and taken away by the SSC.
-- Upgrades on the core Starknet smart-contracts should now be delayed by 7-days. 
-    - Every major upgrade should be approved by the Starknet Security Council with a super-majority vote.
-    - The Starknet Security Council can reduce this time to zero, with a super-majority vote.
-- Upgrades on the core Starknet smart-contracts should be approved by the Security Council off-chain, and can be submitted for an approval vote up to 3 months prior to being added on-chain. Upgrades on the core Starknet smart-contracts can be vetoed by the Starknet Security Council.
+| Flow                      | Upgrade Initiator                    | Threshold | Time Delay       |
+|---------------------------|--------------------------------------|-----------|------------------|
+| Vetted time delayed       | Someone (currently, only SW or the council) | 50%       | Regular         |
+| Non-vetted, no time delay | Security council                     | 66%       | None            |
 
-#### Implementation
+**Note**: Regular time delay SHOULD be set to at least 7 days to be in line with l2beat guidelines.
 
-Actionables list:
-- An Ethereum L1 Safe contract deployment, owned by the Security Council members after their election.
-- A major upgrade to the core Starknet smart contracts to add:
-    - A pause toggle on the ability to advance the Starknet chain, e.g. by finalizing new state roots.
-    - An administrator role of the pauseable toggle right: the Starknet Security Council multi-sig.
-    - A time-delay on major upgrades for the core Starknet smart contracts.
-    - An administrator role of the time-delay: the Starknet Security Council multi-sig.
-    - The ability to veto a Starknet upgrade by the Starknet Security Council multi-sig.
+### Vetting Failure Report
+In the event that the evaluation of an upgrade does not receive the requisite number of votes (50% for a regular action and 66% for an emergency action), the Security Council SHALL produce a "Vetting Failure Report" within fourteen days of the vote on the upgrade, including:
+- The rationale behind the negative votes cast by members.
+- The rationale of the members who did approve the upgrade, if any.
+- An enumeration of the issues identified with the upgrade.
+- Potential avenues for resolving said issues, if feasible.
 
-Before performing any action, we highly recommend to ask for help to Optimism and Arbitrum Security Council to learn from their operational experiences in setting up such a sensitive governance body.
+The Security Council's sole grounds for either rejecting or approving upgrades will be security concerns.
 
-### Election and Composition of the council
+## Security Concerns
+The security council shall be responsible for assessing the extent to which a security concern is present. Given the nature of such concerns, it is not possible to produce a comprehensive list, so the following list is non-exhaustive and provided for illustrative purposes only:
+- **Smart Contract Vulnerabilities**: Bugs, exploits, and vulnerabilities that can lead to theft of funds, manipulation of the network, or other unintended consequences.
+- **Attacks and Hacks**: Sybil, Denial of Service (DoS), Double-Spending, Phishing, Social Engineering.
+- **Stability and Integrity Issues**
+- **Liveness Issues**
+- **Malicious or Rogue Nodes**
+- **Oracle Manipulation**
 
-#### Motivation
+### Security Emergency
+The Security Council is permitted to preemptively address actual or anticipated bugs, defects, unplanned maintenance, stability issues, integrity, availability, non-repudiation, or other security issues with Starknet. 
 
-To best enable the security council to fulfill its role, the Security Council composition criteria was designed to consider limitations that could jeopardize its operations, such as geographic limitation, technical capacity, limited members of the same organization, role responsibilities, and values alignment. 
+These Emergency response measures MAY be taken without specific Governance approval.
 
-First priority is to increase and ensure that the Security Council is always capable of executing its role despite time zones, legal limitations, critical political situation, technical limitations and potential misalignment.
+If the Security Council ever utilizes this discretion, it MUST provide the community with a prompt and comprehensive retrospective (within the bounds of any legal commitments to or security requirements for confidentiality) after the action is taken, explaining the rationale for it.
 
-#### Criteria
+### Eligibility
+Members MUST meet the following criteria:
+- **Technical Competency**: Familiarity with Starknet and secure key management.
+- **Reputation and Alignment**: Trustworthy individuals aligned with Starknet’s vision and values.
+- **Diversity**: Geographic and organizational diversity to prevent overconcentration, with less than 50% from any one country, and fewer than four people from the same organization.
+- **Screening**: All members must pass KYC/AML checks and sign a standard contract accepting their responsibilities within the role.
 
-Limited geographic regions:
+### Compensation
+Council members receive a monthly stipend paid in STRK tokens for their contributions.
 
-- That the 12 members have permanent residency in at least 4 different time zones, with a maximum of 50% of the members residing in the same country.
+### Council Administrator
+The administrator supports the council operation in an administrative capacity and does not have a vote. Responsibilities include:
+- Alerting key holders of upcoming protocol upgrades.
+- Managing required timelines.
+- Scheduling, setting agendas, hosting Council meetings, and facilitating discussions.
+- Monitoring compliance with procedures.
+- Onboarding new Council participants.
+- Communicating with external stakeholders.
 
-- This is due to legal limitations, existing or not-yet existing, that could impact a country due to it occurring into open war, crypto adoption barriers, etc. 
+### Duties and Obligations
 
-Technical capacity:
+#### Availability Commitment
+The following communication channels should be responsive within a maximum delay of eight (8) hours:
+- **Phone Call** - goes through silent mode (using Opus Genie).
+- **Telegram**
+- **Email**
 
-- That the council members have technical capacity such as detailed understanding of the impact from technical decisions could have, to avoid an operational breakage and/or attacks.
+**Note**: In an emergency response, Committee members should be capable of responding with a laptop and a hard ledger wallet during drills involving a realistic emergency scenario.
 
-Limited organization members:
+#### Scope of Work/Services
+Assess and improve StarkGate’s monitoring and security system, including:
+- Reviewing the monitoring service triggers for alerts.
+- Ensuring that all essential assets are monitored.
+- Analyzing StarkWare's monitoring in comparison with other services and chains.
+- Proactively surveying the monitoring agent's dashboard and event detection to manually identify suspicious activities and suggest alert improvements.
 
-- That there is a maximum of 2 members per organisation, as to avoid conflict of interest.
+#### Work Hours
+The Committee member is required to be on call 24/7. If unavailable on any given day, they must notify the council administrator at least 24 hours in advance. **Days of non-availability are not limited.**
 
+### Starknet Governing Body Code of Conduct
+To foster a community of respect, inclusivity, and safety, all members of the Council are expected to adhere to the following principles:
+- **Active Participation**: Engage in discussions and decision-making.
+- **Accessibility**: Remain accessible to the community.
+- **Ethical Behavior**: Uphold high standards in all interactions.
+- **Positive Communication**: Foster a respectful culture.
+- **Respect and Non-Discrimination**: Promote diversity and inclusivity.
+- **Non-Violence**: Avoid promoting violence.
+- **No Abuse of Position**: Avoid exploiting their position.
+- **Conflict of Interests**: Declare and manage conflicts of interest.
+- **Confidentiality**: Protect sensitive information.
 
-Role responsibilities:
+### Adding and Removing Members
+The Starknet Foundation is responsible for appointing and compensating Council members from an administrative perspective. Members may be removed based on the following criteria:
+1. Failure to adhere to the code of conduct.
+2. Failure to undertake duties and responsibilities.
+3. A conflict of interest arises.
+4. Responsibility for a security breach.
+5. Loss of technical or strategic knowledge.
+6. Community loss of confidence.
 
-- That members are aware of and accept the responsibilities within the role, which must be clearly defined prior to election period.
+### Security Council Phasing In
 
-Values alignment:
+#### **Phase 1**
+In phase 1, the Security Council will monitor upgrades affecting the Starknet staking core infrastructure, including:
 
-- That members are aligned with the values of Starknet Foundation.
+**On Starknet**:
+- Staking
+- Operator
+- Minting curve
+- L2 rewards supply
+- Delegation pool
 
-#### Implementation
+**On Ethereum**:
+- STRK mint manager
+- L1 reward supplier
 
-At time of election, candidates must declare:
-1. What organizations they are part of;
-2. Their awareness and acceptance for the role and its responsibilities, should they be elected;
-3. What it means to them to be in alignment with the values of Starknet Foundation.
-4. Their technical background and experience, in accordance with the role's requirements;
+Additionally, the SC will act as the:
+- **Security Admin on the L2 Staking contract**:
+  - Setting the security agent (the entity that can pause the contracts)
+  - Unpausing the contracts
+- **Security Admin on L1 STRK mint manager**:
+  - Setting the security agent (the entity that can revoke allowance)
+- **Security Agent on L1**:
+  - Revoking allowance in case of emergency
+See the following role diagram: 
+![SNIP asset_3](../assets/snip-75/asset_3.png)
 
-There should be a KYC verification by the Starknet Foundation at time of election and before onboarding.
+#### **Phase 2**
+In phase 2, the Security Council will expand its duties to monitor upgrades affecting all of Starknet’s core infrastructure, including all contracts listed in Phase 1 and additional contracts affecting the overall state of Starknet.
 
-Finally, the community and the Starknet Foundation should look to apply best of judgment when evaluating the member's applications considering the criteria above.
+## Rationale 
 
-## Examples and hypothetical future
+**A Security Council is a committee of Ethereum L1 (possibly Starknet L2) multi-sig signers. It is empowered to perform certain actions on behalf of the network: Emergency Action and Non-Emergency Actions.**
 
-Simple minimal examples of how the Security Council could look like (inspired the current states of other rollups):
+Emergency Actions are the last line of defense against bugs and earthshattering events. Due to their unexpected nature they cannot be listed exaustively. Non-Emergency actions frame the normal flow of upgrade and lifetime of the network. They are scoped in a specific meta SNIP dedicated to a network upgrade. 
 
-- Emergency Actions: Upgrades on Starknet are delayed by 1 week after being proposed. The Security Council can reduce the upgrade delay time to zero for an emergency. Starkware, the network operator as well as the Security Council can pause Starknet in case of a "black swan event" (major hack, bug on the proof system), and the Security Council can unpause it.
-- Non-Emergency Actions: The Security Council can veto upgrades that go through time delays.
-- Composition: the Security Council is composed of 12 to 15 people from broad set of sectors (Builders, Users, DeFi, Gaming, Wallet, Cryptography, Infra, etc.), covering a large amount of timezones. Each person in the council has at least 1M vSTRK delegated to them (they must have either skin in the game or a "vote of confidence" from token holders). Council members are managed from within, using their multi-sig, for reelection or removal by their peers should they misbehave.
+The Starknet Security Council is elected with the help of the Starknet community, the Starknet Foundation, Starkware and the STRK token holders. The election process will be descibed in a specific post on the [Starknet comunity forum](https://community.starknet.io/), where the election SHALL be held.
+
+To design this proposal, we relied on the following set of resources:
+
+- [Stages update: Security Council requirements, Luca Donno](https://medium.com/l2beat/stages-update-security-council-requirements-4c79cea8ef52)
+- [Introducing Stages — a framework to evaluate rollups maturity, Luca Donno](https://medium.com/l2beat/introducing-stages-a-framework-to-evaluate-rollups-maturity-d290bb22befe)
+- [The Security Council, Arbitrum](https://docs.arbitrum.foundation/dao-constitution#section-3-the-security-council)
+- [Security Council Charter v0.1](https://github.com/ethereum-optimism/OPerating-manual/blob/main/Security%20Council%20Charter%20v0.1.md)
+- [Risk rosette framework](https://gov.l2beat.com/t/the-risk-rosette-framework/292)
+
+## Security considerations
+
+The key security consideration for the Starknet Security Council centers on implementation and technical risks. It is crucial to ensure that the smart contracts involved in the Council's operations, and the upgrade processes are secure and free from vulnerabilities. To mitigate these risks, all critical code MUST be audited and, or formally verified.
 
 ## Appendix
 
@@ -148,27 +207,6 @@ Simple minimal examples of how the Security Council could look like (inspired th
 For reference, this is the current upgradability structure:
 
 ![Starknet Current upgradability structure in Q3 2024](../assets/snip-75/starknet-upgradability.png)
-
-Note that Starknet would need to give up the permissions for all Proxy governors, Implementation governors, Verifier governors and bridge owners.
-
-### Security "Stage" as per L2Beat
-
-As per the [Risk rosette framework](https://gov.l2beat.com/t/the-risk-rosette-framework/292) and the Stages framework, the Exit window and Stage designation will stay at zero until forced transactions are implemented and proving is made permissionless.
-
-### Definitions
-
-These definitions are not official definitions, but rather heuristics taken as baseline by the authors of this SNIP.
-
-- Starknet Core Smart Contracts list on Ethereum L1, based on heuristics:
-    - Bridge infrastructure (Starkgate contracts)
-    - Starknet proxy & implementation (Starknet core)
-    - Proving related contracts (SHARPVerifierProxy, SHARPCallProxy, GPSStatementVerifier)
-
-- Starknet DAO: the decentralized human community led by STARK ($STRK) token holders.
-
-- Starknet Foundation: the non-profit, legal entity promoting the adoption and evolution of the Starknet ecosystem and values.
-
-- Security Council Emergency Action: **a critical vulnerability that could significantly compromise the integrity, confidentiality, or availability of a chain governed by the Starknet DAO**.
 
 ## Copyright
 
