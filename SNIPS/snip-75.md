@@ -142,7 +142,7 @@ To foster a community of respect, inclusivity, and safety, all members of the Co
 - **Confidentiality**: Protect sensitive information.
 
 ### Adding and Removing Members
-The Starknet Foundation is responsible for appointing and compensating Council members from an administrative perspective. Members may be removed based on the following criteria:
+The Starknet Foundation is responsible for appointing and compensating Council members from an administrative perspective. SNF being the entity paying the different members of the council so it will retain the right to terminate their contract. If this happens, other security council members will cooperate to enact this termination. Members may be removed based on the following criteria:
 1. Failure to adhere to the code of conduct.
 2. Failure to undertake duties and responsibilities.
 3. A conflict of interest arises.
