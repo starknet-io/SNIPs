@@ -1,7 +1,7 @@
 ---
 snip: 75
 title: Starknet Security Council (SSC)
-author: Elias Tazartes <@Eikix>, Mattéo Georges <@mattegoat>, Patrícia Gil de Brolezzi <@pat_zip>, luiz-lvj <lvj253@gmail.com>, Luca Donno <@lucadonnoh>, Nicolas Consigny <@nconsigny>, et al.
+author: Elias Tazartes <@Eikix>, Mattéo Georges <@mattegoat>, Patrícia Gil de Brolezzi <@pat_zip>, luiz-lvj <lvj253@gmail.com>, Luca Donno <@lucadonnoh>, Nicolas Consigny <@nconsigny>, Henri Lieutaud <@l-henri>, Boaz <@BoazStark>
 status: Draft
 type: Meta
 created: 2024-07-06
@@ -64,6 +64,24 @@ This is an emergency flow, initiated by the security council; therefore, it is i
 | Non-vetted, no time delay | Security council                     | 66%       | None            |
 
 **Note**: Regular time delay SHOULD be set to at least 7 days to be in line with l2beat guidelines.
+
+### Pausing Flow
+
+Each pausing flow will include two functions:
+
+- **Pause**: Stopping the affected smart contract from further changes of state.
+- **Unpause**: Resuming normal operation.
+
+#### Flow 1: Pausing the Contract
+
+In case of critical incidents, a monitoring entity has the ability to pause the affected contracts immediately. This pause mechanism serves as a first line of defense to contain potential losses while the Security Council deliberates on a potential upgrade.
+
+- The security council is responsible for adding/removing authorized address(es) that can pause the contract.
+
+#### Flow 2: Unpausing the Contract
+
+Once the security council decides that the smart contract can resume operation, it can unpause the contracts with a majority vote (50%).
+
 
 ### Vetting Failure Report
 In the event that the evaluation of an upgrade does not receive the requisite number of votes (50% for a regular action and 66% for an emergency action), the Security Council SHALL produce a "Vetting Failure Report" within fourteen days of the vote on the upgrade, including:
@@ -129,26 +147,33 @@ Assess and improve StarkGate’s monitoring and security system, including:
 #### Work Hours
 The Committee member is required to be on call 24/7. If unavailable on any given day, they must notify the council administrator at least 24 hours in advance. **Days of non-availability are not limited.**
 
+Finally, all Security Council participants are also responsible for complying with (i) the Code of Conduct of the Starknet governing body and (ii) any additional internal conflict of interest procedures that the Council may develop from time to time.
+
 ### Starknet Governing Body Code of Conduct
 To foster a community of respect, inclusivity, and safety, all members of the Council are expected to adhere to the following principles:
-- **Active Participation**: Engage in discussions and decision-making.
-- **Accessibility**: Remain accessible to the community.
-- **Ethical Behavior**: Uphold high standards in all interactions.
-- **Positive Communication**: Foster a respectful culture.
-- **Respect and Non-Discrimination**: Promote diversity and inclusivity.
-- **Non-Violence**: Avoid promoting violence.
-- **No Abuse of Position**: Avoid exploiting their position.
-- **Conflict of Interests**: Declare and manage conflicts of interest.
-- **Confidentiality**: Protect sensitive information.
+- **Active Participation**: Members are expected to actively engage in discussions and decision-making processes.
+- **Accessibility**: Members should remain accessible to the community through open discussions on the Starknet community forum.
+- **Ethical Behavior**: Members should uphold the highest standards of ethics, integrity, professionalism, and accountability in all their interactions.
+- **Positive Communication**: Members are encouraged to contribute to a positive and respectful culture of communication.
+- **Respect and Non-Discrimination**: Members are expected to conduct themselves in a respectful manner that promotes diversity and inclusivity. Members must refrain from engaging in any form of disrespect, including but not limited to hate speech, racism, misogyny, gender-based hatred, ageism, religious discrimination, discrimination based on sexual orientation, ableism, or ad hominem attacks.
+- **Non-Violence**: Members are expected to avoid promoting or endorsing physical or verbal violent behavior, or any actions that may cause harm.
+- **No Abuse of Position**: Members must not exploit their position within the Council to promise retribution or undue advantages to others.
+
+- **Conflict of Interests**: Members are required to declare and, when necessary, withdraw from participation in cases where a conflict of interest arises
+- **Confidentiality**: Sensitive information obtained during discussions must remain confidential and must not be disclosed.
+
+Adherence to these principles is essential to maintaining the integrity and effectiveness of the Security Council and fostering a harmonious and productive community.
 
 ### Adding and Removing Members
-The Starknet Foundation is responsible for appointing and compensating Council members from an administrative perspective. SNF being the entity paying the different members of the council so it will retain the right to terminate their contract. If this happens, other security council members will cooperate to enact this termination. Members may be removed based on the following criteria:
-1. Failure to adhere to the code of conduct.
-2. Failure to undertake duties and responsibilities.
-3. A conflict of interest arises.
-4. Responsibility for a security breach.
-5. Loss of technical or strategic knowledge.
-6. Community loss of confidence.
+The Starknet Foundation is responsible for appointing and compensating Council membership from a purely administrative perspective. The Starknet Foundation will similarly have the ability to remove council members purely from an administrative perspective - but only to the extent that the criteria below has been met:
+Criteria for removal of council members: 
+
+(i) failure to adhere to the code of conduct;
+(ii) failure to undertake security council duties and responsibilities; 
+(iii) a conflict of interest arises; 
+(iv) a member is responsible for a security breach; 
+(v) the member no longer possesses the technical or strategic knowledge that is needed for future security challenges; and / or 
+(vi) there is a wider community loss of confidence in a council member. 
 
 ### Security Council Phasing In
 
