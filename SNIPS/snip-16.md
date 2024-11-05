@@ -36,7 +36,7 @@ We submit that paymasters are the correct solution for multiple fee tokens. Cons
 
 1. Transaction versions 0,1,2 facilitate native fee payment in ETH. Their deprecation means ETH will no longer be a native fee token.
 
-2. At present a large portion of transactions pay fees in ETH. Consequently, a large portion of the demand will have to go through a different flow for fee payment, likely requiring changes from wallets and potentially (depending on the method of paymaster adoption) also DApps and infrastructre (SDKs).
+2. At present a large portion of transactions pay fees in ETH. Consequently, a large portion of the demand will have to go through a different flow for fee payment, likely requiring changes from wallets and potentially (depending on the method of paymaster adoption) also DApps and infrastructure (SDKs).
 
 3. Old accounts, namely those predating the separation of `validate` and `execute`, can only be accessed via transactions v0. Hence deprecating this transaction version renders all such accounts (and their assets) inaccessible. We will address this issue in a separate SNIP.
 
