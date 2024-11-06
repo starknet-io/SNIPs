@@ -14,9 +14,7 @@ The Starknet Security Council is made up of 12 members who are both geographical
 
 ## Motivation
 
-Starknet has framed itself as a secure rollup from day 1. This is the core idea behind STARK proofs and the concept of integrity: "do the right thing, even when no one is watching". While this applies at the protocol level, i.e. for state transitions, it does not apply for actions that fall out of pure programmatic security: how the core smart contracts of the Starknet network get upgraded or who can intervene in case of a bug.
-
-Currently, Starkware operates the Starknet network and oversees its upgrades, as well as emergency processes in case of bug. The Starknet Foundation provides support through diverse "councils" (DeFi Council, Builder Council, etc.). While Starkware acts in good faith and aims to maximize transparency, it remains a single point of failure. Additionally, partly thanks to [L2Beats](https://l2beat.com/scaling/summary) spearheading the effort, the industry is moving towards common security standards. The concept of Security Council paves the way towards sound and standardized processes with regards to network security.
+The Starknet Security Council is made up of 12 members who are both geographically and organizationally diverse. They are tasked with safeguarding the security of Starknet. The Council assesses proposed upgrades to the network’s core contracts and approves them if no security risks are identified. In the event of an emergency, the Council has the authority to expedite necessary actions.
 
 ## Specification
 The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
