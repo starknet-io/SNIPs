@@ -51,7 +51,7 @@ This flow is not initiated by the Security Council and therefore MUST pass the m
 
 #### Flow 2: Non-Vetted, No Time Delay (Emergency Action)
 This is an emergency flow, initiated by the security council; therefore, it is implicitly vetted as the issue was deemed by the security council to be time-sensitive, forgoing the time delay.
-- The security council votes on the proposed emergency upgrade. It needs 66% of Security Council members to approve it.
+- The security council votes on the proposed emergency upgrade. It needs 75% of Security Council members to approve it.
 - The Security Council suggests the upgrade as an emergency upgrade.
 - No vetting is needed, no time delay is in effect, and the upgrade takes effect immediately.
 - The security council will put out a report explaining why they took this action.
@@ -61,7 +61,7 @@ This is an emergency flow, initiated by the security council; therefore, it is i
 | Flow                      | Upgrade Initiator                    | Threshold | Time Delay       |
 |---------------------------|--------------------------------------|-----------|------------------|
 | Vetted time delayed       | Someone (currently, only SW or the council) | 50%       | Regular         |
-| Non-vetted, no time delay | Security council                     | 66%       | None            |
+| Non-vetted, no time delay | Security council                     | 75%       | None            |
 
 **Note**: Regular time delay SHOULD be set to at least 7 days to be in line with l2beat guidelines.
 
@@ -84,7 +84,7 @@ Once the security council decides that the smart contract can resume operation, 
 
 
 ### Vetting Failure Report
-In the event that the evaluation of an upgrade does not receive the requisite number of votes (50% for a regular action and 66% for an emergency action), the Security Council SHALL produce a "Vetting Failure Report" within fourteen days of the vote on the upgrade, including:
+In the event that the evaluation of an upgrade does not receive the requisite number of votes (50% for a regular action and 75% for an emergency action), the Security Council SHALL produce a "Vetting Failure Report" within fourteen days of the vote on the upgrade, including:
 - The rationale behind the negative votes cast by members.
 - The rationale of the members who did approve the upgrade, if any.
 - An enumeration of the issues identified with the upgrade.
