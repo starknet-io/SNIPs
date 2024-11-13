@@ -15,17 +15,17 @@ In this SNIP we suggest updating StarkGate's ERC20s (including ETH, STRK, USDC [
 
 ## Motivation
 
-Dapps, for example exchanges that operate on Starknet, need to track transfers from & to specific addresses. At the moment, Starknet's json-rpc only allows receiving all `Transfer` or `Approval` events from a given ERC20 in a particular block range. This SNIP would enable filtering those events, allowing filteration by `from` or `to` in `Transfer` events and by `owner` or `spender` in `Approval` events.
+Dapps, for example exchanges that operate on Starknet, need to track transfers from & to specific addresses. At the moment, Starknet's json-rpc only allows receiving all `Transfer` or `Approval` events from a given ERC20 in a particular block range. This SNIP would enable filtering those events, allowing filtering by `from` or `to` in `Transfer` events and by `owner` or `spender` in `Approval` events.
 
 This is already the case on Ethereum and other EVM chains. Due to limitations in early iterations of Cairo, events had only one key corresponding to the event name. This lead to only being able to filter over all transfer events, which is far from ideal.
 
 ## Backward Compatability
 
-**This change is NOT backward compatible**. All DAPPs listenting to ERC20 transfer and approval events will have to adjust their events decoding, in order to look for fields in the `keys` array instead of in the `data` array.
+**This change is NOT backward compatible**. All DAPPs listening to ERC20 transfer and approval events will have to adjust their events decoding, in order to look for fields in the `keys` array instead of in the `data` array.
 
 ## Specification
 
-Starknet's json-rpc [`starknet_getEvents` method](https://github.com/starkware-libs/starknet-specs/blob/76bdde23c7dae370a3340e40f7ca2ef2520e75b9/api/starknet_api_openrpc.json#L798), takes an `EventFilter` object, which contains a nested list of keys to be matched against. For example, if the user sent an event filter containing $\big[[k_1, k_2], [\;], [k_3]\big]$, then the node should return events whose first key is $k_1$ or $k_2$, and the third key is $k_3$, and the second key is unconstrained and can take any value. This functionality is supported by variuous Starknet SDKs, for example, see the following [starknet.js tutorial](https://www.starknetjs.com/docs/guides/events#without-transaction-hash) to see how to filter events.
+Starknet's json-rpc [`starknet_getEvents` method](https://github.com/starkware-libs/starknet-specs/blob/76bdde23c7dae370a3340e40f7ca2ef2520e75b9/api/starknet_api_openrpc.json#L798), takes an `EventFilter` object, which contains a nested list of keys to be matched against. For example, if the user sent an event filter containing $\big[[k_1, k_2], [\;], [k_3]\big]$, then the node should return events whose first key is $k_1$ or $k_2$, and the third key is $k_3$, and the second key is unconstrained and can take any value. This functionality is supported by various Starknet SDKs, for example, see the following [starknet.js tutorial](https://www.starknetjs.com/docs/guides/events#without-transaction-hash) to see how to filter events.
 
 Currently, these are the `Transfer` and `Approval` events in all StarkGate's ERC20s:
 
