@@ -1,9 +1,9 @@
 ---
-snip: 23
+snip: 24
 title: Procedure for Introducing Starknet Breaking Changes
 author: Nicolas Consigny <@nconsigny>
 discussions-to: https://community.starknet.io/t/snip-xxx-procedure-for-introducing-starknet-breaking-changes/114452?u=nico_jr
-status: Draft
+status: Review
 type: Meta
 created: 2024-06-28
 ---
@@ -14,12 +14,11 @@ As the Starknet network matures, breaking changes to the stack affect many proto
 
 ## **Motivation**
 
-The purpose of this SNIP is to formalize the process for proposing, discussing, and implementing core updates that are introducing breaking changes to the Starknet protocol. By providing a clear and structured approach, we aim to facilitate community engagement and transparency in the evolution of Starknet. This will allow the client teams (Madara, Papyrus, Juno, PathFinder) and CairoVM implementors (Lambdaclass' CairoVM rust, SW's CairoVM python, Nethermind's CairoVM go, Kakarot's CairoVM TS) to plan long term developement with certainty. 
+The purpose of this SNIP is to formalize the process for proposing, discussing, and implementing core updates that are introducing breaking changes to the Starknet protocol. By providing a clear and structured approach, we aim to facilitate community engagement and transparency in the evolution of Starknet. This will allow the client teams (Madara, Papyrus, Juno, PathFinder) and CairoVM implementors (Lambdaclass' CairoVM rust, SW's CairoVM python, Nethermind's CairoVM go, Kakarot's CairoVM TS) to plan long term developement with certainty.
 
 ## **Specification**
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 and RFC 8174.
-
 
 ### **Starting with SNIPs**
 
@@ -34,8 +33,6 @@ SNIPs **MUST** follow the process described in [SNIP-1](https://github.com/stark
 SNIPs introducing breaking changes will be coupled to a Starknet version. Each Starknet version **SHOULD** come with a meta upgrade SNIP. The meta upgrade SNIP should specify the changes included in the hard fork and contains the following fields `codename`, `activation` (comes with target block on mainnet / testnet), `included SNIPS`. Versions with significant changes **MUST** require a community vote. All SNIPs associated with the version will be part of the same vote, and if the vote passes, all changes are introduced together.
 
 > precision on the vote mechanism to be added & precise definition of "significant breaking change needed" (IMO any breaking change is significant)
-
-
 
 ### **Breaking Change Timeline**
 
@@ -66,15 +63,17 @@ The timeline proposed here reflects a minimal time to allow all relevant parties
 
 ### **Fast track for Non-Breaking Changes**
 
-As the Starknet network is still in a growing phase a "fast track" is needed for more agility. Thus non-protocol-level SNIPs and SNIPs that do not introduce breaking changes can be "fast-tracked" but **SHOULD** still undergo a regular process to ensure sufficient coverage and comments from relevant community members. Fast-tracked EIPs can go from `draft` to `last call` directly per editor request. However as the network matures more decentralisation will be required and the "fast-track" should be deprecated. 
-
+As the Starknet network is still in a growing phase a "fast track" is needed for more agility. Thus non-protocol-level SNIPs and SNIPs that do not introduce breaking changes can be "fast-tracked" but **SHOULD** still undergo a regular process to ensure sufficient coverage and comments from relevant community members. Fast-tracked EIPs can go from `draft` to `last call` directly per editor request. However as the network matures more decentralisation will be required and the "fast-track" should be deprecated.
 
 ## **Roles and Responsibilities**
 
 ### **SNIP Editor**
+
 In addition to the responsibilities described in [SNIP-1](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-1.md#snip-editor-responsibilities)
+
 - Assess which non-core SNIPs are worthy to be fast-tracked
-> Should the SNIP editor be the one in charge ? 
+  > Should the SNIP editor be the one in charge ?
+
 ### **SNIP Proposer**
 
 You are the SNIP’s owner. Seeing it through is your goal!
@@ -84,7 +83,6 @@ You are the SNIP’s owner. Seeing it through is your goal!
 - Follow discussions on Github and open a Community forum discussion.
 - Address concerns and get approval from relevant parties.
 - Follow the SNIP towards inclusion on Mainnet.
-
 
 ### **Starknet Developer**
 
@@ -107,4 +105,3 @@ While breaking changes affecting the end user are not easy, they are sometimes n
 ## **Copyright**
 
 Copyright and related rights waived via [MIT](../LICENSE).
-
