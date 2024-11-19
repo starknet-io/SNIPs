@@ -9,9 +9,7 @@ created: 2024-07-06
 
 ## Abstract
 
-This Meta SNIP lays out the structure, motivation and decisions of the Starknet Security Council. It describes the process and rules that surronds the Starknet Security Council.
-
-The Starknet Security Council is made up of 12 members who are both geographically and organizationally diverse. They are tasked with safeguarding the security of Starknet. The Council assesses proposed upgrades to the network’s core contracts and approves them if no security risks are identified. In the event of an emergency, the Council has the authority to expedite necessary actions.
+This Meta SNIP lays out the structure, motivation and decisions of the Starknet Security Council. It describes the process and rules that surround the Starknet Security Council.
 
 ## Motivation
 
