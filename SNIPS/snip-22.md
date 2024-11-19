@@ -33,7 +33,7 @@ All tokenized vaults MUST implement the SNIP-2 standard including its optional m
 
 The SNIP-2 operations `balance_of`, `transfer`, `total_supply`, etc. MUST operate on the vault shares.
 
-Calls to `transfer` or `transfer_from` MAY revert if vault shares are non-transferable or some conditions, required by the tokenized vault implementation, for a succesful transfer are not met.
+Calls to `transfer` or `transfer_from` MAY revert if vault shares are non-transferable or some conditions, required by the tokenized vault implementation, for a successful transfer are not met.
 
 The SNIP-2 optional operations `name` and `symbol` SHOULD reflect the underlying asset's `name` and `symbol` in some way.
 
@@ -152,7 +152,7 @@ Mints `shares` vault shares to `receiver` by depositing exactly `assets` of unde
 MUST emit the `Deposit` event.
 
 MUST support SNIP-2 `approve` / `transfer_From` on `asset` as a deposit flow.
-MAY support additoinal deposit flows.
+MAY support additional deposit flows.
 
 MUST revert if all of `assets` cannot be deposited (due to deposit limit being reached, slippage, the user not approving enough underlying tokens to the vault contract, etc).
 
@@ -275,7 +275,7 @@ fn max_redeem(self: @TContractState, owner: ContractAddress) -> u256
 
 #### preview_redeem
 
-Simulate the effects of a share redeemption, at the current block.
+Simulate the effects of a share redemption, at the current block.
 
 MUST return as close to and no more than the exact amount of assets that would be withdrawn in a `redeem` call in the same transaction. I.e. `redeem` should return the same or more `assets` as `preview_redeem` if called in the same transaction.
 
