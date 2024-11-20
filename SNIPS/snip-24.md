@@ -102,6 +102,10 @@ While breaking changes affecting the end user are not easy, they are sometimes n
 - Follow the Starknet mailing list and Starknet official social accounts to be notified of any breaking changes where you might be affected.
 - Changes affecting end users will be more vocally announced to make sure as many as possible are aware of the upcoming change.
 
+## **Security considerations**
+
+This proposal does not introduce security concerns as it simply introduces a process for proposing, discussing, and implementing core updates. The core updates themselves might have security considerations and have to include information that might be important for security discussions, surfaces risks and can be used throughout the life-cycle of the proposal.
+
 ## **Copyright**
 
 Copyright and related rights waived via [MIT](../LICENSE).
