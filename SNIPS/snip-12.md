@@ -369,7 +369,7 @@ Example:
     ],
     "My Enum": [
       { "name": "Variant 1", "type": "()" }
-      { "name": "Variant 2", "type": "(u128, u128*)," }
+      { "name": "Variant 2", "type": "(u128, u128*)" }
       // ...
       { "name": "Variant N", "type": "(u128)" }
     ]
