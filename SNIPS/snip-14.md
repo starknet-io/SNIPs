@@ -57,7 +57,6 @@ The registry is a singleton contract that serves as the entry point for all toke
 
 - `create_account` - creates the tokenbound account for an NFT given an implementation address
 - `get_account` - computes the tokenbound account address for an NFT given an implementation address
-- `total_deployed_accounts` - returns the number of deployed tokenbound accounts for an NFT
 
 The registry is permissionless, immutable, and has no owner. The complete source code for the registry can be found in the [Registry Implementation section](https://github.com/Starknet-Africa-Edu/TBA/blob/main/src/registry/registry.cairo).
 
@@ -84,24 +83,21 @@ trait IRegistry<TContractState> {
     /// @param token_contract the contract address of the NFT
     /// @param token_id the ID of the NFT
     /// @param salt random salt for deployment
-    fn create_account(ref self: TContractState, implementation_hash: felt252, token_contract: ContractAddress, token_id: u256, salt: felt252) -> ContractAddress;
+    /// @param chain_id id of chain to be deployed to
+    fn create_account(ref self: TContractState, implementation_hash: felt252, token_contract: ContractAddress, token_id: u256, salt: felt252, chain_id: felt252) -> ContractAddress;
 
     /// @notice calculates the account address for an existing tokenbound account
     /// @param implementation_hash the class hash of the reference account
     /// @param token_contract the contract address of the NFT
     /// @param token_id the ID of the NFT
     /// @param salt random salt for deployment
-    fn get_account(self: @TContractState, implementation_hash: felt252, token_contract: ContractAddress, token_id: u256, salt: felt252) -> ContractAddress;
-
-    /// @notice returns the total no. of deployed tokenbound accounts for an NFT by the registry
-    /// @param token_contract the contract address of the NFT 
-    /// @param token_id the ID of the NFT
-    fn total_deployed_accounts(self: @TContractState, token_contract: ContractAddress, token_id: u256) -> u8;
+    /// @param chain_id id of chain to be deployed to
+    fn get_account(self: @TContractState, implementation_hash: felt252, token_contract: ContractAddress, token_id: u256, salt: felt252, chain_id: felt252) -> ContractAddress;
 }
 ```
 
 ## Account Implementation
-The account implementation is an opinionated, flexible, and audited tokenbound account implementation.
+The account implementation is an opinionated, flexible, and audited tokenbound account implementation. We included a number of components which can help with quickly spinning up an account implementation.
 
 All tokenbound accounts SHOULD be created via the singleton registry.
 
@@ -111,70 +107,20 @@ All tokenbound account implementations MUST implement the following interface:
 
 ```rust
 #[starknet::interface]
-trait IAccount<TContractState>{
-    /// @notice Emitted exactly once when the account is initialized
-    /// @param owner The owner address
-    #[derive(Drop, starknet::Event)]
-    struct AccountCreated {
-        #[key]
-        owner: ContractAddress,
-    }
-
-    /// @notice Emitted when the account executes a transaction
-    /// @param hash The transaction hash
-    /// @param response The data returned by the methods called
-    #[derive(Drop, starknet::Event)]
-    struct TransactionExecuted {
-        #[key]
-        hash: felt252,
-        response: Span<Span<felt252>>
-    }
-
-    /// @notice Emitted when the account upgrades to a new implementation
-    /// @param tokenContract the contract address of the NFT 
-    /// @param tokenId the token ID of the NFT
-    /// @param implementation the upgraded account class hash
-    #[derive(Drop, starknet::Event)]
-    struct Upgraded {
-        tokenContract: ContractAddress, 
-        tokenId: u256, 
-        implementation: ClassHash
-    }
-
-    /// @notice used for signature validation
-    /// @param hash The message hash 
-    /// @param signature The signature to be validated
-    fn is_valid_signature(self: @TContractState, hash:felt252, signature: Span<felt252>) -> felt252;
-
-    /// @notice validate an account transaction
-    /// @param calls an array of transactions to be executed
-    fn __validate__(ref self: TContractState, calls:Array<Call>) -> felt252;
-
-    fn __validate_declare__(self:@TContractState, class_hash:felt252) -> felt252;
-
-    fn __validate_deploy__(self: @TContractState, class_hash:felt252, contract_address_salt:felt252) -> felt252;
-
-    /// @notice executes a transaction
-    /// @param calls an array of transactions to be executed
-    fn __execute__(ref self: TContractState, calls:Array<Call>) -> Array<Span<felt252>>;
-
-    /// @notice returns the contract address and token ID of the NFT
-    fn token(self:@TContractState) -> (ContractAddress, u256);
-
-    /// @notice gets the token bound NFT owner
+pub trait IAccount<TContractState> {
+    /// @notice gets the NFT owner
     /// @param token_contract the contract address of the NFT
     /// @param token_id the token ID of the NFT
-    fn owner(self: @TContractState, token_contract:ContractAddress, token_id:u256) -> ContractAddress;
+    fn owner(self: @TContractState) -> ContractAddress;
 
-    // @notice protection mechanism for selling token bound accounts. can't execute when account is locked
-    // @param duration for which to lock account
-    fn lock(ref self: TContractState, duration: u64);
-    
-    // @notice returns account lock status and time left until account unlocks
-    fn is_locked(self: @TContractState) -> (bool, u64);
+    /// @notice returns the contract address and token ID of the associated NFT
+    fn token(self: @TContractState) -> (ContractAddress, u256, felt252);
 
-    // @notice check that account supports TBA interface
-    // @param interface_id interface to be checked against
+    /// @notice returns the current state of the account
+    fn state(self: @TContractState) -> u256;
+
+    /// @notice check that account supports TBA interface
+    /// @param interface_id interface to be checked against
     fn supports_interface(self: @TContractState, interface_id: felt252) -> bool;
 }   
 ```
@@ -221,10 +167,10 @@ Smart contract authors may optionally choose to enforce interface detection for 
 ## Reference Implementation
 
 ### Registry Implementation
-https://github.com/Starknet-Africa-Edu/TBA/blob/main/src/registry/registry.cairo
+https://github.com/horuslabsio/TBA/blob/main/src/registry/registry.cairo
 
 ### Reference Account Implementation
-https://github.com/Starknet-Africa-Edu/TBA/blob/main/src/account/account.cairo
+https://github.com/horuslabsio/TBA/blob/main/src/accountV3/accountV3.cairo
 
 ## Security Considerations
 ### Fraud Prevention
@@ -238,7 +184,7 @@ Consider the following potential scam:
 - Alice withdraws 10ETH from the tokenbound account and immediately accepts Bob’s offer
 - Bob receives token X, but account Y is empty
 
-To mitigate this sort of fraudulent behavior by malicious account owners, we've added two methods: `lock` and `is_locked` which decentralized marketplaces SHOULD implement for protection against these sorts of scams at the marketplace level.
+To mitigate this sort of fraudulent behavior by malicious account owners, we've added two optional methods: `lock` and `is_locked` which decentralized marketplaces SHOULD implement for protection against these sorts of scams at the marketplace level.
 
 ### Ownership Cycles
 All assets held in a tokenbound account may be rendered inaccessible if an ownership cycle is created. The simplest example is the case of an ERC-721 token being transferred to its own tokenbound account. If this occurs, both the ERC-721 token and all of the assets stored in the tokenbound account would be permanently inaccessible, since the tokenbound account is incapable of executing a transaction that transfers the ERC-721 token.
