@@ -82,7 +82,8 @@ This object ensures the uniqueness of messages based on:
 
 Introduced in revision `0`, changed in revision `1`  
 In revision `0` the fields `name` , `version` and `chainId` are of type `felt` .  
-Starting with revision `1` those fields are using the type `shortstring` .
+Starting with revision `1` those fields are using the type `shortstring` .  
+In revision `0` the field `chainId` was also called `chain_id`.
 
 In revision `0` the domain object is named `StarkNetDomain`.  
 Starting with revision `1` the domain object is named `StarknetDomain`.  
