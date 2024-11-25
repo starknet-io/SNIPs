@@ -419,8 +419,8 @@ The request should be considered invalid
     ],
     "My Object": [
       { "name": "Some Selector", "type": "selector" },
-      { "name": "Some Contract Address", "type": "ContractAddress" },
-    ],
+      { "name": "Some Contract Address", "type": "ContractAddress" }
+    ]
   },
   "primaryType": "Example Message",
   "domain": {
@@ -430,12 +430,12 @@ The request should be considered invalid
     "revision" : 1
   },
   "message": {
-    "Name": "some name"
+    "Name": "some name",
     "Some Array": [1, 2, 3, 4],
     "Some Object": {
       "Some Selector": "transfer",
       "Some Contract Address": "0x0123"
-    },
+    }
   }
 }
 ```
