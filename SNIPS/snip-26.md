@@ -1,5 +1,5 @@
 ---
-snip: xx
+snip: 26
 title: Access Control for Function Call Delegation
 description: This SNIP aims to introduce access control standards to allow linking wallets together and performing actions on behalf of another wallet.
 author: Jordan Bettencourt <jordan@ethsign.xyz>, Jack Xu <jxu@ethsign.xyz>
@@ -12,7 +12,7 @@ created: 2024-10-02
 
 # Abstract
 
-This SNIP aims to introduce access control standards to allow linking wallets together, permitting an external wallet to perform specified smart contract actions on behalf of a primary wallet, with varying levels of restriction.
+SNIP-26 aims to introduce access control standards to allow linking wallets together, permitting an external wallet to perform specified smart contract actions on behalf of a primary wallet, with varying levels of restriction.
 
 # Motivation
 
@@ -86,14 +86,14 @@ pub struct PermitSignature {
 
 # Behavior Specification
 
-## A SNIP-XX-compliant `Permit` MUST contain:
+## A SNIP-26-compliant `Permit` MUST contain:
 
 - `src_permit_magic_value` for validation.
 - `nonce` for distinguishing between permit calls.
 - `data` containing all `PermitData` entries.
 - A valid hash implementation (see implementation for example using poseidon).
 
-## A SNIP-XX-compliant `PermitData` MUST contain:
+## A SNIP-26-compliant `PermitData` MUST contain:
 
 - `src5_selector` to restrict the permit to a specific function call, or the `SRC_PERMIT_DELEGATE_ALL_FUNCTIONS` wildcard to permit all functions within a contract.
 - `params` to restrict the function params that a permitted wallet can submit in a function call, or the `SRC_PERMIT_DELEGATE_ALL_PARAMS` wildcard to permit usage of any params in a function call.
@@ -102,7 +102,7 @@ pub struct PermitSignature {
 - `valid_until` to restrict a permit’s end timestamp.
 - A valid hash implementation (see implementation for example).
 
-## A SNIP-XX-compliant contract MUST:
+## A SNIP-26-compliant contract MUST:
 
 - Implement `get_permit_hash` as defined.
 - Implement `is_valid_permit` as defined.
