@@ -3,7 +3,7 @@ snip: 26
 title: Access Control for Function Call Delegation
 description: This SNIP aims to introduce access control standards to allow linking wallets together and performing actions on behalf of another wallet.
 author: Jordan Bettencourt <jordan@ethsign.xyz>, Jack Xu <jxu@ethsign.xyz>
-discussions-to:
+discussions-to: https://community.starknet.io/t/snip-access-control-for-function-call-delegation/114821
 status: Draft
 type: Standards Track
 category: Core
