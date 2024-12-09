@@ -1,5 +1,5 @@
 ---
-snip: TBD
+snip: 27
 title: Monetary Committee Charter 
 description: Definition and governance framework for Starknet's Monetary Committee
 author: Henri Lieutaud <@l-henri>, Aayush Giri <@Giri-Aayush>, Boaz <@BoazStark> 
@@ -87,7 +87,7 @@ Members SHALL be responsible for:
 
 #### Availability Commitment
 Members MUST be responsive through the following communication channels with a maximum delay of four (4) days:
-- Phone call - goes through silent mode (installing Opus Genie)
+- Phone call - goes through silent mode (installing Opsgenie)
 - Telegram
 - Email
 
