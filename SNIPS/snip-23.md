@@ -1,8 +1,8 @@
 ---
-snip: 55
+snip: 23
 title: Mixed-case checksum address encoding
 author: Clément Walter <clement@kakarot.org>
-discussions-to: https://community.starknet.io/t/snip-55-mixed-case-checksum-address-encoding/114949
+discussions-to: https://community.starknet.io/t/snip-23-mixed-case-checksum-address-encoding/114949
 type: Standards Track
 category: SRC
 status: Discussion
