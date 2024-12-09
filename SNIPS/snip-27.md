@@ -49,10 +49,10 @@ Each parameter change will include two steps:
 - Implementation monitoring
 - Post-action report required
 
-![Parameter Change Flow](../assets/snip-tbd/parameter-flow.png)
+![Parameter Change Flow](../assets/snip-27/parameter-flow.png)
 
 ### Current Parameter Structure
-![Parameter Structure](../assets/snip-tbd/parameter-structure.png)
+![Parameter Structure](../assets/snip-27/parameter-structure.png)
 
 ### Eligibility
 Members of the Monetary Committee will be selected in accordance with the following criteria:
