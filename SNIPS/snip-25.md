@@ -238,7 +238,7 @@ In phase 2, the Security Council will expand its duties to monitor upgrades affe
 
 Emergency Actions are the last line of defense against bugs and earthshattering events. Due to their unexpected nature they cannot be listed exaustively. Non-Emergency actions frame the normal flow of upgrade and lifetime of the network. They are scoped in a specific meta SNIP dedicated to a network upgrade.
 
-The Starknet Security Council is elected with the help of the Starknet community, the Starknet Foundation, Starkware and the STRK token holders. The election process will be descibed in a specific post on the [Starknet comunity forum](https://community.starknet.io/), where the election SHALL be held.
+The Starknet Security Council is elected with the help of the Starknet community, the Starknet Foundation, Starkware and the STRK token holders. The election process will be described in a specific post on the [Starknet comunity forum](https://community.starknet.io/), where the election SHALL be held.
 
 To design this proposal, we relied on the following set of resources:
 

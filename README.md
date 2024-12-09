@@ -4,7 +4,7 @@
     <a href="https://community.starknet.io/">
         <img src="https://img.shields.io/badge/StarkNet%20Community%20Forum-5C4C9F?style=for-the-badge&logo=startrek&logoColor=white">
     </a>
-    <a href="https://twitter.com/intent/follow?screen_name=StarkNetFndn">
+    <a href="https://x.com/intent/follow?screen_name=StarknetFndn">
         <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white">
     </a>
       <br />
@@ -15,7 +15,7 @@
   <a href="https://github.com/starknet-io/SNIPs/discussions">Ask a Question</a>       
   </p>
   
-  <h3 align="center">StarkNet Improvement Proposal repository.</h3>
+  <h3 align="center">Starknet Improvement Proposal repository.</h3>
 </div>
 
 <div align="center">
@@ -23,7 +23,7 @@
 
 [![Project license](https://img.shields.io/github/license/starknet-io/SNIPs.svg?style=flat-square)](LICENSE)
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/starknet-io/SNIPs/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-[![code with love by StarkNet community](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-StarkNet%20Community-ff1414.svg?style=flat-square)](https://github.com/starknet-io)
+[![code with love by Starknet community](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-StarkNet%20Community-ff1414.svg?style=flat-square)](https://github.com/starknet-io)
 
 </div>
 
@@ -43,13 +43,13 @@
 
 ## About
 
-The goal of the SNIP project is to document standardized protocols for StarkNet related softwares and to document them in a high quality and implementable way.
+The goal of the SNIP project is to document standardized protocols for Starknet related softwares and to document them in a high quality and implementable way.
 
 ## SNIP Process
 
 ### Overview
 
-The SNIP process is the process that a contributor goes through to propose a change to the StarkNet ecosystem. It is inspired by the [EIP process](https://eips.ethereum.org/EIPS/eip-1).
+The SNIP process is the process that a contributor goes through to propose a change to the Starknet ecosystem. It is inspired by the [EIP process](https://eips.ethereum.org/EIPS/eip-1).
 
 Here is the process that a contributor should follow:
 
