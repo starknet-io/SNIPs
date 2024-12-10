@@ -98,7 +98,7 @@ The signature for a struct having `n` fields is: `(field1_type,field2_type,...)`
 
 The signature for an enum having `n` fields is: `E(variant1_type,variant2_type,...)`, where `variantN_type` is the type of the n-th enum variant.
 
-The leading `E` avoid clashes with similar signatures using tuples or structs.
+The leading `E` avoids clashes with similar signatures using tuples or structs.
 
 ### Examples
 
