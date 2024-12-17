@@ -1,7 +1,7 @@
 ---
 snip: 2
 title: Token Standard
-author: Abdelhamid Bakhta <abdelhamid.bakhta@gmail.com>, Nils Bundi <nbundi@proton.me>
+author: Abdel <@AbdelStark>, Nils Bundi <nbundi@proton.me>
 status: Draft
 type: Standards Track
 category: SRC
