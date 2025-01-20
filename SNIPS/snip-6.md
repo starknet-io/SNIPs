@@ -123,6 +123,12 @@ Wallets are advised not to sign any data unless they know that it includes the a
 
 ## Backwards Compatibility
 
+As mentioned before the interface ID for an account is always `0x2ceccef7f994940b3962a6c67e0ba4fcd37df7d131417c604f91e03caecc1cd`** which matches the original account interface. 
+
+Note that the the current interface in and the legacy one are compatible in the way they can be called.
+
+The latest `__execute__` execute methods returns no data. But older versions used to return the result of the calls. 3rd parties shouldn't rely on the data being returned
+
 Currently, multiple accounts are using `bool` as the `is_valid_signature` return value. While in the future we expect that most of the accounts will migrate to this standard, in the meantime, we recommend dapps and protocols using this feature to check for both `true` or `'VALID'`.
 
 ## Copyright
