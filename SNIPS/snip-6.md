@@ -35,6 +35,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 **The interface ID for an account is hardcoded to be `0x2ceccef7f994940b3962a6c67e0ba4fcd37df7d131417c604f91e03caecc1cd`** which matches the original account interface. Note that that some methods have been changed since the first version but the interface ID won't change for compatibility purposes
 
 #### Current interface
+
 ```cairo
 /// @title Represents a call to a target contract
 /// @param to The target contract address
