@@ -32,7 +32,7 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 **Every SNIP-6 compliant account MUST implement the `SRC6` and `SRC5` (from [SNIP-5](./snip-5.md)) interfaces**, and publish both interface ids through `supports_interface`:
 
-**The interface ID for an account is hardcoded to be `0x2ceccef7f994940b3962a6c67e0ba4fcd37df7d131417c604f91e03caecc1cd`** which matches the original account interface. Note that that some methods have been changed since the first version but the interface ID won't change for compatibility purposes
+**The interface ID for an account is hardcoded to be `0x2ceccef7f994940b3962a6c67e0ba4fcd37df7d131417c604f91e03caecc1cd`** which matches the original account interface. Note that some methods have changed since the first version, but the interface ID will not change to maintain compatibility.
 
 #### Current interface
 
