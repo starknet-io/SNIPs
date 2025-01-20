@@ -119,7 +119,10 @@ Wallets are advised not to sign any data unless they know that it includes the a
 
 ## Rationale
 
-(To Do...)
+This SNIP aims to standardize the interface for accounts on Starknet. While some functions are required by Starknet itself for an account to function, this standard includes additional functionality that enhances an account's interoperability with the broader Starknet ecosystem.
+For example, the `is_valid_signature` function provides a standard way for dapps and protocols to verify signatures, making the account compatible with any dapp or protocol that expects this functionality. Adhering to the SNIP-5 also makes an account more easily discoverable and integrable.
+While an account on Starknet could function without adhering to this standard, doing so provides significant benefits in terms of interoperability, discoverability, and user experience. Accounts compliant with SNIP-6 can expect better compatibility and integration with the rest of the Starknet ecosystem.
+At the same time, the standard is designed to be minimal and flexible, allowing for a wide variety of account implementations.
 
 ## Backwards Compatibility
 
