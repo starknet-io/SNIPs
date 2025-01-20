@@ -128,7 +128,7 @@ At the same time, the standard is designed to be minimal and flexible, allowing 
 
 As mentioned before the interface ID for an account is always `0x2ceccef7f994940b3962a6c67e0ba4fcd37df7d131417c604f91e03caecc1cd`** which matches the original account interface. 
 
-Note that the the current interface in and the legacy one are compatible in the way they can be called.
+Note that the the current interface id and the legacy one are compatible in the way they can be called.
 
 The latest `__execute__` execute methods returns no data. But older versions used to return the result of the calls. 3rd parties shouldn't rely on the data being returned
 
