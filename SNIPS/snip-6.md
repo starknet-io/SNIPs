@@ -32,6 +32,51 @@ The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SH
 
 **Every SNIP-6 compliant account MUST implement the `SRC6` and `SRC5` (from [SNIP-5](./snip-5.md)) interfaces**, and publish both interface ids through `supports_interface`:
 
+**The interface ID for an account is hardcoded to be `0x2ceccef7f994940b3962a6c67e0ba4fcd37df7d131417c604f91e03caecc1cd`** which matches the original account interface. Note that that some methods have been changed since the first version but the interface ID won't change for compatibility purposes
+
+#### Current interface
+```cairo
+/// @title Represents a call to a target contract
+/// @param to The target contract address
+/// @param selector The target function selector
+/// @param calldata The serialized function parameters
+struct Call {
+    to: ContractAddress,
+    selector: felt252,
+    calldata: Span<felt252>
+}
+
+/// @title SRC-6 Standard Account
+trait ISRC6 {
+    /// @notice Execute a transaction through the account
+    /// @param calls The list of calls to execute
+    fn __execute__(calls: Array<Call>);
+
+    /// @notice Assert whether the transaction is valid to be executed
+    /// @param calls The list of calls to execute
+    /// @return The string 'VALID' represented as felt when is valid
+    fn __validate__(calls: Array<Call>) -> felt252;
+
+    /// @notice Assert whether a given signature for a given hash is valid
+    /// @param hash The hash of the data
+    /// @param signature The signature to validate
+    /// @return The string 'VALID' represented as felt when the signature is valid
+    fn is_valid_signature(hash: felt252, signature: Array<felt252>) -> felt252;
+}
+
+/// @title SRC-5 Standard Interface Detection
+trait ISRC5 {
+    /// @notice Query if a contract implements an interface
+    /// @param interface_id The interface identifier, as specified in SRC-5
+    /// @return `true` if the contract implements `interface_id`, `false` otherwise
+    fn supports_interface(interface_id: felt252) -> bool;
+}
+```
+
+
+
+#### Legacy interface used to calculate the [SRC5](./snip-5.md) interface ID
+
 ```cairo
 /// @title Represents a call to a target contract
 /// @param to The target contract address
@@ -60,14 +105,6 @@ trait ISRC6 {
     /// @param signature The signature to validate
     /// @return The string 'VALID' is represented as felt when the signature is valid
     fn is_valid_signature(hash: felt252, signature: Array<felt252>) -> felt252;
-}
-
-/// @title SRC-5 Standard Interface Detection
-trait ISRC5 {
-    /// @notice Query if a contract implements an interface
-    /// @param interface_id The interface identifier, as specified in SRC-5
-    /// @return `true` if the contract implements `interface_id`, `false` otherwise
-    fn supports_interface(interface_id: felt252) -> bool;
 }
 ```
 
