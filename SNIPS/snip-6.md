@@ -130,7 +130,7 @@ As mentioned before the interface ID for an account remains `0x2ceccef7f994940b3
 
 Note that the the current interface id and the legacy one are compatible in the way they can be called.
 
-The latest version of the `__execute__` method returns no data. But older versions used to return the result of the calls. Third parties shouldn't rely on the data being returned
+The latest version of the `__execute__` method returns no data. But older versions used to return the result of the calls. Third parties shouldn't rely on the data being returned.
 
 Currently, multiple accounts are using `bool` as the `is_valid_signature` return value. While in the future we expect that most of the accounts will migrate to this standard, in the meantime, we recommend dapps and protocols using this feature to check for both `true` or `'VALID'`.
 
