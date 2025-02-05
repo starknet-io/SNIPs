@@ -3,7 +3,7 @@ snip: xxx
 title: Applicative Paymaster API Standard
 description:
 author: Leonardo Lerer <leo@starkware.co>, AVNU
-discussions-to:
+discussions-to: https://community.starknet.io/t/snip-x-applicative-paymaster-api-standard
 status: Review
 type: Standards Track
 category: Core
