@@ -246,17 +246,23 @@
             ],
             "result": {
                 "name": "result",
-                "description": "The hash of the transaction broadcasted by the paymaster",
+                "description": "The hash of the transaction broadcasted by the paymaster and the tracking ID corresponding to the user `execute` request",
                 "required": true,
                 "schema": {
                     "type": "object",
                     "properties": {
+                        "tracking_id": {
+                            "title": "Tracking ID",
+                            "description": "A unique identifier used to track an execution request of a user. Its purpose is to track possibly different transactions sent by the paymaster and which are associated with a same user request. Such cases can happen during congestion, where a fee or tip bump may be needed in order for a transaction to enter a block",
+                            "$ref": "#/components/schemas/TRACKING_ID"
+                        },
                         "transaction_hash": {
                             "title": "Transaction hash",
-                            "$ref": "#/components/schemas/TXN_HASH"
+                            "$ref": "#/components/schemas/TRANSACTION_HASH"
                         }
                     },
                     "required": [
+                        "tracking_id",
                         "transaction_hash"
                     ]
                 }
@@ -304,6 +310,43 @@
                     }
                 }
             }
+        },
+        {
+            "name": "paymaster_trackingIdToLatestHash",
+            "summary": "",
+            "params": [
+                {
+                    "name": "tracking_id",
+                    "description": "A unique identifier used to track an execution request of a user. This identitifier is returned by the paymaster after a successful call to `execute`. Its purpose is to track the possibly different transaction hashes in the mempool which are associated with a same user request",
+                    "required": true,
+                    "schema": {
+                        "title": "Tracking ID",
+                        "$ref": "#/components/schemas/TRACKING_ID"
+                    }
+                }
+            ],
+            "result": {
+                "name": "result",
+                "description": "The hash of the latest transaction broadcasted by the paymaster and corresponding to the requested ID",
+                "required": true,
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "transaction_hash": {
+                            "title": "Transaction hash",
+                            "$ref": "#/components/schemas/TRANSACTION_HASH"
+                        }
+                    },
+                    "required": [
+                        "transaction_hash"
+                    ]
+                }
+            },
+            "errors": [
+                {
+                    "$ref": "#/components/errors/INVALID_ID"
+                }
+            ]
         }
     ],
     "components": {
@@ -360,9 +403,14 @@
                     }
                 }
             },
-            "TXN_HASH": {
+            "TRANSACTION_HASH": {
                 "$ref": "#/components/schemas/FELT",
                 "description": "The transaction hash",
+                "title": "Transaction hash"
+            },
+            "TRACKING_ID": {
+                "$ref": "#/components/schemas/FELT",
+                "description": "The transaction ID",
                 "title": "Transaction hash"
             },
             "OUTSIDE_EXECUTION_TYPED_DATA": {
@@ -992,6 +1040,10 @@
             "INVALID_CLASS_HASH": {
                 "code": 159,
                 "message": "An error occurred (INVALID_ADDRESS)"
+            },
+            "INVALID_ID": {
+                "code": 160,
+                "message": "An error occurred (INVALID_ID)"
             },
             "UNKNOWN_ERROR": {
                 "code": 163,
