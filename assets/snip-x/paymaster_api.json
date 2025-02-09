@@ -327,7 +327,7 @@
             ],
             "result": {
                 "name": "result",
-                "description": "The hash of the latest transaction broadcasted by the paymaster and corresponding to the requested ID",
+                "description": "The hash of the latest transaction broadcasted by the paymaster corresponding to the requested ID and the status of the ID",
                 "required": true,
                 "schema": {
                     "type": "object",
@@ -335,10 +335,21 @@
                         "transaction_hash": {
                             "title": "Transaction hash",
                             "$ref": "#/components/schemas/TRANSACTION_HASH"
+                        },
+                        "status": {
+                            "title": "Status",
+                            "description": "A status of 'active' indicates that the latest transaction associated with the ID is not yet included in a block but is still being handled and monitored by the paymaster. A status of 'accepted' means that a transaction associated with the ID has been accepted on L2. A status of 'dropped' means that no transaction associated with the ID managed to enter a block and the request has been dropped by the paymaster",
+                            "type": "string",
+                            "enum": [
+                                "active",
+                                "accepted",
+                                "dropped"
+                            ]
                         }
                     },
                     "required": [
-                        "transaction_hash"
+                        "transaction_hash",
+                        "status"
                     ]
                 }
             },
@@ -816,7 +827,6 @@
                         "description": "The field which describes whether or not a fee transfer is required in the outside execution",
                         "$ref": "#/components/schemas/FEE_MODE"
                     }
-
                 }
             },
             "FEE_MODE": {
