@@ -4,7 +4,7 @@ title: Staking’s First Stage on Starknet
 description: SW proposal for STRK Staking on Starknet
 author: Natan Granit <natan@starkware.co>
 discussions-to: https://community.starknet.io/t/snip-18-staking-s-first-stage-on-starknet/114334
-status: Review
+status: Final
 type: Standards Track
 category: Core
 created: 2024-07-10

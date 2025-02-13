@@ -3,7 +3,7 @@ snip: 107
 title: Immutable Component Config
 authors: Eric Nordelo <eric.nordelo39@gmail.com>
 discussions-to: https://community.starknet.io/t/immutable-component-config/114434
-status: Draft
+status: Review
 type: Standards Track
 category: SRC
 created: 2024-08-15

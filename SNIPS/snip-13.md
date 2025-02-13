@@ -2,7 +2,7 @@
 snip: 13
 title: Index `Transfer` and `Approval` events in ERC20s
 author: Natan Granit <natan@starkware.co>
-status: Draft
+status: Review
 type: Standards Track
 created: 2024-05-05
 ---
