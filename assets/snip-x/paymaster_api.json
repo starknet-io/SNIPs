@@ -154,8 +154,8 @@
                             "description": "This object should not be returned if the corresponding request didn't specify a token address",
                             "type": "object",
                             "properties": {
-                                "max_amount": {
-                                    "title": "Max amount",
+                                "estimated_amount": {
+                                    "title": "Estimated amount",
                                     "description": "The estimated max token amount that the user is required to allow for the paymaster transaction. This is only an informative field: its semantics is not enforced in the subsequent flow. This information is extractable from the typed data object",
                                     "$ref": "#/components/schemas/u256"
                                 },
@@ -166,7 +166,7 @@
                                 }
                             },
                             "required": [
-                                "max_amount",
+                                "estimated_amount",
                                 "price_in_strk"
                             ]
                         }
@@ -188,9 +188,6 @@
                 },
                 {
                     "$ref": "#/components/errors/TOKEN_NOT_SUPPORTED"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_REQUEST_PAYLOAD"
                 },
                 {
                     "$ref": "#/components/errors/INVALID_TIME_BOUNDS"
@@ -276,9 +273,6 @@
                 },
                 {
                     "$ref": "#/components/errors/INVALID_DEPLOYMENT_DATA"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_REQUEST_PAYLOAD"
                 },
                 {
                     "$ref": "#/components/errors/INVALID_SIGNATURE"
@@ -1006,10 +1000,6 @@
             "TOKEN_NOT_SUPPORTED": {
                 "code": 151,
                 "message": "An error occurred (TOKEN_NOT_SUPPORTED)"
-            },
-            "INVALID_REQUEST_PAYLOAD": {
-                "code": 152,
-                "message": "An error occurred (INVALID_REQUEST_PAYLOAD)"
             },
             "INVALID_SIGNATURE": {
                 "code": 153,
