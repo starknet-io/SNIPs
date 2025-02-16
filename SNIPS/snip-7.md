@@ -3,7 +3,7 @@ snip: 7
 title: Addition of Starknet Appchain Info RPC Endpoint
 author: Abdelhamid Bakhta <@abdelhamidbakhta>
 discussions-to: https://community.starknet.io/t/addition-of-starknet-appchain-info-rpc-endpoint/97884
-status: Draft
+status: Review
 type: Standards Track
 category: Interface
 created: 2023-07-27

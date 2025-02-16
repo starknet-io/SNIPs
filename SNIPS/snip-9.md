@@ -3,7 +3,7 @@ snip: 9
 title: Outside execution
 authors: Argent Labs <argent.xyz>, AVNU <avnu.fi>, Braavos <braavos.app>
 discussions-to: https://community.starknet.io/t/snip-outside-execution/101058
-status: Draft
+status: Review
 type: Standards Track
 category: SRC
 created: 2023-10-11

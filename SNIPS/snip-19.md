@@ -4,7 +4,7 @@ title: Contract Class Hash Syscall
 author: Elias Tazartes <@Eikix>
 description: Introduce a Starknet syscall to get class hash at a particular address.
 discussions-to: https://community.starknet.io/t/snip-19-get-class-hash-at-syscall
-status: Draft
+status: Final
 type: Standards Track
 category: Core
 created: 2024-06-12

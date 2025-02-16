@@ -3,7 +3,7 @@ snip: 64
 title: Custom Errors for Fungible and Non-Fungible Tokens
 author: Jack Boyuan Xu <jxu@ethsign.xyz>
 discussions-to: $DISCUSSION_LINK
-status: Draft
+status: Review
 type: Standards Track
 category: SRC
 created: 2023-12-13

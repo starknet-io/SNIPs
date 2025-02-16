@@ -3,7 +3,7 @@ snip: 14
 title: Non-fungible Tokenbound Accounts
 author: Darlington Nnam <darlingtonnnam@gmail.com>, Ademola Kelvin <adegbiteademola1999@gmail.com>
 discussions-to: https://community.starknet.io/t/snip-72-non-fungible-tokenbound-accounts/112479
-status: Draft
+status: Review
 type: Standards Track
 category: SRC
 created: 2024-01-08

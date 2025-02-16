@@ -3,7 +3,7 @@ snip: 8
 title: Transaction V3 Structure
 authors: Evyatar Oster <@evyataro>, Elin Tulchinsky <elin@starkware.co>
 discussions-to: https://community.starknet.io/t/transaction-v3-snip/98228
-status: Draft
+status: Final
 type: Standards Track
 category: Core
 created: 2023-08-09

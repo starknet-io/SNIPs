@@ -2,7 +2,7 @@
 snip: 2
 title: Token Standard
 author: Abdel <@AbdelStark>, Nils Bundi <nbundi@proton.me>
-status: Draft
+status: Final
 type: Standards Track
 category: SRC
 created: 2022-06-03
