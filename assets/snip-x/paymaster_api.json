@@ -415,8 +415,8 @@
             },
             "TRACKING_ID": {
                 "$ref": "#/components/schemas/FELT",
-                "description": "The transaction ID",
-                "title": "Transaction hash"
+                "description": "A unique identifier corresponding to an `execute` request to the paymaster",
+                "title": "Tracking ID"
             },
             "OUTSIDE_EXECUTION_TYPED_DATA": {
                 "title": "Typed data for outside execution",
@@ -978,7 +978,6 @@
                         "description": "The Cairo version of the contract 0 or 1",
                         "type": "integer",
                         "enum": [
-                            0,
                             1
                         ]
                     }
