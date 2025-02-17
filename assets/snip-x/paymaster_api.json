@@ -332,7 +332,7 @@
                         },
                         "status": {
                             "title": "Status",
-                            "description": "A status of 'active' indicates that the latest transaction associated with the ID is not yet included in a block but is still being handled and monitored by the paymaster. A status of 'accepted' means that a transaction associated with the ID has been accepted on L2. A status of 'dropped' means that no transaction associated with the ID managed to enter a block and the request has been dropped by the paymaster",
+                            "description": "A status of 'active' indicates that the latest transaction associated with the ID is not yet included in a block but is still being handled and monitored by the paymaster. A status of 'accepted' means that a transaction associated with the ID has been accepted on L2. A status of 'dropped' means that no transaction associated with the ID managed to enter a block and the request has been dropped by the paymaster. In all cases, the returned transaction hash must be the hash of the most recent tx sent by the paymaster and corresponding to the ID",
                             "type": "string",
                             "enum": [
                                 "active",
@@ -825,7 +825,7 @@
             },
             "FEE_MODE": {
                 "title": "Fee mode",
-                "description": "",
+                "description": "Selects how to pay the tx fees",
                 "oneOf": [
                     {
                         "title": "Pay fee",
@@ -989,6 +989,45 @@
                     "calldata",
                     "version"
                 ]
+            },
+            "CONTRACT_EXECUTION_ERROR": {
+                "description": "Structured error that can later be processed by wallets or SDKs",
+                "title": "Contract execution error",
+                "$ref": "#/components/schemas/CONTRACT_EXECUTION_ERROR_INNER"
+            },
+            "CONTRACT_EXECUTION_ERROR_INNER": {
+                "description": "Structured error that can later be processed by wallets or sdks",
+                "title": "Contract execution error",
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "contract_address": {
+                                "$ref": "#/components/schemas/ADDRESS"
+                            },
+                            "class_hash": {
+                                "$ref": "#/components/schemas/FELT"
+                            },
+                            "selector": {
+                                "$ref": "#/components/schemas/FELT"
+                            },
+                            "error": {
+                                "$ref": "#/components/schemas/CONTRACT_EXECUTION_ERROR"
+                            }
+                        },
+                        "required": [
+                            "contract_address",
+                            "class_hash",
+                            "selector",
+                            "error"
+                        ]
+                    },
+                    {
+                        "title": "Error message",
+                        "description": "the error raised during execution",
+                        "type": "string"
+                    }
+                ]
             }
         },
         "errors": {
@@ -1019,13 +1058,15 @@
                     "type": "object",
                     "description": "More data about the execution failure",
                     "properties": {
-                        "revert_error": {
+                        "execution_error": {
                             "title": "revert error",
-                            "description": "A string encoding the execution trace up to the point of failure",
-                            "type": "string"
+                            "description": "The execution trace up to the point of failure",
+                            "$ref": "#/components/schemas/CONTRACT_EXECUTION_ERROR"
                         }
                     },
-                    "required": "revert_error"
+                    "required": [
+                        "execution_error"
+                    ]
                 }
             },
             "INVALID_TIME_BOUNDS": {
