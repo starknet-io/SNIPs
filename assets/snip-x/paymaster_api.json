@@ -21,63 +21,6 @@
             }
         },
         {
-            "name": "paymaster_supportedVersion",
-            "summary": "Given an account address, returns the highest compatible version of SNIP-9 that the account implements",
-            "params": [
-                {
-                    "name": "user_account",
-                    "description": "The address or class hash of the account that wishes to use the paymaster service",
-                    "required": true,
-                    "schema": {
-                        "oneOf": [
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "address": {
-                                        "$ref": "#/components/schemas/ADDRESS"
-                                    }
-                                },
-                                "required": [
-                                    "address"
-                                ]
-                            },
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "class_hash": {
-                                        "$ref": "#/components/schemas/CLASS_HASH"
-                                    }
-                                },
-                                "required": [
-                                    "class_hash"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ],
-            "result": {
-                "name": "result",
-                "description": "If the address is compatible with some version of outside execution, return the highest compatible version. Return an error if incompatible",
-                "required": true,
-                "schema": {
-                    "title": "Highest compatible version of outside execution",
-                    "$ref": "#/components/schemas/NUMERIC"
-                }
-            },
-            "errors": [
-                {
-                    "$ref": "#/components/errors/INVALID_ADDRESS"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_CLASS_HASH"
-                },
-                {
-                    "$ref": "#/components/errors/CLASS_HASH_NOT_SUPPORTED"
-                }
-            ]
-        },
-        {
             "name": "paymaster_buildTypedData",
             "summary": "Receives the array of calls that the user wishes to make, along with token data. Returns a typed object for the user to sign and, optionally, data about token amount and rate",
             "params": [
@@ -127,14 +70,6 @@
                     "schema": {
                         "title": "Token address",
                         "$ref": "#/components/schemas/ADDRESS"
-                    }
-                },
-                {
-                    "name": "version",
-                    "description": "The version of the outside execution revision (SNIP-9) that is being used. If not present, the paymaster will choose any compatible revision",
-                    "required": false,
-                    "schema": {
-                        "$ref": "#/components/schemas/NUMERIC"
                     }
                 }
             ],
@@ -975,7 +910,7 @@
                     },
                     "version": {
                         "title": "Contract Version",
-                        "description": "The Cairo version of the contract 0 or 1",
+                        "description": "The Cairo version (CairoZero is not supported)",
                         "type": "integer",
                         "enum": [
                             1
