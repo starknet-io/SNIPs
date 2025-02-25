@@ -1,5 +1,5 @@
 ---
-snip: xxx
+snip: 29
 title: Applicative Paymaster API Standard
 description:
 author: Leonardo Lerer <leo@starkware.co>, AVNU
