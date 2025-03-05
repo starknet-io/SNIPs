@@ -290,7 +290,7 @@ mod ERC721ErrorsComponent {
 
         fn throw_insufficient_approval(self: @ComponentState<TContractState>, operator: ContractAddress, token_id: u256) {
             let data: Array<felt252> = array![
-                'ERC721InsufficientApprovel',
+                'ERC721InsufficientApproval',
                 operator.into(),
                 token_id.try_into().unwrap(),
             ];
