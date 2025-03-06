@@ -127,14 +127,14 @@ See [SNIP 12](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md) f
 Check if the account supports this SNIP:
 
 ```rust
-let account = ISRC5Dispatcher { contract_address: acount_address };
+let account = ISRC5Dispatcher { contract_address: account_address };
 let is_supported = account.supports_interface(SRC5_OUTSIDE_EXECUTION_INTERFACE_ID); // see below for actual value
 ```
 
 Call the `execute_from_outside` method on the account:
 
 ```rust
-let account = IOutsideExecutionDispatcher { contract_address: acount_address };
+let account = IOutsideExecutionDispatcher { contract_address: account_address };
 // pre-execution logic...
 let results = account.execute_from_outside(outside_execution, signature);
 // post-execution logic...
