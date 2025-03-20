@@ -19,7 +19,7 @@ Dapps, for example exchanges that operate on Starknet, need to track transfers f
 
 This is already the case on Ethereum and other EVM chains. Due to limitations in early iterations of Cairo, events had only one key corresponding to the event name. This lead to only being able to filter over all transfer events, which is far from ideal.
 
-## Backward Compatability
+## Backward Compatibility
 
 **This change is NOT backward compatible**. All DAPPs listening to ERC20 transfer and approval events will have to adjust their events decoding, in order to look for fields in the `keys` array instead of in the `data` array.
 
