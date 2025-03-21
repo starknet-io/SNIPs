@@ -9,7 +9,7 @@ created: 2022-06-03
 
 ## What is a SNIP?
 
-SNIP stands for StarkNet Improvement Proposal. A SNIP is a design document providing information to the StarkNet community, or describing a new feature for StarkNet or its processes or environment. The SNIP should provide a concise technical specification of the feature and a rationale for the feature. The SNIP author is responsible for building consensus within the community and documenting dissenting opinions.
+SNIP stands for StarkNet Improvement Proposal. A SNIP is a design document that provides information to the StarkNet community, or describes a new feature for StarkNet or its processes or environment. The SNIP should provide a concise technical specification of the feature and a rationale for the feature. The SNIP author is responsible for building consensus within the community and documenting dissenting opinions.
 
 ## SNIP Rationale
 
