@@ -84,7 +84,7 @@ Refer to this implementation: [https://github.com/argentlabs/argent-contracts-st
 
 #### 2.2. Version 2
 
-In [domain_seperator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator):
+In [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator):
 - `version` is set to `2`
 
 In `OutsideExecution` type definition:
