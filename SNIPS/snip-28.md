@@ -55,24 +55,25 @@ Therefore, we introduce a new latency parameter k, and update the staking power 
 
 To illustrate with an example, let’s say we have a validator A with 50K STRK staked. During Epoch i, someone delegates to A an additional 10K STRK. during Epoch i+1, someone undelegates from A 30K STRK. Here is what A’s weight and reward are going to look like:
 
-### Block attestation
+### Block attestation section
 
 The primary proposed change in Staking v2 is the introduction of a block attestation mechanism for Validators. This section outlines the technical details of the attestation process. For now, epochs are treated as groups of E blocks (a detailed explanation will follow in a later section).
 
-* Each Validator is assigned a unique identifier per epoch, which equals to Hash(staked\_amount, epoch\_id, validator\_address) % 2^N.    
-* During an epoch, Validators have the opportunity to attest to specific blocks. A block qualifies for attestation of its block hash modulo 2^N equal to the identifier  
-* Attestation involves submitting an `attest` transaction within a defined block window. If T represents the block number that meets the matching criteria, the attestation window spans from block T+11 to T+W (for instance, where W \= 20). In addition, the attestation must be sent within the corresponding epoch. This means that the last 10 blocks within an epoch cannot be attested.   
-* Each Validator is required to perform only one attestation per epoch.
+Each Validator is assigned a block per epoch based on the following formula:
 
-This mechanism ensures Validators actively use full nodes, as they need to track block hashes continuously. Additionally, the attestation reflects their activity and is publicly verifiable. This ensures Validators' reliability is publicly tested, which is crucial before Starknet's security and liveness depend on them.
+block\_number=Hash(staked\_amount,epoch\_id,validator\_address)%(E−W)
 
-We note that in this proposal, the work is the same for all  Validators, and only the rewards are proportional to their stake. The reason we opt for this is it makes the implementation more straightforward, so we can focus more time and effort on the later stages. This is essential as testing Validators’ reliability is crucial before handing them core responsibilities. Also, Running a full node is the main cost and effort, which is obligatory for all Validators.
+When the block\_number is the relative number within the epoch, and W represents the range of blocks applicable for attestation submittal.  
+During each epoch, Validators have the opportunity to attest to their assigned block by submitting an attest transaction. This transaction includes the block hash of the attested block and must be included within a specific attestation window. If T represents the block number that meets the matching criteria, the attestation window spans from block T+11 to T+W (for instance, where W \= 20). Each Validator is required to perform only one attestation per epoch.
 
-Lastly, the exact parameters of epoch length (E), Modulo power (N), and attestation window (W) will be determined later and added to this proposal, but here are some thoughts about what is bounding them:
+This mechanism ensures Validators actively use full nodes, as they need to track block hashes continuously. Additionally, the attestation reflects their activity and is publicly verifiable. This ensures Validators’ reliability is publicly tested, which is crucial before Starknet’s security and liveness depend on them.
 
-* E should be more than 16 to the power of N, but not orders of magnitude more. Notice that with some small probability ((1-1/2^N)^(E \-W) ), validators will not have the opportunity to submit transactions. We want this probability to be small (less than 1%) to keep the rewards variety small. However, too large an E (with respect to N) means that validators with high probability may stop tracking the network until the end of the epoch when a small percentage of the epoch is done  
-* E should be large enough to keep the Operator’s cost sensible—even on a day with high gas fees, the yield for an Operator that has staked only 20K STRK over an epoch should be significantly more than the cost of the transaction it would have to submit. E should be small enough so latency on activities that depend on epoch (such as adding or removing stake) will not be too cumbersome.   
-* W should be small to ensure liveness. But also \- not too small. We want to incentivize people to react in real-time but also to avoid scenarios where, due to sporadic spikes in the network, the validator failed to submit a transaction in time.
+Note that in this proposal, the work is the same for all Validators, and only the rewards are proportional to their stake. This is done to simplify the implementation, so time and effort may be saved for the later stages. This is essential as testing Validators’ reliability is crucial before handing them core responsibilities. Also, Running a full node is the main cost and effort, which is obligatory for all Validators.
+
+Lastly, the exact parameters of epoch length (E) and attestation window (W) will be determined later and added to this proposal, but here are some thoughts about what is bounding them:
+
+E should be large enough to keep the Operator’s cost sensible—even on a day with high gas fees, the yield for an Operator that has staked only 20K STRK over an epoch should be significantly more than the cost of the transaction it would have to submit. E should be small enough so latency on activities that depend on epoch (such as adding or removing stake) will not be too cumbersome.  
+W should be small to ensure liveness. But also \- not too small. We want to incentivize people to react in real-time but also to avoid scenarios where, due to sporadic spikes in the network, the validator failed to submit a transaction in time.
 
 ### Rewards 
 
@@ -99,19 +100,16 @@ Here is a table summarising the new protocol parameters proposed in this version
 | The block window range to submit an attestation (W) | 16 \- 30 Block |
 | Number of epochs used for latency (k) | 1 |
 
-### Commission increase (if included)
+### Commission increase
 
-After [exposing](https://community.starknet.io/t/learning-from-staking-v1-a-discussion-on-commission-policy-and-stake-distribution/115163) some routes for allowing commission increase, we plan to opt for something close to option three which was detailed there. Namely:
+After [exposing](https://community.starknet.io/t/learning-from-staking-v1-a-discussion-on-commission-policy-and-stake-distribution/115163) some routes for allowing commission increase, the current suggestion it to opt for something close to option three which was detailed there. Namely:
 
-* Validators will be able to commit to a certain maximum commission M, and the last date that this commitment is relevant for. Until this last date arrives, validators will not be able to increase their commission beyond M, but can freely change their commission in the range \[0,M\]  
-* Validators will be able to declare ahead **one** additional commission commitment. For example, a validator that commits to a maximal commission of M=5% until 1.6.2025 can also commit to a maximal commission M’ \= 3% or M’ \= 7% until 1.1.2026. To elaborate more on how it would work:  
-  * If M’ \= 7%, then the commission is guaranteed to be at most 5% until 1.6.2025 and to be at most 7% on 1.6.2025-1.1.2026. Except these upper thresholds there is nothing limiting the validator from changing commission.Nothing will happen to the actual commission rate on the 1.6.2025.  
-  * If M’ \= 3%, then the commission is guaranteed to be at most 5% until 1.6.2025 and at most 3% from 1.6.2025 to 1.1.2026. Except for these upper thresholds, nothing limits the validator from changing the commission. On 1.6.2025, if the current commission is higher than 3%, it will be forced to drop to 3%. Defacto, this will be forced whenever the validator does some work (so relatively quickly on staking v2, but might take a bit longer time in future staking versions).   
-* Once given, the validator cannot change the commitments. The validator also can’t include more than one commitment that refers to a future date (so in the example above, no further commitments can be given until 1.1.1.2026)  
-* Commitments may not refer to more than one year from the date they are given. The purpose here is to be future-compatible with other features around commission (such as imposing minimal commission for large stakers). When the protocol stabilizes, the period the commitment refer to will be extended.   
-* One edge case that the description above doesn’t cover is if/how to prevent validators to go 0→100 commission the day after v2 is released, when no commitments are yet done. To counter that, we consider to prevent any commission increase in the two first months after v2 goes live, giving the users ample of time to switch validators according to the relevant commitments made by the different validators. 
+* Validators will be able to commit to a certain maximum commission M, and the last date (in Epochs) that this commitment is relevant for. Until this last date arrives, validators will not be able to increase their commission beyond M, but can freely change their commission in the range \[0,M\]  
+* Once given, the validator cannot change the commitments.  
+* Commitments may not refer to more than one year from the date they are given. The purpose here is to be future-compatible with other features around commission (such as imposing minimal commission for large stakers) which may be added in the future. When the protocol stabilizes, the period the commitment refer to will be extended.  
+* Future extensions, such as commitment extensions or future commitment support, will be considered based on community demand and actual usage.
 
-We encourage validators to impose limitations on their commission to give maximal transparency to the users. We will work with staking platforms and dashboards to highlight validators without commitment, or validators where the current commitment will be expired within the next month with no followup commitment, as a "dangerous" validator where commission could suddenly change unexpectedly. 
+Validators are encouraged to impose limitations on their commission to give maximal transparency to the users. The plan is that staking platforms and dashboards would highlight validators without commitment or validators where the current commitment will expire within the next month to increase user visibility.
 
 ## **Backward compatibility** 
 
