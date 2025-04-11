@@ -473,6 +473,28 @@
                                 "$ref": "#/components/schemas/FELT"
                             }
                         }
+                    },
+                    {
+                        "title": "Pay transaction in gas token with an added tip",
+                        "description": "Fee mode where the transaction is paid by the user in the given gas token and the user can specify a tip",
+                        "required": [
+                            "mode",
+                            "gas_token",
+                            "tip"
+                        ],
+                        "properties": {
+                            "mode": {
+                                "const": [
+                                    "priority"
+                                ]
+                            },
+                            "gas_token": {
+                                "$ref": "#/components/schemas/FELT"
+                            },
+                            "tip": {
+                                "$ref": "#/components/schemas/FELT"
+                            }
+                        }
                     }
                 ]
             },
