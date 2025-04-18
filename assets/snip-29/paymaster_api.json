@@ -19,7 +19,7 @@
             }
         },
         {
-            "name": "paymaster_getSupportedTokensAndPrices",
+            "name": "paymaster_getSupportedTokens",
             "summary": "Get a list of the tokens that the paymaster supports, together with their prices in STRK",
             "params": [],
             "result": {
@@ -84,7 +84,7 @@
             ]
         },
         {
-            "name": "paymaster_buildTypedData",
+            "name": "paymaster_buildTransaction",
             "summary": "Receives the transaction the user wants to execute. Returns the typed data along with the estimated gas cost and the maximum gas cost suggested to ensure execution",
             "params": [
                 {
@@ -106,23 +106,88 @@
             ],
             "result": {
                 "name": "result",
-                "description": "The typed data that the user needs to sign, together with information about the fee",
+                "description": "The transaction data required for execution along with an estimation of the fee",
                 "required": true,
                 "schema": {
-                    "title": "Execute from outside typed data and the fee information related to the transaction built",
                     "type": "object",
-                    "required": [
-                        "typed_data",
-                        "fee"
-                    ],
-                    "properties": {
-                        "typed_data": {
-                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
-                        },
-                        "fee": {
+                    "oneOf": [
+                      {
+                        "title": "Deploy Response",
+                        "required": [
+                          "type",
+                          "deployment",
+                          "parameters",
+                          "fee"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["deploy"]
+                          },
+                          "deployment": {
+                            "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
                             "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          } 
                         }
-                    }
+                      },
+                      {
+                        "title": "Invoke Response",
+                        "required": [
+                          "type",
+                          "typed_data",
+                          "parameters",
+                          "fee"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["invoke"]
+                          },
+                          "typed_data": {
+                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          } 
+                        }
+                      },
+                      {
+                        "title": "Deploy and Invoke Response",
+                        "required": [
+                          "type",
+                          "deployment",
+                          "typed_data",
+                          "parameters",
+                          "fee"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["invoke"]
+                          },
+                          "deployment": {
+                            "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                          },
+                          "typed_data": {
+                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          } 
+                        }
+                      }
+                    ]
                 }
             },
             "errors": [
@@ -150,7 +215,7 @@
             ]
         },
         {
-            "name": "paymaster_execute",
+            "name": "paymaster_executeTransaction",
             "summary": "Sends the signed typed data to the paymaster service for execution",
             "params": [
                 {
