@@ -92,7 +92,7 @@
                     "description": "Transaction to be executed by the paymaster",
                     "required": true,
                     "schema": {
-                        "$ref": "#/components/schemas/PAYMASTER_TRANSACTION"
+                        "$ref": "#/components/schemas/USER_TRANSACTION"
                     }
                 },
                 {
@@ -100,7 +100,7 @@
                     "description": "Execution parameters to be used when executing the transaction",
                     "required": true,
                     "schema": {
-                        "$ref": "#/components/schemas/PAYMASTER_EXECUTION"
+                        "$ref": "#/components/schemas/USER_PARAMETERS"
                     }
                 }
             ],
@@ -120,7 +120,7 @@
                             "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
                         },
                         "fee": {
-                            "$ref": "#/components/schemas/PAYMASTER_FEE_ESTIMATE"
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
                         }
                     }
                 }
@@ -159,7 +159,15 @@
                     "schema": {
                         "title": "Transaction",
                         "description": "Typed data build by calling paymaster_buildTypedData signed by the user to be executed by the paymaster service",
-                        "$ref": "#/components/schemas/PAYMASTER_EXECUTABLE_TRANSACTION"
+                        "$ref": "#/components/schemas/EXECUTABLE_USER_TRANSACTION"
+                    }
+                },
+                {
+                    "name": "parameters",
+                    "description": "Execution parameters to be used when executing the transaction",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/components/schemas/USER_PARAMETERS"
                     }
                 }
             ],
@@ -213,7 +221,7 @@
     ],
     "components": {
         "schemas": {
-            "PAYMASTER_EXECUTABLE_TRANSACTION": {
+            "EXECUTABLE_USER_TRANSACTION": {
                 "oneOf": [
                     {
                         "title": "Deploy",
@@ -225,7 +233,7 @@
                         "properties": {
                             "type": {
                                 "title": "Transaction type",
-                                "const": [
+                                "enum": [
                                     "deploy"
                                 ]
                             },
@@ -246,14 +254,14 @@
                         "properties": {
                             "type": {
                                 "title": "Transaction type",
-                                "const": [
+                                "enum": [
                                     "invoke"
                                 ]
                             },
                             "invoke": {
                                 "title": "Invoke data",
                                 "description": "Invoke data signed by the user to be executed by the paymaster service",
-                                "$ref": "#/components/schemas/PAYMASTER_EXECUTABLE_INVOKE"
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_INVOKE"
                             }
                         }
                     },
@@ -268,7 +276,7 @@
                         "properties": {
                             "type": {
                                 "title": "Transaction type",
-                                "const": [
+                                "enum": [
                                     "deploy_and_invoke"
                                 ]
                             },
@@ -280,13 +288,13 @@
                             "invoke": {
                                 "title": "Invoke data",
                                 "description": "Invoke data signed by the user to be executed by the paymaster service",
-                                "$ref": "#/components/schemas/PAYMASTER_EXECUTABLE_INVOKE"
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_INVOKE"
                             }
                         }
                     }
                 ]
             },
-            "PAYMASTER_EXECUTABLE_INVOKE": {
+            "EXECUTABLE_USER_INVOKE": {
                 "type": "object",
                 "required": [
                     "user_address",
@@ -311,7 +319,7 @@
                     }
                 }
             },
-            "PAYMASTER_TRANSACTION": {
+            "USER_TRANSACTION": {
                 "oneOf": [
                     {
                         "title": "Deploy",
@@ -323,7 +331,7 @@
                         "properties": {
                             "type": {
                                 "title": "Transaction type",
-                                "const": [
+                                "enum": [
                                     "deploy"
                                 ]
                             },
@@ -344,14 +352,14 @@
                         "properties": {
                             "type": {
                                 "title": "Transaction type",
-                                "const": [
+                                "enum": [
                                     "invoke"
                                 ]
                             },
                             "invoke": {
                                 "title": "Invoke data",
                                 "description": "Invoke data to a transaction on behalf of the user",
-                                "$ref": "#/components/schemas/PAYMASTER_INVOKE"
+                                "$ref": "#/components/schemas/USER_INVOKE"
                             }
                         }
                     },
@@ -366,7 +374,7 @@
                         "properties": {
                             "type": {
                                 "title": "Transaction type",
-                                "const": [
+                                "enum": [
                                     "deploy_and_invoke"
                                 ]
                             },
@@ -378,13 +386,13 @@
                             "invoke": {
                                 "title": "Invoke data",
                                 "description": "Invoke data to a transaction on behalf of the user",
-                                "$ref": "#/components/schemas/PAYMASTER_INVOKE"
+                                "$ref": "#/components/schemas/USER_INVOKE"
                             }
                         }
                     }
                 ]
             },
-            "PAYMASTER_INVOKE": {
+            "USER_INVOKE": {
                 "title": "Invoke Parameters",
                 "description": "Calls to be executed by the paymaster and the user account address that will be called",
                 "required": [
@@ -406,9 +414,9 @@
                     }
                 }
             },
-            "PAYMASTER_EXECUTION": {
+            "USER_PARAMETERS": {
                 "title": "Execution parameters",
-                "description": "Execution parameters to used when executing the transaction through the paymaster",
+                "description": "Execution parameters to be used when executing the transaction through the paymaster",
                 "oneOf": [
                     {
                         "title": "Execution parameters v1",
@@ -419,9 +427,9 @@
                         "properties": {
                             "version": {
                                 "title": "Version",
-                                "description": "Version of the execution parameters",
-                                "const": [
-                                    "v1"
+                                "description": "Version of the execution parameters which is not tied to the execute from outside version",
+                                "enum": [
+                                    "0x1"
                                 ]
                             },
                             "fee_mode": {
@@ -450,7 +458,7 @@
                         ],
                         "properties": {
                             "mode": {
-                                "const": [
+                                "enum": [
                                     "sponsored"
                                 ]
                             }
@@ -465,7 +473,7 @@
                         ],
                         "properties": {
                             "mode": {
-                                "const": [
+                                "enum": [
                                     "default"
                                 ]
                             },
@@ -480,25 +488,25 @@
                         "required": [
                             "mode",
                             "gas_token",
-                            "tip"
+                            "tip_in_strk"
                         ],
                         "properties": {
                             "mode": {
-                                "const": [
+                                "enum": [
                                     "priority"
                                 ]
                             },
                             "gas_token": {
                                 "$ref": "#/components/schemas/FELT"
                             },
-                            "tip": {
+                            "tip_in_strk": {
                                 "$ref": "#/components/schemas/FELT"
                             }
                         }
                     }
                 ]
             },
-            "PAYMASTER_FEE_ESTIMATE": {
+            "FEE_ESTIMATE": {
                 "required": [
                     "gas_token_price_in_strk",
                     "estimated_fee_in_strk",
