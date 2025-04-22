@@ -500,7 +500,7 @@
                             "fee_mode": {
                                 "title": "Fee Mode",
                                 "description": "Fee mode to use for the execution",
-                                "$ref": "#/components/schemas/PAYMASTER_FEE_MODE"
+                                "$ref": "#/components/schemas/FEE_MODE"
                             },
                             "time_bounds": {
                                 "title": "Time Bounds",
@@ -511,7 +511,7 @@
                     }
                 ]
             },
-            "PAYMASTER_FEE_MODE": {
+            "FEE_MODE": {
                 "title": "Paymaster fee mode",
                 "description": "Specify how the transaction should be paid. Either by the user specifying a gas token or through sponsorship",
                 "oneOf": [
@@ -677,10 +677,6 @@
                     {
                         "title": "Typed data V2",
                         "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA_V2"
-                    },
-                    {
-                        "title": "Typed data V3",
-                        "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA_V3"
                     }
                 ]
             },
@@ -733,35 +729,6 @@
                     },
                     "message": {
                         "$ref": "#/components/schemas/OUTSIDE_EXECUTION_MESSAGE_V2"
-                    }
-                },
-                "required": [
-                    "types",
-                    "primaryType",
-                    "domain",
-                    "message"
-                ]
-            },
-            "OUTSIDE_EXECUTION_TYPED_DATA_V3": {
-                "type": "object",
-                "properties": {
-                    "types": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/STARKNET_TYPE"
-                            }
-                        }
-                    },
-                    "primaryType": {
-                        "type": "string"
-                    },
-                    "domain": {
-                        "$ref": "#/components/schemas/STARKNET_DOMAIN"
-                    },
-                    "message": {
-                        "$ref": "#/components/schemas/OUTSIDE_EXECUTION_MESSAGE_V3"
                     }
                 },
                 "required": [
@@ -1031,82 +998,6 @@
                     "Execute Before",
                     "Calls"
                 ]
-            },
-            "OUTSIDE_EXECUTION_MESSAGE_V3": {
-                "name": "message",
-                "type": "object",
-                "properties": {
-                    "Caller": {
-                        "title": "Caller address",
-                        "description": "The account address of the user",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Nonce": {
-                        "title": "Nonce",
-                        "description": "The nonce used in the outside execution protocol",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Execute After": {
-                        "title": "Minimum timestamp",
-                        "description": "Timestamp after which the outside execution is valid and possible",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Execute Before": {
-                        "title": "Maximum timestamp",
-                        "description": "Timestamp before which the outside execution is valid and possible",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Calls": {
-                        "title": "Calls",
-                        "description": "The array of calls returned by the paymaster service",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OUTSIDE_CALL_V2"
-                        }
-                    },
-                    "Fee": {
-                        "title": "Fee",
-                        "description": "The field which describes whether or not a fee transfer is required in the outside execution",
-                        "$ref": "#/components/schemas/FEE_MODE"
-                    }
-                }
-            },
-            "FEE_MODE": {
-                "title": "Fee mode",
-                "description": "Selects how to pay the tx fees",
-                "oneOf": [
-                    {
-                        "title": "Pay fee",
-                        "type": "object",
-                        "properties": {
-                            "Pay Fee": {
-                                "title": "Fee payment info",
-                                "$ref": "#/components/schemas/FEE_PAYMENT_INFO"
-                            }
-                        }
-                    },
-                    {
-                        "title": "No fee",
-                        "type": "object",
-                        "properties": {
-                            "No Fee": {}
-                        }
-                    }
-                ]
-            },
-            "FEE_PAYMENT_INFO": {
-                "title": "Fee payment info",
-                "type": "object",
-                "properties": {
-                    "Fee Amount": {
-                        "title": "Fee amount",
-                        "$ref": "#/components/schemas/u256_AS_FELTS"
-                    },
-                    "Fee Receiver": {
-                        "title": "Receiver",
-                        "$ref": "#/components/schemas/ADDRESS"
-                    }
-                }
             },
             "u256_AS_FELTS": {
                 "title": "u256 as felts",
