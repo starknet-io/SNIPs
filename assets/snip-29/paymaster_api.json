@@ -171,7 +171,7 @@
                         "properties": {
                           "type": {
                             "title": "Transaction type",
-                            "enum": ["invoke"]
+                            "enum": ["deploy_and_invoke"]
                           },
                           "deployment": {
                             "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
@@ -223,7 +223,7 @@
                     "required": true,
                     "schema": {
                         "title": "Transaction",
-                        "description": "Typed data build by calling paymaster_buildTypedData signed by the user to be executed by the paymaster service",
+                        "description": "Typed data build by calling paymaster_buildTransaction signed by the user to be executed by the paymaster service",
                         "$ref": "#/components/schemas/EXECUTABLE_USER_TRANSACTION"
                     }
                 },
@@ -374,7 +374,7 @@
                     },
                     "typed_data": {
                         "title": "Typed data",
-                        "description": "Typed data returned by the endpoint paymaster_buildTypedData",
+                        "description": "Typed data returned by the endpoint paymaster_buildTransaction",
                         "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
                     },
                     "signature": {
@@ -473,6 +473,7 @@
                     "calls": {
                         "title": "Calls to execute",
                         "description": "The sequence of calls that the user wishes to perform",
+                        "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/CALL"
                         }
