@@ -103,7 +103,7 @@ Each SNIP should have the following parts:
 
 ## SNIP Formats and Templates
 
-SNIPs should be written in [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) format. There is a [template](https://github.com/ethereum/SNIPs/blob/master/snip-template.md) to follow.
+SNIPs should be written in [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) format. There is a [template](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-template.md) to follow.
 
 ## SNIP Header Preamble
 
