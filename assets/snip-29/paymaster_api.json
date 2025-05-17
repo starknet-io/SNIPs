@@ -38,7 +38,7 @@
                     "description": "The necessary data to deploy an account through the universal deployer contract",
                     "required": false,
                     "schema": {
-                        "title": "Deployment data",
+                        "title": "Deployement data",
                         "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
                     }
                 },
@@ -153,7 +153,7 @@
                     "description": "The necessary data to deploy an account through the universal deployer contract",
                     "required": false,
                     "schema": {
-                        "title": "Deployment data",
+                        "title": "Deployement data",
                         "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
                     }
                 },
