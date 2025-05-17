@@ -1,11 +1,9 @@
 {
-    "openrpc": "1.0.0-rc1",
+    "openrpc": "1.2.4",
     "info": {
-        "version": "0.1.0-rc0",
         "title": "Applicative Paymaster API",
-        "license": {}
+        "version": "0.1.0-rc0"
     },
-    "servers": [],
     "methods": [
         {
             "name": "paymaster_isAvailable",
@@ -21,210 +19,7 @@
             }
         },
         {
-            "name": "paymaster_buildTypedData",
-            "summary": "Receives the array of calls that the user wishes to make, along with token data. Returns a typed object for the user to sign and, optionally, data about token amount and rate",
-            "params": [
-                {
-                    "name": "user_address",
-                    "description": "The address of the user account",
-                    "required": true,
-                    "schema": {
-                        "title": "Address",
-                        "$ref": "#/components/schemas/ADDRESS"
-                    }
-                },
-                {
-                    "name": "deployment_data",
-                    "description": "The necessary data to deploy an account through the universal deployer contract",
-                    "required": false,
-                    "schema": {
-                        "title": "Deployement data",
-                        "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
-                    }
-                },
-                {
-                    "name": "calls",
-                    "description": "The sequence of calls that the user wishes to perform",
-                    "required": true,
-                    "schema": {
-                        "title": "Calls",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/CALL"
-                        }
-                    }
-                },
-                {
-                    "name": "time_bounds",
-                    "description": "Bounds on valid timestamps",
-                    "required": false,
-                    "schema": {
-                        "title": "Time bounds",
-                        "$ref": "#/components/schemas/TIME_BOUNDS"
-                    }
-                },
-                {
-                    "name": "gas_token_address",
-                    "description": "The address of the token contract that the user wishes use to pay fees with. If not present then the paymaster can allow other flows, such as sponsoring",
-                    "required": false,
-                    "schema": {
-                        "title": "Token address",
-                        "$ref": "#/components/schemas/ADDRESS"
-                    }
-                }
-            ],
-            "result": {
-                "name": "result",
-                "description": "The typed data that the user needs to sign, together with information about the fee",
-                "schema": {
-                    "title": "Typed data and token info",
-                    "type": "object",
-                    "properties": {
-                        "typed_data": {
-                            "title": "Typed data",
-                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
-                        },
-                        "token_amount_and_price": {
-                            "title": "Max token amount and price",
-                            "description": "This object should not be returned if the corresponding request didn't specify a token address",
-                            "type": "object",
-                            "properties": {
-                                "estimated_amount": {
-                                    "title": "Estimated amount",
-                                    "description": "The estimated max token amount that the user is required to allow for the paymaster transaction. This is only an informative field: its semantics is not enforced in the subsequent flow. This information is extractable from the typed data object",
-                                    "$ref": "#/components/schemas/u256"
-                                },
-                                "price_in_strk": {
-                                    "title": "Price in STRK",
-                                    "description": "The exchange rate between the chosen token and STRK that is used in the estimation",
-                                    "$ref": "#/components/schemas/u256"
-                                }
-                            },
-                            "required": [
-                                "estimated_amount",
-                                "price_in_strk"
-                            ]
-                        }
-                    },
-                    "required": [
-                        "typed_data"
-                    ]
-                }
-            },
-            "errors": [
-                {
-                    "$ref": "#/components/errors/INVALID_ADDRESS"
-                },
-                {
-                    "$ref": "#/components/errors/CLASS_HASH_NOT_SUPPORTED"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_DEPLOYMENT_DATA"
-                },
-                {
-                    "$ref": "#/components/errors/TOKEN_NOT_SUPPORTED"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_TIME_BOUNDS"
-                },
-                {
-                    "$ref": "#/components/errors/UNKNOWN_ERROR"
-                },
-                {
-                    "$ref": "#/components/errors/TRANSACTION_EXECUTION_ERROR"
-                }
-            ]
-        },
-        {
-            "name": "paymaster_execute",
-            "summary": "Sends the signed typed data to the paymaster service for execution",
-            "params": [
-                {
-                    "name": "user_address",
-                    "description": "The address of the user account",
-                    "required": true,
-                    "schema": {
-                        "title": "Address",
-                        "$ref": "#/components/schemas/ADDRESS"
-                    }
-                },
-                {
-                    "name": "deployment_data",
-                    "description": "The necessary data to deploy an account through the universal deployer contract",
-                    "required": false,
-                    "schema": {
-                        "title": "Deployement data",
-                        "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
-                    }
-                },
-                {
-                    "name": "typed_data",
-                    "description": "The typed data that was returned by the `paymaster_buildTypedData` endpoint and signed upon by the user",
-                    "required": true,
-                    "schema": {
-                        "title": "Typed data",
-                        "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
-                    }
-                },
-                {
-                    "name": "signature",
-                    "description": "The signature of the user on the typed data",
-                    "required": true,
-                    "schema": {
-                        "title": "Signature",
-                        "$ref": "#/components/schemas/SIGNATURE"
-                    }
-                }
-            ],
-            "result": {
-                "name": "result",
-                "description": "The hash of the transaction broadcasted by the paymaster and the tracking ID corresponding to the user `execute` request",
-                "required": true,
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "tracking_id": {
-                            "title": "Tracking ID",
-                            "description": "A unique identifier used to track an execution request of a user. Its purpose is to track possibly different transactions sent by the paymaster and which are associated with a same user request. Such cases can happen during congestion, where a fee or tip bump may be needed in order for a transaction to enter a block",
-                            "$ref": "#/components/schemas/TRACKING_ID"
-                        },
-                        "transaction_hash": {
-                            "title": "Transaction hash",
-                            "$ref": "#/components/schemas/TRANSACTION_HASH"
-                        }
-                    },
-                    "required": [
-                        "tracking_id",
-                        "transaction_hash"
-                    ]
-                }
-            },
-            "errors": [
-                {
-                    "$ref": "#/components/errors/INVALID_ADDRESS"
-                },
-                {
-                    "$ref": "#/components/errors/CLASS_HASH_NOT_SUPPORTED"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_DEPLOYMENT_DATA"
-                },
-                {
-                    "$ref": "#/components/errors/INVALID_SIGNATURE"
-                },
-                {
-                    "$ref": "#/components/errors/UNKNOWN_ERROR"
-                },
-                {
-                    "$ref": "#/components/errors/MAX_AMOUNT_TOO_LOW"
-                },
-                {
-                    "$ref": "#/components/errors/TRANSACTION_EXECUTION_ERROR"
-                }
-            ]
-        },
-        {
-            "name": "paymaster_getSupportedTokensAndPrices",
+            "name": "paymaster_getSupportedTokens",
             "summary": "Get a list of the tokens that the paymaster supports, together with their prices in STRK",
             "params": [],
             "result": {
@@ -287,11 +82,530 @@
                     "$ref": "#/components/errors/INVALID_ID"
                 }
             ]
+        },
+        {
+            "name": "paymaster_buildTransaction",
+            "summary": "Receives the transaction the user wants to execute. Returns the typed data along with the estimated gas cost and the maximum gas cost suggested to ensure execution",
+            "params": [
+                {
+                    "name": "transaction",
+                    "description": "Transaction to be executed by the paymaster",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/components/schemas/USER_TRANSACTION"
+                    }
+                },
+                {
+                    "name": "parameters",
+                    "description": "Execution parameters to be used when executing the transaction",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/components/schemas/USER_PARAMETERS"
+                    }
+                }
+            ],
+            "result": {
+                "name": "result",
+                "description": "The transaction data required for execution along with an estimation of the fee",
+                "required": true,
+                "schema": {
+                    "type": "object",
+                    "oneOf": [
+                      {
+                        "title": "Deploy Response",
+                        "required": [
+                          "type",
+                          "deployment",
+                          "parameters",
+                          "fee"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["deploy"]
+                          },
+                          "deployment": {
+                            "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          } 
+                        }
+                      },
+                      {
+                        "title": "Invoke Response",
+                        "required": [
+                          "type",
+                          "typed_data",
+                          "parameters",
+                          "fee"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["invoke"]
+                          },
+                          "typed_data": {
+                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          } 
+                        }
+                      },
+                      {
+                        "title": "Deploy and Invoke Response",
+                        "required": [
+                          "type",
+                          "deployment",
+                          "typed_data",
+                          "parameters",
+                          "fee"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["deploy_and_invoke"]
+                          },
+                          "deployment": {
+                            "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                          },
+                          "typed_data": {
+                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          } 
+                        }
+                      }
+                    ]
+                }
+            },
+            "errors": [
+                {
+                    "$ref": "#/components/errors/INVALID_ADDRESS"
+                },
+                {
+                    "$ref": "#/components/errors/CLASS_HASH_NOT_SUPPORTED"
+                },
+                {
+                    "$ref": "#/components/errors/INVALID_DEPLOYMENT_DATA"
+                },
+                {
+                    "$ref": "#/components/errors/TOKEN_NOT_SUPPORTED"
+                },
+                {
+                    "$ref": "#/components/errors/INVALID_TIME_BOUNDS"
+                },
+                {
+                    "$ref": "#/components/errors/UNKNOWN_ERROR"
+                },
+                {
+                    "$ref": "#/components/errors/TRANSACTION_EXECUTION_ERROR"
+                }
+            ]
+        },
+        {
+            "name": "paymaster_executeTransaction",
+            "summary": "Sends the signed typed data to the paymaster service for execution",
+            "params": [
+                {
+                    "name": "transaction",
+                    "required": true,
+                    "schema": {
+                        "title": "Transaction",
+                        "description": "Typed data build by calling paymaster_buildTransaction signed by the user to be executed by the paymaster service",
+                        "$ref": "#/components/schemas/EXECUTABLE_USER_TRANSACTION"
+                    }
+                },
+                {
+                    "name": "parameters",
+                    "description": "Execution parameters to be used when executing the transaction",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/components/schemas/USER_PARAMETERS"
+                    }
+                }
+            ],
+            "result": {
+                "name": "result",
+                "description": "The hash of the transaction broadcasted by the paymaster and the tracking ID corresponding to the user `execute` request",
+                "required": true,
+                "schema": {
+                    "type": "object",
+                    "properties": {
+                        "tracking_id": {
+                            "title": "Tracking ID",
+                            "description": "A unique identifier used to track an execution request of a user. Its purpose is to track possibly different transactions sent by the paymaster and which are associated with a same user request. Such cases can happen during congestion, where a fee or tip bump may be needed in order for a transaction to enter a block",
+                            "$ref": "#/components/schemas/TRACKING_ID"
+                        },
+                        "transaction_hash": {
+                            "title": "Transaction hash",
+                            "$ref": "#/components/schemas/TRANSACTION_HASH"
+                        }
+                    },
+                    "required": [
+                        "tracking_id",
+                        "transaction_hash"
+                    ]
+                }
+            },
+            "errors": [
+                {
+                    "$ref": "#/components/errors/INVALID_ADDRESS"
+                },
+                {
+                    "$ref": "#/components/errors/CLASS_HASH_NOT_SUPPORTED"
+                },
+                {
+                    "$ref": "#/components/errors/INVALID_DEPLOYMENT_DATA"
+                },
+                {
+                    "$ref": "#/components/errors/INVALID_SIGNATURE"
+                },
+                {
+                    "$ref": "#/components/errors/UNKNOWN_ERROR"
+                },
+                {
+                    "$ref": "#/components/errors/MAX_AMOUNT_TOO_LOW"
+                },
+                {
+                    "$ref": "#/components/errors/TRANSACTION_EXECUTION_ERROR"
+                }
+            ]
         }
     ],
     "components": {
-        "contentDescriptors": {},
         "schemas": {
+            "EXECUTABLE_USER_TRANSACTION": {
+                "oneOf": [
+                    {
+                        "title": "Deploy",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "deployment"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "deploy"
+                                ]
+                            },
+                            "deployment": {
+                                "title": "Deployment data",
+                                "description": "Deployment data necessary to deploy the account",
+                                "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Invoke",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "invoke"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "invoke"
+                                ]
+                            },
+                            "invoke": {
+                                "title": "Invoke data",
+                                "description": "Invoke data signed by the user to be executed by the paymaster service",
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_INVOKE"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Deploy and Invoke",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "deployment",
+                            "invoke"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "deploy_and_invoke"
+                                ]
+                            },
+                            "deployment": {
+                                "title": "Deployment data",
+                                "description": "Deployment data necessary to deploy the account",
+                                "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                            },
+                            "invoke": {
+                                "title": "Invoke data",
+                                "description": "Invoke data signed by the user to be executed by the paymaster service",
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_INVOKE"
+                            }
+                        }
+                    }
+                ]
+            },
+            "EXECUTABLE_USER_INVOKE": {
+                "type": "object",
+                "required": [
+                    "user_address",
+                    "typed_data",
+                    "signature"
+                ],
+                "properties": {
+                    "user_address": {
+                        "title": "User Account",
+                        "description": "The address of the user account",
+                        "$ref": "#/components/schemas/ADDRESS"
+                    },
+                    "typed_data": {
+                        "title": "Typed data",
+                        "description": "Typed data returned by the endpoint paymaster_buildTransaction",
+                        "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
+                    },
+                    "signature": {
+                        "title": "Signature",
+                        "description": "Signature of the associated Typed Data",
+                        "$ref": "#/components/schemas/SIGNATURE"
+                    }
+                }
+            },
+            "USER_TRANSACTION": {
+                "oneOf": [
+                    {
+                        "title": "Deploy",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "deployment"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "deploy"
+                                ]
+                            },
+                            "deployment": {
+                                "title": "Deployment data",
+                                "description": "Deployment data necessary to deploy the account",
+                                "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Invoke",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "invoke"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "invoke"
+                                ]
+                            },
+                            "invoke": {
+                                "title": "Invoke data",
+                                "description": "Invoke data to a transaction on behalf of the user",
+                                "$ref": "#/components/schemas/USER_INVOKE"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Deploy and Invoke",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "deployment",
+                            "invoke"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "deploy_and_invoke"
+                                ]
+                            },
+                            "deployment": {
+                                "title": "Deployment data",
+                                "description": "Deployment data necessary to deploy the account",
+                                "$ref": "#/components/schemas/ACCOUNT_DEPLOYMENT_DATA"
+                            },
+                            "invoke": {
+                                "title": "Invoke data",
+                                "description": "Invoke data to a transaction on behalf of the user",
+                                "$ref": "#/components/schemas/USER_INVOKE"
+                            }
+                        }
+                    }
+                ]
+            },
+            "USER_INVOKE": {
+                "title": "Invoke Parameters",
+                "description": "Calls to be executed by the paymaster and the user account address that will be called",
+                "required": [
+                    "user_address",
+                    "calls"
+                ],
+                "properties": {
+                    "user_address": {
+                        "title": "User Account",
+                        "description": "The address of the user account",
+                        "$ref": "#/components/schemas/FELT"
+                    },
+                    "calls": {
+                        "title": "Calls to execute",
+                        "description": "The sequence of calls that the user wishes to perform",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CALL"
+                        }
+                    }
+                }
+            },
+            "USER_PARAMETERS": {
+                "title": "Execution parameters",
+                "description": "Execution parameters to be used when executing the transaction through the paymaster",
+                "oneOf": [
+                    {
+                        "title": "Execution parameters v1",
+                        "required": [
+                            "version",
+                            "fee_mode"
+                        ],
+                        "properties": {
+                            "version": {
+                                "title": "Version",
+                                "description": "Version of the execution parameters which is not tied to the execute from outside version",
+                                "enum": [
+                                    "0x1"
+                                ]
+                            },
+                            "fee_mode": {
+                                "title": "Fee Mode",
+                                "description": "Fee mode to use for the execution",
+                                "$ref": "#/components/schemas/FEE_MODE"
+                            },
+                            "time_bounds": {
+                                "title": "Time Bounds",
+                                "description": "Time constraint on the execution",
+                                "$ref": "#/components/schemas/TIME_BOUNDS"
+                            }
+                        }
+                    }
+                ]
+            },
+            "FEE_MODE": {
+                "title": "Paymaster fee mode",
+                "description": "Specify how the transaction should be paid. Either by the user specifying a gas token or through sponsorship",
+                "oneOf": [
+                    {
+                        "title": "Sponsor transaction",
+                        "description": "Specify that the transaction should be sponsored. This argument does not guaranteed sponsorship and will depend on the paymaster provider",
+                        "required": [
+                            "mode"
+                        ],
+                        "properties": {
+                            "mode": {
+                                "enum": [
+                                    "sponsored"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "title": "Pay transaction in gas token",
+                        "description": "Default fee mode where the transaction is paid by the user in the given gas token",
+                        "required": [
+                            "mode",
+                            "gas_token"
+                        ],
+                        "properties": {
+                            "mode": {
+                                "enum": [
+                                    "default"
+                                ]
+                            },
+                            "gas_token": {
+                                "$ref": "#/components/schemas/FELT"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Pay transaction in gas token with an added tip",
+                        "description": "Fee mode where the transaction is paid by the user in the given gas token and the user can specify a tip",
+                        "required": [
+                            "mode",
+                            "gas_token",
+                            "tip_in_strk"
+                        ],
+                        "properties": {
+                            "mode": {
+                                "enum": [
+                                    "priority"
+                                ]
+                            },
+                            "gas_token": {
+                                "$ref": "#/components/schemas/FELT"
+                            },
+                            "tip_in_strk": {
+                                "$ref": "#/components/schemas/FELT"
+                            }
+                        }
+                    }
+                ]
+            },
+            "FEE_ESTIMATE": {
+                "required": [
+                    "gas_token_price_in_strk",
+                    "estimated_fee_in_strk",
+                    "estimated_fee_in_gas_token",
+                    "suggested_max_fee_in_strk",
+                    "suggested_max_fee_in_gas_token"
+                ],
+                "properties": {
+                    "gas_token_price_in_strk": {
+                        "title": "Price in STRK",
+                        "description": "The exchange rate between the chosen token and STRK that is used in the estimation",
+                        "$ref": "#/components/schemas/FELT"
+                    },
+                    "estimated_fee_in_strk": {
+                        "title": "Estimated fee in STRK",
+                        "$ref": "#/components/schemas/FELT"
+                    },
+                    "estimated_fee_in_gas_token": {
+                        "title": "Estimated fee in gas token",
+                        "$ref": "#/components/schemas/FELT"
+                    },
+                    "suggested_max_fee_in_strk": {
+                        "title": "Suggested max fee in STRK",
+                        "description": "The estimated max token amount that the user is required to allow for the paymaster transaction. This is only an informative field: its semantics is not enforced in the subsequent flow. This information is extractable from the typed data object",
+                        "$ref": "#/components/schemas/FELT"
+                    },
+                    "suggested_max_fee_in_gas_token": {
+                        "title": "Suggested max fee in gas token",
+                        "description": "The estimated max token amount that the user is required to allow for the paymaster transaction. This is only an informative field: its semantics is not enforced in the subsequent flow. This information is extractable from the typed data object",
+                        "$ref": "#/components/schemas/FELT"
+                    }
+                }
+            },
             "ADDRESS": {
                 "title": "Address",
                 "description": "A contract address on Starknet",
@@ -364,10 +678,6 @@
                     {
                         "title": "Typed data V2",
                         "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA_V2"
-                    },
-                    {
-                        "title": "Typed data V3",
-                        "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA_V3"
                     }
                 ]
             },
@@ -420,35 +730,6 @@
                     },
                     "message": {
                         "$ref": "#/components/schemas/OUTSIDE_EXECUTION_MESSAGE_V2"
-                    }
-                },
-                "required": [
-                    "types",
-                    "primaryType",
-                    "domain",
-                    "message"
-                ]
-            },
-            "OUTSIDE_EXECUTION_TYPED_DATA_V3": {
-                "type": "object",
-                "properties": {
-                    "types": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/STARKNET_TYPE"
-                            }
-                        }
-                    },
-                    "primaryType": {
-                        "type": "string"
-                    },
-                    "domain": {
-                        "$ref": "#/components/schemas/STARKNET_DOMAIN"
-                    },
-                    "message": {
-                        "$ref": "#/components/schemas/OUTSIDE_EXECUTION_MESSAGE_V3"
                     }
                 },
                 "required": [
@@ -719,82 +1000,6 @@
                     "Calls"
                 ]
             },
-            "OUTSIDE_EXECUTION_MESSAGE_V3": {
-                "name": "message",
-                "type": "object",
-                "properties": {
-                    "Caller": {
-                        "title": "Caller address",
-                        "description": "The account address of the user",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Nonce": {
-                        "title": "Nonce",
-                        "description": "The nonce used in the outside execution protocol",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Execute After": {
-                        "title": "Minimum timestamp",
-                        "description": "Timestamp after which the outside execution is valid and possible",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Execute Before": {
-                        "title": "Maximum timestamp",
-                        "description": "Timestamp before which the outside execution is valid and possible",
-                        "$ref": "#/components/schemas/FELT"
-                    },
-                    "Calls": {
-                        "title": "Calls",
-                        "description": "The array of calls returned by the paymaster service",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/OUTSIDE_CALL_V2"
-                        }
-                    },
-                    "Fee": {
-                        "title": "Fee",
-                        "description": "The field which describes whether or not a fee transfer is required in the outside execution",
-                        "$ref": "#/components/schemas/FEE_MODE"
-                    }
-                }
-            },
-            "FEE_MODE": {
-                "title": "Fee mode",
-                "description": "Selects how to pay the tx fees",
-                "oneOf": [
-                    {
-                        "title": "Pay fee",
-                        "type": "object",
-                        "properties": {
-                            "Pay Fee": {
-                                "title": "Fee payment info",
-                                "$ref": "#/components/schemas/FEE_PAYMENT_INFO"
-                            }
-                        }
-                    },
-                    {
-                        "title": "No fee",
-                        "type": "object",
-                        "properties": {
-                            "No Fee": {}
-                        }
-                    }
-                ]
-            },
-            "FEE_PAYMENT_INFO": {
-                "title": "Fee payment info",
-                "type": "object",
-                "properties": {
-                    "Fee Amount": {
-                        "title": "Fee amount",
-                        "$ref": "#/components/schemas/u256_AS_FELTS"
-                    },
-                    "Fee Receiver": {
-                        "title": "Receiver",
-                        "$ref": "#/components/schemas/ADDRESS"
-                    }
-                }
-            },
             "u256_AS_FELTS": {
                 "title": "u256 as felts",
                 "description": "A u256 integer represented as two felts `low` and `high`",
@@ -928,14 +1133,15 @@
             "CONTRACT_EXECUTION_ERROR": {
                 "description": "Structured error that can later be processed by wallets or SDKs",
                 "title": "Contract execution error",
-                "$ref": "#/components/schemas/CONTRACT_EXECUTION_ERROR_INNER"
-            },
-            "CONTRACT_EXECUTION_ERROR_INNER": {
-                "description": "Structured error that can later be processed by wallets or sdks",
-                "title": "Contract execution error",
                 "oneOf": [
                     {
                         "type": "object",
+                        "required": [
+                            "contract_address",
+                            "class_hash",
+                            "selector",
+                            "error"
+                        ],
                         "properties": {
                             "contract_address": {
                                 "$ref": "#/components/schemas/ADDRESS"
@@ -949,13 +1155,7 @@
                             "error": {
                                 "$ref": "#/components/schemas/CONTRACT_EXECUTION_ERROR"
                             }
-                        },
-                        "required": [
-                            "contract_address",
-                            "class_hash",
-                            "selector",
-                            "error"
-                        ]
+                        }
                     },
                     {
                         "title": "Error message",
@@ -995,8 +1195,7 @@
                     "properties": {
                         "execution_error": {
                             "title": "revert error",
-                            "description": "The execution trace up to the point of failure",
-                            "$ref": "#/components/schemas/CONTRACT_EXECUTION_ERROR"
+                            "description": "The execution trace up to the point of failure"
                         }
                     },
                     "required": [
