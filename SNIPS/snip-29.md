@@ -158,9 +158,9 @@ This specification may be breaking for existing paymaster services: more precise
 
 From the point of view of the user, the critical juncture during a "full" interaction with a paymaster (i.e. one that involves calling method `buildTypedData` and then `execute`) is the inspection of the typed data returned to them by the `buildTypedData` endpoint. In case the user account is already deployed, the array of calls in this object SHOULD either
 1. Be exactly equal to the array of calls submitted by the user.
-2. The first call is a single `Transfer` call originating from the user account and calling the ERC-20 contract of the requested token, followed by the array of calls submitted by the user.
+2. Be equal to the array of calls submitted by the user with an additional call appended at the end. The last call must be a `Transfer` call originating from the user account and calling the ERC-20 contract of the requested token.
 
-The user SHOULD parse the returned typed data according to option 1. or option 2. In case of option 2. the user should double-check locally that the `Transfer` call involves the chosen ERC-20 contract and decide whether the amount is acceptable or not. Wallets and Dapps that are integrated with a paymaster should make this critical information as clear as possible to the user.
+The user and the SDKs SHOULD parse the returned typed data according to option 1. or option 2. In case of option 2. the user should double-check locally that the `Transfer` call involves the chosen ERC-20 contract and decide whether the amount is acceptable or not. Wallets and Dapps that are integrated with a paymaster should make this critical information as clear as possible to the user.
 
 Note that when using OutsideExecution v3 as described in the Specification, the previous flow does not apply: the information about the fee transfer is part of the typed data but not of the array of calls. The user should only check equality of this array with the one they submitted, which is a better state of affairs for the user.
 
