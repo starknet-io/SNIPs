@@ -38,7 +38,7 @@ In v0.14.0 the maximum block time will be around 4 to 6 seconds. More precisely,
 1. If there are enough available transactions or big enough transactions that can fill a block, then the proposer will close the block earlier than the timeout. 
 2. Otherwise (i.e. in the steady state without congestion), the proposer will propose the block just before timeout `t`.
 
-**Note**: v0.14.0 introduces pre-confirmations (see the corresponding section in this SNIP): this is a transaction status which is available to the user much earlier than block publication, and with finality comparable to (but weaker than) `ACCEPTED_ON_L2`. The latency of pre-confirmation is uncoupled from maximum block time. This means that for the vast majority of use cases, UX is not affected by the decision on the value of `t`.
+**Note**: v0.14.0 introduces pre-confirmations (see the corresponding section in this SNIP): this is a transaction status which is available to the user much earlier than block publication, and with finality comparable to (but weaker than) `ACCEPTED_ON_L2`. The latency of pre-confirmation is independent of maximum block time. This means that for the vast majority of use cases, UX is not affected by the decision on the value of `t`.
 
 #### Tradeoffs around block time
 
@@ -87,11 +87,11 @@ Up until v0.14.0, fees were largely set in order to cover only the "marginal" on
 
 ### Sequencer architecture
 
-There will be three sequencers running Tendermint consensus with threshold 1/2 (i.e. 2 out of 3 is enough to finalize a block).
+There will be three sequencers running Tendermint consensus with threshold 1/2 (i.e. 2 out of 3 are needed to finalize a block, whereas in the standard > 2/3 threshold, we would need all three sequencers to agree or add another sequencer to be able to sustain one possible fault).
 
 Why 1/2 instead of 2/3? The threshold of 1/2 gives the same guarantees as the usual 2/3 threshold, provided that the only possible faults are crash faults and network delays (instead of the more general fault of Byzantine behavior). Because in v0.14.0 the sequencers will be operated by StarkWare, this assumption holds.
 
-All three sequencers participate in block proposals by taking turns, pseudo-randomly.
+All three sequencers participate in block proposals by taking turns.
 
 
 ### Mempool
