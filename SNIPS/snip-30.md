@@ -74,16 +74,15 @@ For a wider discussion on the status, check the release notes.
 This version introduces a fee market on the l2_gas resource, following Ethereum’s EIP 1559. Each block will have three integers associated with it: `l1_gas_price`, `l2_gas_price`, `l1_data_gas_price`, which are the base fee (in FRI) of the corresponding resource. Every transaction defines a bid on each of the three resources in the form of a pair (`max_amount`, `price_per_unit`) and a `tip`. A necessary condition for a transaction to enter a block is that, for each resource, the bid `price_per_unit` is greater than or equal to the corresponding base fee. The tip is a further addition to the `price_per_unit` for l2_gas: the sequencer will receive `(base_fee + tip) * l2_gas_used`. Two remarks:
 
 1. In v0.14.0 the base fee won't be burned.
-2. There will be a minimum base price, denominated in FRI, per unit of `l2_gas`. Concretely, when there is no congestion in the network, the base price per unit of l2_gas will be equal to this minimum.
+2. There will be a minimum base price, denominated in FRI, per unit of `l2_gas`. Concretely, when there is no congestion in the network, the base price per unit of `l2_gas` will be equal to this minimum.
 
 #### Minimum base price
 
-There are ongoing discussions with the community on how to set the minimum base price for `l2_gas`, so at the moment of writing, the exact value is TBD. 
+On the one hand, the minimum base price should be low enough as to keep Starknet among the cheapest existing rollups, having subcent fees on an average transaction. On the other hand, this value should be as close as possible to the marginal cost of the transaction, in terms of offchain and onchain costs.
 
-On the one hand, this value should be low enough as to keep Starknet among the cheapest existing rollups, having subcent fees on an average transaction. On the other hand, this value should be as close as possible to the marginal cost of the transaction, in terms of offchain and onchain costs.
+Up until v0.14.0, fees were largely set in order to cover only the "marginal" onchain cost of verification (here the term "marginal" is in quotes because the verification cost is actually almost a fixed cost of the operation of Starknet). As Starknet moves towards decentralization, fees should cover at least the true offchain marginal cost of the transaction (sequencing and proving cost). The minimum base price in v0.14.0 should go in this direction.
 
-Up until v0.14.0, fees were largely set in order to cover only the "marginal" onchain cost of verification (here the term "marginal" is in quotes because the verification cost is actually almost a fixed cost of the operation of Starknet). As Starknet moves towards decentralization, fees should cover at least the true offchain marginal cost of the transaction (sequencing and proving cost). The minimum base price in v0.14.0 should go in this direction: concretely, we expect a minimum base fee which is roughly twice the current average `l2_gas_price`.
-
+The average price for `l2_gas` on Starknet since Ethereum's Pectra upgrade and until the time of writing, i.e. the window of time between 7/5/25 and 7/7/25, is around 1.43 gFRI (= gigaFRI = 10^9 FRI). For v0.14.0 we propose a minimum base price for `l2_gas` of **3 gFRI**, which is roughly x2 of the current average. Note that before v0.14.0, the price of `l2_gas` was dependent on the gas price in Ethereum, hence impacted by its fluctuations. In v0.14.0, this is not the case: as recalled previously, in absence of congestion on Starknet the price of `l2_gas` will be constantly equal to 3 gFRI.
 
 ### Sequencer architecture
 
