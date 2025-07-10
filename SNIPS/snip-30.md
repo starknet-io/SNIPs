@@ -1,6 +1,6 @@
 # Bitcoin Staking on Starknet
 
-**snip:** 30   
+**snip:** 31   
 **Title:** Bitcoin Staking on Starknet  
 **Author:** @NatanSW   
 Status: Draft  
