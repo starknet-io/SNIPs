@@ -46,38 +46,39 @@ When working with arrays, @param and @return tags should only be applied to the 
 
 ### Example Contract
 ```
-# SPDX-License-Identifier: MIT
-%lang starknet
+// SPDX-License-Identifier: MIT
+#[starknet::contract]
 
-from starkware.cairo.common.cairo_builtins import HashBuiltin
-from starkware.starknet.common.syscalls import get_caller_address
+use starknet::ContractAddress;
+use starknet::get_caller_address;
 
-#
-# @title Simple Savings Account
-# @author Vitalik Buterin - vitalik.buterin@ethereum.org
-# @notice A contract to track users' savings in various pots
-#
+//
+// @title Simple Savings Account
+// @author Vitalik Buterin - vitalik.buterin@ethereum.org
+// @notice A contract to track users' savings in various pots
+//
 
-# @dev Stores the balances of each pot
-# @param address: Address of the user
-# @param pot_index: Index of the pot
-# @return amount: The amount stored
-@storage_var
-func balance(address : felt, pot_index : felt) -> (amount : felt):
-end
+#[storage]
+struct Storage {
+    // @dev Stores the balances of each pot
+    // @param address: Address of the user
+    // @param pot_index: Index of the pot
+    // @return amount: The amount stored
+    balance: LegacyMap<(ContractAddress, u32), u256>
+}
 
-# @dev Updates a user's balance in a specified pot
-# @param amount: Amount to increase the balance by
-# @param pot_index: Index of the pot
-@external
-func increase_balance{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    amount : felt, pot_index : felt
-):
-    let (address) = get_caller_address()
-    let (current) = balance.read(address, pot_index)
-    balance.write(address, pot_index, current + amount)
-    return ()
-end
+#[generate_trait]
+impl SavingsImpl of SavingsTrait {
+    // @dev Updates a user's balance in a specified pot
+    // @param amount: Amount to increase the balance by
+    // @param pot_index: Index of the pot
+    #[external]
+    fn increase_balance(ref self: ContractState, amount: u256, pot_index: u32) {
+        let address = get_caller_address();
+        let current = self.balance.read((address, pot_index));
+        self.balance.write((address, pot_index), current + amount);
+    }
+}
 ```
 
 ## Copyright
