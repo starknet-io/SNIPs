@@ -3,7 +3,7 @@ snip: TBD
 title: Expose Keccak-f[1600] Permutation Syscall
 description: Proposes a syscall to expose the raw Keccak-f[1600] permutation for flexible and gas-efficient cryptographic library development.
 author: wh173-c47 (@wh173-c47)
-discussions-to: TBD
+discussions-to: https://community.starknet.io/t/snip-x-expose-keccak-f-1600-permutation-syscall/115770
 status: Draft
 type: Standards Track
 category: Core
