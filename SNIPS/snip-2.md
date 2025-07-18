@@ -192,7 +192,7 @@ struct Approval {
 ## Implementation
 
 #### Example implementations are available at
-- [OpenZeppelin implementation](https://github.com/OpenZeppelin/cairo-contracts/blob/main/src/token/erc20/erc20.cairo)
+- [OpenZeppelin implementation](https://github.com/OpenZeppelin/cairo-contracts/blob/main/packages/token/src/erc20/erc20.cairo)
 
 
 ## Backwards Compatibility
