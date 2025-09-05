@@ -563,20 +563,20 @@
                     {
                         "type": "string",
                         "enum": [
-                            "Slow",
-                            "Normal",
-                            "Fast"
+                            "slow",
+                            "normal",
+                            "fast"
                         ],
                         "default": "Normal"
                     },
                     {
                         "type": "object",
                         "required": [
-                            "Custom"
+                            "custom"
                         ],
                         "additionalProperties": false,
                         "properties": {
-                            "Custom": {
+                            "custom": {
                                 "type": "integer",
                                 "description": "Custom tip value"
                             }
