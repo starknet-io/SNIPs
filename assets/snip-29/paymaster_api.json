@@ -567,7 +567,7 @@
                             "normal",
                             "fast"
                         ],
-                        "default": "Normal"
+                        "default": "normal"
                     },
                     {
                         "type": "object",
