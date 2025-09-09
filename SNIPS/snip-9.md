@@ -1,7 +1,7 @@
 ---
 snip: 9
 title: Outside execution
-authors: Argent Labs <argent.xyz>, AVNU <avnu.fi>, Braavos <braavos.app>
+authors: Argent Labs <argent.xyz>, AVNU <avnu.fi>, Braavos <braavos.app>, Cartridge <cartridge.gg>
 discussions-to: https://community.starknet.io/t/snip-outside-execution/101058
 status: Review
 type: Standards Track
@@ -114,6 +114,41 @@ The type hash of `OutsideExecution` is then:
 **`H('"OutsideExecution"("Caller":"ContractAddress","Nonce":"felt","Execute After":"u128","Execute Before":"u128","Calls":"Call*")"Call"("To":"ContractAddress","Selector":"selector","Calldata":"felt*")')`**
 
 which results in `0x312b56c05a7965066ddbda31c016d8d05afc305071c0ca3cdc2192c3c2f1f0f`
+
+And the type hash of `Call` is:
+**`H('"Call"("To":"ContractAddress","Selector":"selector","Calldata":"felt*")')`**
+
+which results in `0x3635c7f2a7ba93844c0d064e18e487f35ab90f7c39d00f186a781fc3f0c2ca9`
+
+#### 2.3. Version 3
+
+In [domain_separator](https://github.com/starknet-io/SNIPs/blob/main/SNIPS/snip-12.md#domain-separator):
+- `version` is set to `3`
+
+In `OutsideExecution` type definition:
+
+- **Nonce**: changed to type `(felt,u128)` to support nonce channels
+
+So the version `3` type definition to sign is:
+```rust
+  OutsideExecution: [
+    { name: "Caller", type: "ContractAddress" },
+    { name: "Nonce", type: "(felt,u128)" },
+    { name: "Execute After", type: "u128" },
+    { name: "Execute Before", type: "u128" },
+    { name: "Calls", type: "Call*" },
+  ],
+  Call: [
+    { name: "To", type: "ContractAddress" },
+    { name: "Selector", type: "selector" },
+    { name: "Calldata", type: "felt*" },
+  ]
+```
+The type hash of `OutsideExecution` is then:
+
+**`H('"OutsideExecution"("Caller":"ContractAddress","Nonce":"(felt,u128)","Execute After":"u128","Execute Before":"u128","Calls":"Call*")"Call"("To":"ContractAddress","Selector":"selector","Calldata":"felt*")')`**
+
+which results in `0x012371bfd23fb68f7214682d0c7b20a411620eb73288435e6623489325129f84`
 
 And the type hash of `Call` is:
 **`H('"Call"("To":"ContractAddress","Selector":"selector","Calldata":"felt*")')`**
