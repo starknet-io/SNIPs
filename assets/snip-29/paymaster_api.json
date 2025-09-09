@@ -1105,8 +1105,8 @@
                         "$ref": "#/components/schemas/FELT"
                     },
                     "salt": {
-                        "title": "Class hash",
-                        "description": "The hash of the deployed contract's class",
+                        "title": "Salt",
+                        "description": "The salt used for the contract address calculation",
                         "$ref": "#/components/schemas/FELT"
                     },
                     "calldata": {
