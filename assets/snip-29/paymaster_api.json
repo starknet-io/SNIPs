@@ -527,6 +527,9 @@
                                 "enum": [
                                     "sponsored"
                                 ]
+                            },
+                            "tip": {
+                                "$ref": "#/components/schemas/TIP_PRIORITY"
                             }
                         }
                     },
@@ -545,28 +548,37 @@
                             },
                             "gas_token": {
                                 "$ref": "#/components/schemas/FELT"
+                            },
+                            "tip": {
+                                "$ref": "#/components/schemas/TIP_PRIORITY"
                             }
                         }
+                    }
+                ]
+            },
+            "TIP_PRIORITY": {
+                "title": "Tip priority",
+                "description": "Relative tip priority or a custom tip value (u64)",
+                "oneOf": [
+                    {
+                        "type": "string",
+                        "enum": [
+                            "slow",
+                            "normal",
+                            "fast"
+                        ],
+                        "default": "normal"
                     },
                     {
-                        "title": "Pay transaction in gas token with an added tip",
-                        "description": "Fee mode where the transaction is paid by the user in the given gas token and the user can specify a tip",
+                        "type": "object",
                         "required": [
-                            "mode",
-                            "gas_token",
-                            "tip_in_strk"
+                            "custom"
                         ],
+                        "additionalProperties": false,
                         "properties": {
-                            "mode": {
-                                "enum": [
-                                    "priority"
-                                ]
-                            },
-                            "gas_token": {
-                                "$ref": "#/components/schemas/FELT"
-                            },
-                            "tip_in_strk": {
-                                "$ref": "#/components/schemas/FELT"
+                            "custom": {
+                                "type": "integer",
+                                "description": "Custom tip value"
                             }
                         }
                     }
