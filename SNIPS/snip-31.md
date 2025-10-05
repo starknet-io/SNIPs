@@ -5,7 +5,7 @@
 **Author:** @NatanSW   
 Status: Draft  
 Type: Standards Track  
-Creation date: June 25rd, 2025
+Creation date: June 25th, 2025
 Github link: 
 
 # Abstract
