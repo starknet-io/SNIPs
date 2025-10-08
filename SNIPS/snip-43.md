@@ -3,7 +3,7 @@ snip: 43
 title: Unified Bech32m Addresses and Viewing Keys for Starknet
 description: Specify Bech32m Unified Addresses (UA), shielded/public receivers, and viewing/detection keys to enable a multi‑asset shielded pool and privacy‑by‑default UX.
 author: <Abdel> (@AbdelStark)
-discussions-to: https://community.starknet.io/
+discussions-to: https://community.starknet.io/t/snip-43-unified-bech32m-addresses-and-viewing-keys-for-starknet/116001
 status: Draft
 type: Standards Track
 category: Interface
