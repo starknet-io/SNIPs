@@ -3,7 +3,7 @@ snip: 42
 title: Bech32m Address Encoding for Starknet
 description: Introduce Bech32m-encoded, checksummed, HRP‑scoped addresses (public and shielded) to improve UX, safety, and enable privacy primitives.
 author: <Abdel> (@AbdelStark)
-discussions-to: https://community.starknet.io/
+discussions-to: https://community.starknet.io/t/snip-42-bech32m-address-encoding-for-starknet/116000
 status: Draft
 type: Standards Track
 category: Interface
