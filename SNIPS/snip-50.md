@@ -1,5 +1,5 @@
 ---
-snip: $SNIP_ID
+snip: 50
 title: Introspection
 description: Introspection and serialization of onchain data
 author: Bengineer <@bengineer42>, Glihm <@glihm>, Kronosapiens <@kronosapiens>
@@ -279,13 +279,13 @@ The following two graphics summarize the core database concepts which will be re
 
 The first graphic shows various terms describing _elements of a table_, highlighting the relationships between concepts like rows, records, columns, and fields:
 
-![Table Elements](../assets/snip-x/table-elements.png)
+![Table Elements](../assets/snip-50/table-elements.png)
 
 #### Table Operations
 
 The second graphic shows various terms describing _operations on a table_, highligting the relationships between names, types, and sets:
 
-![Table Operations](../assets/snip-x/table-operations.png)
+![Table Operations](../assets/snip-50/table-operations.png)
 
 ### Type Events
 
