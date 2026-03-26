@@ -4,7 +4,7 @@ title: Introspection
 description: Introspection and serialization of onchain data
 author: Bengineer <@bengineer42>, Glihm <@glihm>, Kronosapiens <@kronosapiens>
 discussions-to: The url pointing to the official discussion thread
-status: Draft
+status: Review
 type: Standards Track
 category: SRC
 created: 2026-02-02
