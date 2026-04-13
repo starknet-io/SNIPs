@@ -8,7 +8,7 @@
 
 ## **author:** Ohad Barta, ohad@starkware.co
 
-## **discussions-to:**
+## **discussions-to:**  https://community.starknet.io/t/snip-35-automatically-adjust-base-fee-to-strk-price/116168
 
 ## **status:** Draft
 
