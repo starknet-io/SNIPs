@@ -3,7 +3,7 @@ snip: 38
 title: strkBTC — Bitcoin on Starknet
 description: A federated Bitcoin wrapper on Starknet with a roadmap toward trust-minimized verification
 author: Henri Lieutaud (henri@starknet.org)
-discussions-to: https://community.starknet.io/
+discussions-to: https://community.starknet.io/t/snip-38-strkbtc-bitcoin-on-starknet/116174
 status: Draft
 type: Standards Track
 category: Core
