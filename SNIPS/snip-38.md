@@ -39,10 +39,7 @@ Members act with full independence and autonomy, free from influence by third pa
 | 3   | NEAR      |
 | 4   | UTXO      |
 | 5   | Luganodes |
-<<<<<<< SNIP_38-strkBTC
 | 6   | OneKey    |
-=======
->>>>>>> main
 
 _Additional members may be added beyond the minimum of five. Geographic and organizational diversity requirements apply._
 
