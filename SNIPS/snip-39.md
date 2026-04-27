@@ -3,7 +3,7 @@ snip: 39
 title: strkBTC as a Stakable Token on Starknet
 description: Approve strkBTC as an eligible BTC wrapper for staking on Starknet under the framework established in SNIP-31
 author: Natan Granit (natan@starkware.co), Robert Kodra (robert@starknet.org)
-discussions-to: The url pointing to the official discussion thread
+discussions-to: https://community.starknet.io/t/snip-39-strkbtc-as-a-stakable-token-on-starknet/116180
 status: Draft
 type: Meta
 created: 2026-04-22
