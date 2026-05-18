@@ -1,14 +1,14 @@
 ---
 
-## **snip:** SNIP-
+## **snip:** SNIP-35
 
-## **Title:** Meaningful separation of tip from the base fee
+## **Title:** Automatically adjust base fee to STRK price
 
-## **description:** Meaningful separation of tip from the base fee
+## **description:** Adjust the base fee of Starknet to the STRK price
 
 ## **author:** Ohad Barta, ohad@starkware.co
 
-## **discussions-to:**  https://community.starknet.io/t/snip-35-automatically-adjust-base-fee-to-strk-price/116168
+## **discussions-to:**
 
 ## **status:** Draft
 
@@ -18,88 +18,92 @@
 
 ## **created:**
 
-## **Simple Summary**
+## **Overview**
 
-This SNIP proposes significantly reducing Starknet’s base fee and instead relying on the transaction tip to cover the marginal cost of execution. The document outlines the motivation, surveys possible designs, and specifies a concrete mechanism that improves fee predictability, preserves incentives, and aligns better with long‑term decentralization goals.
+This SNIP proposes to reshape Starknet’s base fee protocol so that it is automatically adjusted based on STRK/USD price (in addition to the congestion-based adjustment that exists today). This feature will replace the manual adjustments that have been taking place since early 2026\.
+
+The document outlines the motivation, surveys possible designs, and specifies a concrete mechanism that improves fee predictability, preserves incentives, and aligns better with long‑term decentralization goals.
 
 ## **Motivation**
 
-Currently, Starknet’s base fee covers sequencer costs, and StarkWare—operating the sequencer today—receives the full base fee. In addition, except under congestion, the base fee is effectively constant and denominated in STRK. This design has two major drawbacks:
+Currently, Starknet’s base fee is a static configuration, aimed to cover sequencer costs**.** Without manual adjustments, when the STRK price rises, application fees increase in USD terms even though dApp revenues typically do not. This complicates budgeting for builders, whose revenues are usually denominated in USDC or other non‑STRK assets. Conversely, when STRK price drops, sequencers face reduced USD‑denominated revenue despite largely fixed operating costs.
 
-**Unpredictable prices.** When the STRK price rises, application fees increase in USD terms even though dApp revenues typically do not. This complicates budgeting for builders, whose revenues are usually denominated in USDC or other non‑STRK assets. Conversely, when STRK price drops, sequencers face reduced USD‑denominated revenue despite largely fixed operating costs.
+While manual adjustments to the base fee have been introduced to counter that, these adjustments are infrequent, fully trusted, and might come at irregular intervals. They are much weaker than an on-the-fly mechanism that makes the fee rate depend on the current price. 
 
-**Future incompatibility.** Allocating the base fee to the block producer deviates from EIP‑1559 as implemented on Ethereum, where the base fee is burned rather than paid to the proposer. This deviation is problematic long‑term: if base fees are paid directly to sequencers, a small set of colluding sequencers can simulate congestion and extract additional value from users at no cost to the network. The 1559 mechanism relies on the base fee being neutral with respect to proposer incentives; paying it to sequencers breaks this property.
+This SNIP only concerns itself with the L2gas price. Other fee components (L1gas, L1\_data\_gas) are meant to be a cost-recovery component with ETH settlement and work with a similar motivation according to a STRK/ETH oracle. 
 
 ## **Rationale**
 
-At a high level, there are three plausible approaches to addressing these issues. All of them share a common element: introducing a STRK/USD (or STRK/USDC) price oracle into Apollo, and splitting fees into two conceptual components:
+Several approaches can address these issues, but all share a core requirement: integrating a STRK/USD price oracle into the Apollo nodes. This allows the protocol to dynamically calculate Feeactual \- a fee component that covers the marginal sequencing and proving costs. Since these operational costs are USD-denominated, this fee component must remain stable in USD terms, meaning its STRK value must change with the STRK/USD price.
 
-* **fee_dividend** – a network‑aligned fee component intended for burning, redistribution, treasury funding, staking rewards, or similar mechanisms. This fee should be significantly lower than today’s base fee (initial suggestion: \~2 gFri/L2Gas) and should increase with congestion, reflecting network demand. The exact handling of this component is explicitly out of scope for this SNIP.  
-* **fee_sequencer** – a cost‑recovery component intended to cover marginal sequencing and proving costs, which are largely USD‑denominated. This component should be stable in USD terms and therefore vary with the STRK price.
+The key question is how to map these concepts to the Starknet protocol semantics and Apollo’s implementation.
 
-The key question is how to map these concepts onto Starknet protocol semantics and Apollo’s implementation.
+We review here two options:
 
-### **Option 1: Base fee \= fee_dividend \+ fee_sequencer**
+### **Option 1: Dynamic minimal tip**
 
-Under this option, the protocol base fee is defined as the sum of fee_dividend and fee_sequencer. Only fee_sequencer is paid to the sequencer; fee_dividend is handled according to a future mechanism (burn, redistribution, etc.). The existing `tip` field remains an explicit priority fee that always goes to the sequencer. Any base fee specified above fee_dividend \+ fee_sequencer is not charged to the user.
+In this model, sequencers would only accept transactions if the user-provided tip covers the STRK-denominated Feeactual.
 
-**Downside.** Because the base fee must be agreed upon by all sequencers, determining “how many USD cover execution costs” becomes a governance problem rather than an economic decision made independently by each node. Over time, this prevents individual sequencers from immediately passing efficiency gains (e.g., better proving stacks) on to users via lower fees. It also requires global agreement on a STRK/USD oracle, complicating consensus.
+**Upsides:** Maintains a clean EIP-1559 separation and avoids hard-coding "costs" into the consensus, allowing sequencers to adjust tips freely based on their own optimizations.
 
-### **Option 2: Base fee \= fee_dividend, tip covers costs implicitly**
+**Downsides:**
 
-Here, the base fee is reduced to fee_dividend  only. Sequencers are expected to accept transactions only if the tip is large enough to cover execution costs, meaning the minimal accepted tip implicitly tracks STRK price.
+*  **Lack of Signal:** Users have no on-chain reference for the current Feeactual. To ensure inclusion, rational users will "over-tip" to hedge against price swings, causing the market rate to ratchet upward regardless of actual congestion.  
+* **Integration Burden:** This is a de facto breaking change, as many Starknet integrations use zero tip by default. Moving the cost-recovery to the tip would require an ecosystem-wide update to SDKs and wallets.
 
-**Downside.** Users have no reliable on‑chain signal for the required fee_sequencer. Rational users who strongly prefer inclusion will slightly outbid the currently observed minimal tip to hedge against price movement. If all users behave this way, the minimal accepted tip ratchets upward over time even without congestion, leading to persistent overpayment.
 
-### **Option 3 (Recommended): Explicit fee_sequencer publication**
+### **Option 2 (recommended): Dynamic minimal base fee**
 
-This option refines Option 2 by adding explicit, user‑friendly discovery of fee_sequencer with minimal behavioral changes:
+Under this option, the protocol's minimal base fee (the fee when there is no congestion), is defined as Feeactual. The existing `tip` field keeps its original function as an explicit priority fee. As usual, if the user specifies a value higher than the base fee, they are only charged the base fee.
 
-* Each block proposer publishes an expected fee_sequencer value. The proposer can technically choose any value here.   
-* Proposers that follow this SNIP will change their fee_sequencer slowly and predictably between blocks.
+The upside is that this is a gentle modification to the current protocol: as before, tip=0 is expected to work if there is no congestion. Furthermore, there is no need for exploration mechanisms \- users are safe to sign on a fee higher than the base fee, and they will only be charged the base fee.
 
-Let `Feemin` denote the minimal tip among transactions included in a block. User behavior is then:
+The specification below suggests a concrete way to "agree" on a specific STRK price (recall that each sequencer may use a different oracle). It relies on an aggregate of sequencer-reported values, ensuring that a dishonest minority cannot manipulate the Feeactual.
 
-* If `Feemin ≤ fee_sequencer × MaxPriceRateChange` (where `MaxPriceRateChange` is slightly above 1), there is no congestion. Users can submit transactions with a tip of `MaxPriceRateChange × min(Feemin, fee_sequencer)` and expect inclusion.  
-* If `Feemin` is significantly larger than `fee_sequencer`, congestion is present and users behave as they do today.
+Under this model, Feeactual acts as a dynamic floor for the base fee. While the existing EIP-1559 style mechanism may raise the base fee higher during periods of congestion, it will never drop below Feeactual. As congestion subsides, the fee will decay until it reaches this price-adjusted floor, ensuring sequencers always cover their marginal USD-denominated costs.
 
-When prices are stable, fee_sequencer remains stable (especially across blocks proposed by the same sequencer), ensuring predictable USD‑denominated fees.
+**Specification**
 
-## **Specification**
+### **Feeactual derivation (enforced by consensus)**
 
-* The first transaction in each block publishes `fee_sequencer` via an event.  
-* `fee_sequencer` is not consensus‑enforced. Sequencers may choose any value, but large deviations from the recommended derivation make it difficult for users to price transactions correctly, disincentivizing irrational behavior.
+`Feeactual` of the current block will be defined as the median of values published over the last 10 blocks (by the last 10 proposers \- and excluding the current one). The median here will be defined as the average of the 5th and 6th values published, rounded down to the nearest Fri unit (1 Fri equals 10\-18 STRK). We denote these values by Feeproposal. Think of it as the “recommended fee for the sequencer” going forward. Feeproposal is part of the proposal, and is available for nodes participating in the consensus.  Feeproposal  isn’t affecting the block hash. 
 
-### **Recommended fee_sequencer derivation**
+**Initiation:** For the first 10 blocks after this SNIP is implemented, `Feeactual` will be the base fee used at the last block before this SNIP was implemented.
 
-Let:
+### **Feeproposal derivation**
 
-* `Tp` be the tip implied by the latest STRK price tick and the configured cost per L2Gas.  
-* `Tp' = Tp / 1.01`.  
-* `Tprev` be the median `fee_sequencer` published in the last 10 blocks.
+Let `Feetarget` be the fee target according to the latest STRK price tick. Explicitly, this is the configured USD cost per L2Gas defined locally within the node, divided by the most recent STRK price. Note: the protocol doesn’t assume `Feetarget` is the same for all nodes, and some deviations are expected. 
 
-On bootstrap or consensus join, an Apollo node initializes `Tp'` as the median of the last 10 published values.
+Let `Feeactual` be the fee that was chosen for the current block (by the previous 10 proposers).
 
-Define:
+The consensus will enforce:
 
-* If `Tp' > Tprev`:  
-  * `fee_sequencer = min(Tp', Tprev × 1.002)`  
-* Else:  
-  * `fee_sequencer = max(Tp', Tprev / 1.002)`
+`Feeactual/1.002 <=` Feeproposal `<= Feeactual × 1.002`
 
-If the node lacks a current STRK price, it reuses the previous proposer’s price.
+Each sequencer may choose any Feeproposal that satisfies this condition, but honest sequencers will work as follows:
 
-**Rationale.** Using a rolling median over multiple blocks smooths out variance when proposers are decentralized and not all sequencers follow the recommendation. Some sequencers may rationally deviate due to different cost structures; the median dampens these effects and improves predictability for users.
+If `Feetarget > Feeactual`
 
-### **User guidance**
+* Feeproposal `= min(Feetarget, Feeactual × 1.002)`
 
-This mechanism guarantees the following:
+Else:
 
-* If `Feemin > fee_sequencer × 1.02`, congestion exists and fee setting follows current practices.  
-* If `fee_sequencer ≤ Feemin ≤ fee_sequencer × 1.02`, the sequencer charges fees consistent with its published value, and there is no strong congestion. Users can submit transactions with a tip of `fee_sequencer × 1.02` and expect inclusion.  
-* If `Feemin < fee_sequencer`, the proposer is not following this SNIP. Users should ignore the published `fee_sequencer` and rely on `Feemin`
+* Feeproposal `= max(Feetarget, Feeactual/1.002)`
 
-The constants are chosen intentionally. In the event of a sharp STRK price drop (requiring higher STRK‑denominated tips), these constants will dictate `fee_sequencer` increase at a rate of \~1.2% per minute:  With a 10‑block median, price-step will happen every 5 blocks. As the step size suggested here is 0.2%, it means that  there would be at most 0.2% increase every \~5 blocks, translating to  \~1.2% per minute. Users who pay 2% above the published `fee_sequencer` can be confident of inclusion for \~100 seconds in the absence of congestion.
+If an oracle fails (leaving `Feetarget` undefined), the sequencers will report Feeproposal \= `Feeactual` effectively "freezing" the base fee until the oracle returns.
+
+**Rationale.** In this design, the fee a sequencer gets, `Feeactual`, is determined by the previous 10 sequencers, reducing their motivation to lie and push the price up. Because `Feeactual` is the median of the last 10 `Feeproposal` values, it is resistant to rapid spikes. Even if consecutive sequencers propose the maximum allowed increase \+0.2%, the median (the average of the 5th and 6th values) will not shift until a majority of the 10-block window contains new values. Specifically, if a price trend shifts, it takes 6 blocks for the median to "move" from its previous position. This creates a safety buffer where the `Feeactual` effectively adjusts at a maximum rate of 0.2% approximately every 5 blocks, preventing a single malicious sequencer or a brief price spike from causing fee volatility.
+
+This ensures that the base fee only adjusts when a majority of the network agrees on a price trend, providing high predictability for users and preventing a minority (up to 50%) of sequencers from manipulating the fee.
+
+Additionally, the price and the configured price per L2gas in USD are not hard-coded into the check. This means that the protocol is:
+
+1. Resilient against oracle failures  
+2. Allowing changes in the expected fee in USD per L2gas without a version upgrade \- the price will slowly align to the new expected fee payment once the majority of the network switches configuration. 
+
+**User guidance**
+
+Transaction submission remains largely unchanged. Because users are only charged the actual base fee regardless of their `max_fee` setting, they can safely "overshoot" the base fee to protect against fluctuations. However, since this mechanism increases the variance of the base fee, SDKs and users are advised to include a slightly larger buffer in their fee estimates to ensure inclusion during price-adjustment periods.
 
 ## **Implementation**
 
@@ -107,28 +111,13 @@ This SNIP is published for early discussion and feedback. Implementation has not
 
 ## **Backwards Compatibility**
 
-This SNIP significantly changes transaction fee semantics, but the intent is to preserve existing client behavior via SDK updates. The following workflow should continue to function unchanged:
-
-```
-current_base_fee = estimate_fee(current_block)
-current_tip = estimate_tip(current block)
-calculate_fee_for_transaction(current_base_fee, current_tip)
-```
-
-SDKs will update the `estimate_tip` endpoint to incorporate `fee_sequencer`  and its logic described above, rather than returning the minimal observed tip. A new endpoint, `minimum_tip`, will expose the raw minimal value.
-
-Clients that upgrade to newer SDK versions will thus be compatible with this SNIP. Even without explicit SDK upgrade, this code is expected to continue and function ok, as current SDKs either take significant buffer on top of minimal fee ([starknet.js](http://starknet.js)) or return the median tip and not the minimal one ([starknet.py](http://starknet.py) and several others). This means that once enough clients upgrade to be compatible with this SNIP, existing clients will work just fine without upgrading their SDK. 
-
-The following patterns to sending transactions will break, though:
-
-* Clients that always submit transactions with `tip = 0`; such transactions will no longer be accepted. Notice that such logics will not function also today when there is congestion (happened a couple of times since 0.14 launch).   
-* Asynchronously signed transactions (e.g., multisig flows over long time spans) may need to specify larger tips to account for STRK price movement over hours. Notice that these transactions are sent very infrequently. 
+* This SNIP will increase base\_fee variance. While not breaking any interface syntactically, users will need to use higher margins for the base fee they use in the transaction submission. 
 
 ## **Security Considerations**
 
-When the Starknet block proposal will be decentralized, sequencers will have degrees of freedom to set arbitrary `fee_sequencer.` This is not treated as a major security concern compared to moving forward without this SNIP, as proposers will also be able to choose whatever tip they want in general, adjust the minimum tip for current demand and their economical model. 
+Once Starknet block proposal is decentralized, a majority of the sequencers can collude, and it will have degrees of freedom to deviate from the recommended price. This is not treated as a major security concern, as this deviation can’t be done by a single sequencer and will require a majority of the sequencers.
 
-## **Copyright**
+**Copyright**
 
 Copyright and related rights waived via [MIT](https://chatgpt.com/LICENSE).
 
