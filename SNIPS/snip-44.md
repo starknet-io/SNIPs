@@ -431,6 +431,10 @@ representation.
 
 ## Test Cases
 
+A machine-readable copy of the vectors in this section is available in
+[`assets/snip-44/test-vectors.json`](../assets/snip-44/test-vectors.json).
+The values below and in that file are normative and MUST remain identical.
+
 The following vectors use this common context:
 
 ```text
