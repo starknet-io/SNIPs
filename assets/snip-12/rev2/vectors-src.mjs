@@ -152,6 +152,15 @@ export const VALID = [
     ),
   },
   {
+    name: 'single-variant-enum',
+    description: 'A type whose only field type is parenthesised is a one-variant enum, not a tuple; nested in a struct it is valid.',
+    typed_data: doc(
+      { Wrapper: [{ name: 'pair', type: 'Pair' }], Pair: [{ name: 'Values', type: '(felt,u128)' }] },
+      'Wrapper',
+      { pair: { Values: [1, 2] } },
+    ),
+  },
+  {
     name: 'domain-verifying-contract',
     description: 'Optional verifyingContract in the domain.',
     typed_data: doc({ Ping: [{ name: 'n', type: 'u8' }] }, 'Ping', { n: 1 }, { ...DOMAIN, verifyingContract: '0x0777' }, [...DOMAIN_TYPE, { name: 'verifyingContract', type: 'ContractAddress' }]),
@@ -195,7 +204,10 @@ export const INVALID = [
   { name: 'shortstring-as-number', reason: 'shortstring values must be JSON strings', typed_data: doc({ T: [{ name: 's', type: 'shortstring' }] }, 'T', { s: 2 }) },
   { name: 'bool-as-string', reason: 'bool must be a JSON boolean', typed_data: doc({ T: [{ name: 'b', type: 'bool' }] }, 'T', { b: 'true' }) },
   { name: 'reserved-type-name', reason: 'user types cannot use a basic type name', typed_data: doc({ u256: [{ name: 'low', type: 'u128' }], T: [{ name: 'a', type: 'u256' }] }, 'T', { a: { low: 1 } }) },
-  { name: 'tuple-field-type', reason: 'tuples are not a SNIP-12 type; model them as a struct', typed_data: doc({ T: [{ name: 'n', type: '(felt,u128)' }] }, 'T', { n: [1, 2] }) },
+  { name: 'tuple-as-primary-type', reason: 'an all-parenthesised type is an enum, and primaryType must be a struct', typed_data: doc({ T: [{ name: 'n', type: '(felt,u128)' }] }, 'T', { n: [1, 2] }) },
+  { name: 'tuple-next-to-struct-field', reason: 'a type mixes struct fields and enum variants', typed_data: doc({ T: [{ name: 'n', type: '(felt,u128)' }, { name: 'm', type: 'u8' }] }, 'T', { n: [1, 2], m: 1 }) },
+  { name: 'enum-as-primary-type', reason: 'primaryType must be a struct', typed_data: doc(enumTypes, 'Fee Mode', { 'No Fee': [] }) },
+  { name: 'contains-on-non-merkletree', reason: '"contains" is only allowed on merkletree fields', typed_data: doc({ P: [{ name: 'n', type: 'u8', contains: 'NoSuchType' }] }, 'P', { n: 1 }) },
   { name: 'duplicate-field-name', reason: 'field names within a type must be unique', typed_data: doc({ T: [{ name: 'a', type: 'u8' }, { name: 'a', type: 'u8' }] }, 'T', { a: 1 }) },
   { name: 'name-with-quote', reason: 'names cannot contain the double quote character', typed_data: doc({ T: [{ name: 'a"b', type: 'u8' }] }, 'T', { 'a"b': 1 }) },
   { name: 'name-with-colon', reason: 'names cannot contain the colon character', typed_data: doc({ T: [{ name: 'a:b', type: 'u8' }] }, 'T', { 'a:b': 1 }) },

@@ -478,7 +478,7 @@ Revision `2` fixes these by specification rather than by patching libraries, bec
 | `string` | `hash_array(serialise(x))` | Cairo `ByteArray` serialisation of the UTF-8 bytes, spelled out |
 | `selector` | hex passthrough in the reference implementation | always `starknet_keccak(name)`; value must be an identifier |
 | Names | JSON escaping | printable ASCII without `"` `\` `(` `)` `,` `:` `*`; escaping is quoting |
-| Tuples, `Option` | undefined | not allowed; model as structs |
+| Tuples, `Option` | undefined | not expressible: a type whose field types are all parenthesised is an enum; model tuple-like data as structs |
 | Nested arrays | undefined | allowed (`T**`) |
 | Merkle tree | undefined | defined (sorted pairs, `hash_array`, odd node promoted) |
 | Validation | type-name rules only | full MUST-reject list, including undeclared and missing message fields |
@@ -578,7 +578,7 @@ Integers are never parsed from a `shortstring`, and a `shortstring` is never par
 
 #### User-defined structs
 
-Declared as in revision `1`: an array of `{ "name", "type" }` fields. A field type is a basic type, a user-defined type, or either followed by one or more `*` for arrays. A `merkletree` field additionally carries `"contains"`, the name of the user-defined struct or enum used for its leaves.
+Declared as in revision `1`: an array of `{ "name", "type" }` fields. A field type is a basic type, a user-defined type, or either followed by one or more `*` for arrays. A `merkletree` field additionally carries `"contains"`, the name of the user-defined struct or enum used for its leaves. No other field may carry `"contains"`.
 
 ```
 Enc[x] = hash_array(type_hash(T), Enc[field_1], ..., Enc[field_n])
@@ -588,7 +588,7 @@ where the field encodings are concatenated in declaration order (a `u256` field 
 
 #### User-defined enums
 
-Declared as an array of variants, each `{ "name", "type" }` where `type` is a parenthesised, comma-separated list of parameter types: `"()"`, `"(u128)"`, `"(u128,Other Struct*)"`. A type is an enum if and only if every field type is parenthesised; mixing is not allowed. Whitespace inside the parentheses is ignored.
+Declared as an array of variants, each `{ "name", "type" }` where `type` is a parenthesised, comma-separated list of parameter types: `"()"`, `"(u128)"`, `"(u128,Other Struct*)"`. A type is an enum if and only if every field type is parenthesised. There is no tuple type: a type whose field types are all parenthesised is an enum with one variant per field, and a type with some parenthesised and some plain field types is malformed and MUST be rejected. Tuple-like data is modelled as a struct. Whitespace inside the parentheses is ignored.
 
 An enum is referenced from a struct or from another enum by its name, exactly like a struct: `{ "name": "Fee", "type": "Fee Mode" }`. The revision `1` form `"type": "enum", "contains": ...` is not valid in revision `2`.
 
@@ -659,12 +659,12 @@ A conforming implementation MUST reject a request, before signing or hashing, wh
 1. `domain.revision` is not the JSON string `"2"`.
 2. `types.StarknetDomain` is not one of the four definitions above, or the `domain` object does not have exactly the declared fields.
 3. `domain.chainId` is not the chain the wallet is connected to (wallets).
-4. `primaryType` is `StarknetDomain` or is not declared in `types`.
+4. `primaryType` is `StarknetDomain`, is not declared in `types`, or is not a struct.
 5. A type name or field name violates the naming rules, a type name is a basic type name, or a type declares two fields with the same name.
-6. A field or variant parameter references a type that is neither basic nor declared; a `merkletree` field lacks `contains`, or `contains` is not a user-defined struct or enum.
-7. A field type is a tuple, or a type mixes struct fields and enum variants.
+6. A field or variant parameter references a type that is neither basic nor declared; a `merkletree` field lacks `contains`, or its `contains` is not a user-defined struct or enum; or a field that is not a `merkletree` carries `contains`.
+7. A type mixes struct fields and enum variants (some field types parenthesised, some not).
 8. A declared type (other than `StarknetDomain`) is not reachable from `primaryType`, or type references form a cycle.
-9. The `message`, or any nested struct value, has a field that is not declared or lacks a declared field.
+9. The `message`, or any nested struct value, has an undeclared field or lacks a declared field.
 10. A value has the wrong JSON kind, is outside its type's range, is not a valid `selector` identifier, or is a `shortstring` longer than 31 bytes or containing non-printable or non-ASCII characters.
 11. An enum value does not have exactly one key, names an undeclared variant, or supplies the wrong number of parameters.
 12. A `merkletree` value is empty.
@@ -673,9 +673,11 @@ Implementations MAY additionally impose limits on document size, array length an
 
 ### Wallet requirements
 
-- The wallet MUST display every field of the `message`, including every merkle leaf, and MUST NOT display anything that is not part of the hashed data. Two documents that display differently MUST hash differently.
+- The wallet MUST display every field of the `message`, including every merkle leaf.
+- The wallet MUST NOT display anything that is not part of the hashed data.
 - `selector`, `ContractAddress`, `ClassHash`, `timestamp`, `TokenAmount` and `NftId` values SHOULD be rendered in a user-meaningful form (entrypoint name, resolved name or checksummed address, date and time, token symbol and decimals).
 - The wallet MUST show the domain `name`, `chainId` and, when present, `verifyingContract`.
+- Two documents that display differently MUST hash differently. A derived form that is not unique, such as a token symbol or a resolved name, MUST be shown alongside the underlying value, or not used at all.
 
 ### Recommended structs for display
 

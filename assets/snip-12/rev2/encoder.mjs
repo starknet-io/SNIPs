@@ -133,6 +133,7 @@ export function validateTypedData(td) {
 
   if (primaryType === DOMAIN_TYPE) throw new Error('primaryType cannot be the domain');
   if (!types[primaryType]) throw new Error(`unknown primaryType ${primaryType}`);
+  if (Array.isArray(types[primaryType]) && isEnumDefinition(types[primaryType])) throw new Error(`primaryType ${primaryType} must be a struct, not an enum`);
 
   // Type definitions.
   for (const [name, def] of Object.entries(types)) {
@@ -148,6 +149,7 @@ export function validateTypedData(td) {
       if (typeof field.type !== 'string' || field.type.length === 0) throw new Error(`field ${name}.${field.name} has no type`);
       const paren = field.type.startsWith('(');
       if (isEnum !== paren) throw new Error(`type ${name} mixes struct fields and enum variants`);
+      if ('contains' in field && field.type !== 'merkletree') throw new Error(`"contains" is only allowed on merkletree fields (${name}.${field.name})`);
       const refs = isEnum ? variantParams(field.type) : [field.type];
       for (const ref of refs) {
         const { base } = stripArray(ref);

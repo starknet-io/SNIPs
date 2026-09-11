@@ -1268,6 +1268,74 @@
       }
     },
     {
+      "name": "single-variant-enum",
+      "description": "A type whose only field type is parenthesised is a one-variant enum, not a tuple; nested in a struct it is valid.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Wrapper": [
+            {
+              "name": "pair",
+              "type": "Pair"
+            }
+          ],
+          "Pair": [
+            {
+              "name": "Values",
+              "type": "(felt,u128)"
+            }
+          ]
+        },
+        "primaryType": "Wrapper",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "pair": {
+            "Values": [
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Wrapper": "\"Wrapper\"(\"pair\":\"Pair\")\"Pair\"(\"Values\"(\"felt\",\"u128\"))",
+          "Pair": "\"Pair\"(\"Values\"(\"felt\",\"u128\"))"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Wrapper": "0x1c68b304ada3dd64b867f5dce2a84a222453d2cb5189248f7a270563e394451",
+          "Pair": "0x210ebf2e5dacc2755bc86f5ff49e2df463bc10c8f6b4a012170a4cf2da78029"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x1a623aca460c349afe76d13e8e1a6da9465a3a8f0653fc4b32ef185ae89f30d",
+        "message_hash": "0x1aa4a70a56d8a040d3a226207cf136604e35fc9aeaf61cb194d44dac6998bdc"
+      }
+    },
+    {
       "name": "domain-verifying-contract",
       "description": "Optional verifyingContract in the domain.",
       "typed_data": {
@@ -2490,8 +2558,8 @@
       }
     },
     {
-      "name": "tuple-field-type",
-      "reason": "tuples are not a SNIP-12 type; model them as a struct",
+      "name": "tuple-as-primary-type",
+      "reason": "an all-parenthesised type is an enum, and primaryType must be a struct",
       "typed_data": {
         "types": {
           "StarknetDomain": [
@@ -2531,6 +2599,179 @@
             1,
             2
           ]
+        }
+      }
+    },
+    {
+      "name": "tuple-next-to-struct-field",
+      "reason": "a type mixes struct fields and enum variants",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "(felt,u128)"
+            },
+            {
+              "name": "m",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": [
+            1,
+            2
+          ],
+          "m": 1
+        }
+      }
+    },
+    {
+      "name": "enum-as-primary-type",
+      "reason": "primaryType must be a struct",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Fee Mode",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "No Fee": []
+        }
+      }
+    },
+    {
+      "name": "contains-on-non-merkletree",
+      "reason": "\"contains\" is only allowed on merkletree fields",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "P": [
+            {
+              "name": "n",
+              "type": "u8",
+              "contains": "NoSuchType"
+            }
+          ]
+        },
+        "primaryType": "P",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
         }
       }
     },
