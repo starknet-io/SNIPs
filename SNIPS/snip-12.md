@@ -492,6 +492,19 @@ A wallet, SDK or contract that does not implement a revision MUST reject a reque
 
 Note: Cartridge Controller's `execute_from_outside_v3` hashes its domain with the felt `2` in the `revision` slot while applying revision `1` rules and a `(felt,u128)` nonce type. Those signatures are not revision `2` messages; revision `2` deliberately uses `0x32` so that the two cannot collide.
 
+### Notation
+
+The rest of this section uses the following terms and nothing else for them.
+
+- `P`: the STARK field prime `2^251 + 17 * 2^192 + 1`. All felts are integers in `[0, P)`.
+- `hash_array(x_0, ..., x_n)`: the array hash defined under Hash functions. It maps a sequence of felts to one felt.
+- `encode_type(T)`: the *type string* of a struct or enum `T`, defined under encode_type. It is the only place where "encode" refers to a type.
+- `type_hash(T)`: `starknet_keccak(encode_type(T))`, a felt.
+- `Enc[x]`: the *encoding* of a value `x`, a sequence of felts. It is one felt for every value except a `u256`, which is two felts. Structs, enums, arrays and merkle trees always encode to exactly one felt. Whenever this section says the encoding of a value, it means `Enc[x]`.
+- `a || b`: concatenation of felt sequences.
+- *struct hash*: `Enc[x]` of a struct value; the *domain hash* is `Enc[domain]`; the *message hash* is the final felt that is signed, defined under Message hash.
+- `escape(name)`: the quoting of a name in a type string, defined under Names and escaping.
+
 ### Hash functions
 
 - `hash_array(x_0, ..., x_n)`: Poseidon over the sequence, as computed by Cairo's `core::poseidon::poseidon_hash_span` and cairo-lang's `poseidon_hash_many`. This is the only array hash used in revision `2`.
@@ -531,7 +544,7 @@ signed_data = hash_array('StarkNet Message', Enc[domain], account, Enc[message])
 
 - The `domain` object MUST contain exactly the fields declared in the `StarknetDomain` type: no missing fields, no undeclared fields.
 - `chainId` is the chain identifier as a shortstring, for example `"SN_MAIN"`. A wallet MUST reject a request whose `chainId` is not the chain it is connected to.
-- `verifyingContract` SHOULD be set to the contract that will verify the signature whenever there is one. It prevents two contracts that share a `name` and `version` from accepting each other's signatures.
+- `verifyingContract` SHOULD be set to the contract that will verify the signature whenever there is one. It prevents two contracts that share a `name` and `version` from accepting each other's signatures. It is optional rather than mandatory because one signature may legitimately authorise a workflow that spans several contracts, for example releasing liquidity from multiple pools; in that case the domain `name` and `version` carry the binding and the message itself should identify the contracts involved.
 - `salt` is an arbitrary felt for further disambiguation, as in EIP-712.
 
 The domain is hashed as a struct: `Enc[domain] = hash_array(type_hash(StarknetDomain), Enc[name], Enc[version], Enc[chainId], Enc[revision], ...)`.
@@ -584,7 +597,7 @@ Declared as in revision `1`: an array of `{ "name", "type" }` fields. A field ty
 Enc[x] = hash_array(type_hash(T), Enc[field_1], ..., Enc[field_n])
 ```
 
-where the field encodings are concatenated in declaration order (a `u256` field contributes two felts).
+where the `Enc` sequences of the fields are concatenated in declaration order (a `u256` field contributes two felts).
 
 #### User-defined enums
 
@@ -613,7 +626,7 @@ Enc[x] = hash_array(type_hash(E), variant_index, Enc[param_1], ..., Enc[param_k]
 Enc[(x_0, ..., x_n)] = hash_array(Enc[x_0] || ... || Enc[x_n])
 ```
 
-The element encodings are concatenated (so an array of `u256` hashes `2(n+1)` felts) and the array always encodes to a single felt. The empty array encodes as `hash_array()`.
+The `Enc` sequences of the elements are concatenated (so an array of `u256` hashes `2(n+1)` felts) and `Enc` of an array is always a single felt. `Enc` of the empty array is `hash_array()` of the empty sequence.
 
 #### Merkle tree
 
@@ -644,7 +657,7 @@ For an enum:
 
 Field and parameter types are written exactly as declared, including `*` suffixes, with no whitespace. A `merkletree` field is written as `"field":"merkletree"`.
 
-After the primary encoding, the encodings of every user-defined type it references, directly or transitively, are appended: types referenced by fields (through any number of `*`), by enum variant parameters, and by a `merkletree` field's `contains`. Referenced types are sorted by their names in byte order and each appears once. Basic types, including `u256`, are never appended.
+After the type string of `T` itself, the type strings of every user-defined type it references, directly or transitively, are appended: types referenced by fields (through any number of `*`), by enum variant parameters, and by a `merkletree` field's `contains`. Referenced types are sorted by their names in byte order and each appears once. Basic types, including `u256`, are never appended.
 
 Example, using the `Payment` types from the test vectors:
 
@@ -711,6 +724,7 @@ Implementations MAY additionally impose limits on document size, array length an
 3. Whether `verifyingContract` should be mandatory rather than optional.
 4. Whether the `'StarkNet Message'` prefix should become `'Starknet Message'`.
 5. Whether `string` should keep the `ByteArray` serialisation or move to a simpler `hash_array` over 31-byte chunks.
+6. Whether `hash_array` should be Blake2s instead of Poseidon. Starknet moved compiled-class hashes to Blake2s in v0.14.1 (SNIP-34) and OS program and config hashes in v0.14.3, because Blake is about 3x cheaper to prove with Stwo (8x on the CASM-hash component once batching is counted) and avoids Poseidon's post-quantum questions. Against it, for the contracts that verify SNIP-12 signatures: under the current fee schedule one Blake2s compression (64 bytes, which under the SNIP-34 felt encoding carries two large felts) costs 3,334 gas, against 491 gas plus three steps for one Poseidon permutation that also absorbs two felts, so roughly 4x per large felt; and Cairo contracts must first split every felt into u32 words without hints. A Cairo 2.18 measurement with a SNIP-34-compatible Blake felt hash (checked against starknet.js's `blake2sHashMany`) put a 32-felt hash at 10x to 30x the Poseidon cost, or about 2x when only the compression step is counted. SNIP-12 inputs are almost all large felts (type hashes, struct hashes, addresses), and every wallet, SDK, account contract and merkle library speaks Poseidon today. This draft keeps Poseidon. The question should be reopened if a felt-native Blake libfunc ships or the Poseidon builtin is repriced.
 
 ## Implementation
 
