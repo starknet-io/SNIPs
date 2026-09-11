@@ -1,0 +1,3911 @@
+{
+  "snip": 12,
+  "revision": "2",
+  "status": "draft",
+  "generated_by": "assets/snip-12/rev2/encoder.mjs",
+  "account": "0x1234",
+  "notes": [
+    "message_hash = hash_array([\"StarkNet Message\", domain_hash, account, struct_hash]) with hash_array = Poseidon (poseidon_hash_span).",
+    "All hex values are 0x-prefixed field elements without zero padding.",
+    "Every document under \"invalid\" MUST be rejected by a conforming implementation; \"reason\" names the rule."
+  ],
+  "vectors": [
+    {
+      "name": "integers",
+      "description": "Every integer basic type, including negative signed values (encoded as P + v) and timestamp (u64).",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Integers": [
+            {
+              "name": "a",
+              "type": "u8"
+            },
+            {
+              "name": "b",
+              "type": "u16"
+            },
+            {
+              "name": "c",
+              "type": "u32"
+            },
+            {
+              "name": "d",
+              "type": "u64"
+            },
+            {
+              "name": "e",
+              "type": "u128"
+            },
+            {
+              "name": "f",
+              "type": "i8"
+            },
+            {
+              "name": "g",
+              "type": "i16"
+            },
+            {
+              "name": "h",
+              "type": "i32"
+            },
+            {
+              "name": "i",
+              "type": "i64"
+            },
+            {
+              "name": "j",
+              "type": "i128"
+            },
+            {
+              "name": "k",
+              "type": "timestamp"
+            }
+          ]
+        },
+        "primaryType": "Integers",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a": 255,
+          "b": 65535,
+          "c": "4294967295",
+          "d": "0xffffffffffffffff",
+          "e": "340282366920938463463374607431768211455",
+          "f": -128,
+          "g": "-1",
+          "h": 0,
+          "i": "-9223372036854775808",
+          "j": -1000,
+          "k": 1700000000
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Integers": "\"Integers\"(\"a\":\"u8\",\"b\":\"u16\",\"c\":\"u32\",\"d\":\"u64\",\"e\":\"u128\",\"f\":\"i8\",\"g\":\"i16\",\"h\":\"i32\",\"i\":\"i64\",\"j\":\"i128\",\"k\":\"timestamp\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Integers": "0x2ac6b645845e85e8a61850effdb35fcd29377c12e9704f2ae61decba9f57810"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x4e550e8e31492f2e892e1f13562ac35b7ac5eaff43fa5c24ba7429e7c7f19ac",
+        "message_hash": "0x578f1e1b36755180f636119ec7ac64ac41d73efdc65ed976e6cb6aadc2bf1ca"
+      }
+    },
+    {
+      "name": "felts-and-bool",
+      "description": "felt, ContractAddress, ClassHash, bytes31 accept JSON numbers, decimal strings and 0x strings; bool is a JSON boolean.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Felts": [
+            {
+              "name": "Felt Hex",
+              "type": "felt"
+            },
+            {
+              "name": "Felt Dec",
+              "type": "felt"
+            },
+            {
+              "name": "Felt Num",
+              "type": "felt"
+            },
+            {
+              "name": "Address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Class",
+              "type": "ClassHash"
+            },
+            {
+              "name": "Bytes",
+              "type": "bytes31"
+            },
+            {
+              "name": "Yes",
+              "type": "bool"
+            },
+            {
+              "name": "No",
+              "type": "bool"
+            }
+          ]
+        },
+        "primaryType": "Felts",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Felt Hex": "0x1234",
+          "Felt Dec": "1000",
+          "Felt Num": 42,
+          "Address": "0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7",
+          "Class": "0x01",
+          "Bytes": "0x00ff",
+          "Yes": true,
+          "No": false
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Felts": "\"Felts\"(\"Felt Hex\":\"felt\",\"Felt Dec\":\"felt\",\"Felt Num\":\"felt\",\"Address\":\"ContractAddress\",\"Class\":\"ClassHash\",\"Bytes\":\"bytes31\",\"Yes\":\"bool\",\"No\":\"bool\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Felts": "0x646cf518dce2679580b809be734e33134dc0dbd9dea5a7158f212dca571e6"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x1b3f0fd5e3e3962080c9859666d63d8dfc4ed25f344b2819980c48977502402",
+        "message_hash": "0x1d96ab81bbd92237ff92e0203581253aa70dbe8b30157ffbd871478fc20b8a0"
+      }
+    },
+    {
+      "name": "strings",
+      "description": "shortstring is always the ASCII bytes (\"2\" encodes as 0x32); string is the Cairo ByteArray serialisation of the UTF-8 bytes, hashed.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Strings": [
+            {
+              "name": "Short",
+              "type": "shortstring"
+            },
+            {
+              "name": "Numeric Short",
+              "type": "shortstring"
+            },
+            {
+              "name": "Empty Short",
+              "type": "shortstring"
+            },
+            {
+              "name": "Empty",
+              "type": "string"
+            },
+            {
+              "name": "Hello",
+              "type": "string"
+            },
+            {
+              "name": "Exactly 31",
+              "type": "string"
+            },
+            {
+              "name": "Exactly 32",
+              "type": "string"
+            },
+            {
+              "name": "Unicode",
+              "type": "string"
+            }
+          ]
+        },
+        "primaryType": "Strings",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Short": "hello",
+          "Numeric Short": "2",
+          "Empty Short": "",
+          "Empty": "",
+          "Hello": "hello",
+          "Exactly 31": "abcdefghijklmnopqrstuvwxyz01234",
+          "Exactly 32": "abcdefghijklmnopqrstuvwxyz012345",
+          "Unicode": "héllo wörld ✓"
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Strings": "\"Strings\"(\"Short\":\"shortstring\",\"Numeric Short\":\"shortstring\",\"Empty Short\":\"shortstring\",\"Empty\":\"string\",\"Hello\":\"string\",\"Exactly 31\":\"string\",\"Exactly 32\":\"string\",\"Unicode\":\"string\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Strings": "0x14f06ce4603119b7cbb8ae2061ec3fcc8686058dcd356a949d98ae9fe7cfab9"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x4d6176212b2d70e312f86ab9d84ea75d62cfbe437b385a55e052d284df35633",
+        "message_hash": "0x6cdd347ff2f8169e171f4da7e6c8d7534b8f8f4c21c54d4ce92cfba4edc646b"
+      }
+    },
+    {
+      "name": "selector",
+      "description": "selector is always starknet_keccak of the entrypoint name.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Call": [
+            {
+              "name": "Selector",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "Call",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Selector": "transfer"
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Call": "\"Call\"(\"Selector\":\"selector\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Call": "0x5a36952a3e9e600c0806abea4884ce4422c9656de06cbd4b23873d63227516"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0xc975f56dfd5a5849bacff9cf89bc1d075c758d62a55700d24d8a275c618018",
+        "message_hash": "0x8dcedd755607c74e8d880564dd6e637b704362023cfcbe4847ffe05e3773b2"
+      }
+    },
+    {
+      "name": "u256",
+      "description": "u256 is a basic type encoded as two felts (low, high) inside the parent hash input; the type string is just \"u256\".",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Amounts": [
+            {
+              "name": "Small",
+              "type": "u256"
+            },
+            {
+              "name": "Max",
+              "type": "u256"
+            },
+            {
+              "name": "High Limb",
+              "type": "u256"
+            },
+            {
+              "name": "List",
+              "type": "u256*"
+            }
+          ]
+        },
+        "primaryType": "Amounts",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Small": 1000,
+          "Max": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "High Limb": "0x100000000000000000000000000000005",
+          "List": [
+            1,
+            "0x100000000000000000000000000000000",
+            "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Amounts": "\"Amounts\"(\"Small\":\"u256\",\"Max\":\"u256\",\"High Limb\":\"u256\",\"List\":\"u256*\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Amounts": "0x200fa4905d4db1374a4b4a655a69a3732276b0c6d2001ff94982ee0f3977b6e"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x2ffed8a4e4a468401e32e7b6eb2b9d9509ac08c801862507345a4e9caf645df",
+        "message_hash": "0x13bfb0d54a5b50474dcfd8c293bcb22121807a989ecb15c19eadf6a1f8701d7"
+      }
+    },
+    {
+      "name": "nested-structs-and-arrays",
+      "description": "Struct references, arrays of structs, arrays of basic types, nested arrays and an empty array.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Order": [
+            {
+              "name": "Maker",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Items",
+              "type": "Item*"
+            },
+            {
+              "name": "Tags",
+              "type": "shortstring*"
+            },
+            {
+              "name": "Matrix",
+              "type": "u8**"
+            }
+          ],
+          "Item": [
+            {
+              "name": "Token",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Order",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Maker": "0xabc",
+          "Items": [
+            {
+              "Token": "0x1",
+              "Amount": 1
+            },
+            {
+              "Token": "0x2",
+              "Amount": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+            }
+          ],
+          "Tags": [],
+          "Matrix": [
+            [
+              1,
+              2
+            ],
+            [
+              3
+            ],
+            []
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Order": "\"Order\"(\"Maker\":\"ContractAddress\",\"Items\":\"Item*\",\"Tags\":\"shortstring*\",\"Matrix\":\"u8**\")\"Item\"(\"Token\":\"ContractAddress\",\"Amount\":\"u256\")",
+          "Item": "\"Item\"(\"Token\":\"ContractAddress\",\"Amount\":\"u256\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Order": "0x2377c29745dc7ebf98d2c791e0f76965f463b1ec74276487bcb628f38896a7b",
+          "Item": "0x2f652f762e55c7e9f2fd14b50eb1c166be46fa7f9a003bf9cd60b1fe01bdd65"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x269216d666edf08040c453e497ee4f3616c643f00c13d62d0997b89880bd364",
+        "message_hash": "0x493b922654e907ff46a3bdc72faff513918998fbaa0204705bce0223b8982b1"
+      }
+    },
+    {
+      "name": "enum-empty-variant",
+      "description": "Enum referenced by name; variant with no parameters hashes as [type_hash, index].",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "No Fee": []
+          }
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Payment": "\"Payment\"(\"Payer\":\"ContractAddress\",\"Fee\":\"Fee Mode\")\"Fee Mode\"(\"No Fee\"(),\"Pay Fee\"(\"Fee Transfer\"),\"Split\"(\"u128\",\"u128*\"))\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "Fee Mode": "\"Fee Mode\"(\"No Fee\"(),\"Pay Fee\"(\"Fee Transfer\"),\"Split\"(\"u128\",\"u128*\"))\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "Fee Transfer": "\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "TokenAmount": "\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Payment": "0x110e79cd0b5e735bfeb0364241391ba2ad64e67779e60d65d206377c7d4bc6",
+          "Fee Mode": "0xb9f8f1defc578db48737cf11a215b3a9695a616b194fd4ea071bb991c6ae12",
+          "Fee Transfer": "0x1ca3374ec8b70082db753b9237530358795a804e09f33e445e7d1ca2e70d24f",
+          "TokenAmount": "0x29e9297c256ee019456057f798cbc3255f49d2cc76a1cba85e43bb71165b4a2"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x2ccedcb874b864b8e79f629b5fbe77573e0962f8e11f75c6505fd6e647b98b3",
+        "message_hash": "0x35bb2d71d04d4567964cef18f03f8c275b5673ccdeba71abeb0595403d3bd9e"
+      }
+    },
+    {
+      "name": "enum-struct-variant",
+      "description": "Variant carrying a struct that itself contains u256 (flattened) and a nested struct dependency.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "Pay Fee": [
+              {
+                "Fee Amount": {
+                  "token_address": "0x4",
+                  "amount": "0x100000000000000000000000000000001"
+                },
+                "Fee Receiver": "0x5"
+              }
+            ]
+          }
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Payment": "\"Payment\"(\"Payer\":\"ContractAddress\",\"Fee\":\"Fee Mode\")\"Fee Mode\"(\"No Fee\"(),\"Pay Fee\"(\"Fee Transfer\"),\"Split\"(\"u128\",\"u128*\"))\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "Fee Mode": "\"Fee Mode\"(\"No Fee\"(),\"Pay Fee\"(\"Fee Transfer\"),\"Split\"(\"u128\",\"u128*\"))\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "Fee Transfer": "\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "TokenAmount": "\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Payment": "0x110e79cd0b5e735bfeb0364241391ba2ad64e67779e60d65d206377c7d4bc6",
+          "Fee Mode": "0xb9f8f1defc578db48737cf11a215b3a9695a616b194fd4ea071bb991c6ae12",
+          "Fee Transfer": "0x1ca3374ec8b70082db753b9237530358795a804e09f33e445e7d1ca2e70d24f",
+          "TokenAmount": "0x29e9297c256ee019456057f798cbc3255f49d2cc76a1cba85e43bb71165b4a2"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x3a30bcd19c4ed9123bf11a6cd07a937fd660c88f90be0fb9aafed3ab800eecd",
+        "message_hash": "0x3ff4ef990612ded4238b8d81e6dcab4f7d88611f1e91616b2cf7629d59ab3fa"
+      }
+    },
+    {
+      "name": "enum-tuple-variant",
+      "description": "Variant with several parameters including an array.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "Split": [
+              7,
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          }
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Payment": "\"Payment\"(\"Payer\":\"ContractAddress\",\"Fee\":\"Fee Mode\")\"Fee Mode\"(\"No Fee\"(),\"Pay Fee\"(\"Fee Transfer\"),\"Split\"(\"u128\",\"u128*\"))\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "Fee Mode": "\"Fee Mode\"(\"No Fee\"(),\"Pay Fee\"(\"Fee Transfer\"),\"Split\"(\"u128\",\"u128*\"))\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "Fee Transfer": "\"Fee Transfer\"(\"Fee Amount\":\"TokenAmount\",\"Fee Receiver\":\"ContractAddress\")\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")",
+          "TokenAmount": "\"TokenAmount\"(\"token_address\":\"ContractAddress\",\"amount\":\"u256\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Payment": "0x110e79cd0b5e735bfeb0364241391ba2ad64e67779e60d65d206377c7d4bc6",
+          "Fee Mode": "0xb9f8f1defc578db48737cf11a215b3a9695a616b194fd4ea071bb991c6ae12",
+          "Fee Transfer": "0x1ca3374ec8b70082db753b9237530358795a804e09f33e445e7d1ca2e70d24f",
+          "TokenAmount": "0x29e9297c256ee019456057f798cbc3255f49d2cc76a1cba85e43bb71165b4a2"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x5c3ce62416c7568dd6e4caaa3ae686e08bc1d59df2a7facb610422ea6192887",
+        "message_hash": "0x2e55adbe09feeeb38ec317950025df961064dd49ef4fd2cf108dd7e0471c3aa"
+      }
+    },
+    {
+      "name": "merkletree-1-leaf",
+      "description": "A single leaf is the root.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Session": [
+            {
+              "name": "Expires At",
+              "type": "timestamp"
+            },
+            {
+              "name": "Allowed Methods",
+              "type": "merkletree",
+              "contains": "Allowed Method"
+            }
+          ],
+          "Allowed Method": [
+            {
+              "name": "Contract Address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Selector",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "Session",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Expires At": 1700000000,
+          "Allowed Methods": [
+            {
+              "Contract Address": "0x1",
+              "Selector": "transfer"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Session": "\"Session\"(\"Expires At\":\"timestamp\",\"Allowed Methods\":\"merkletree\")\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")",
+          "Allowed Method": "\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Session": "0x1c596d7455b21f95e0226344b87710b9583baf63b793be8cd2530d2464bbab6",
+          "Allowed Method": "0x349e733d483ab6810e692f381677b7ea1e37a3d2972c55b3f91e01ea8ec4a35"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x779e0e516d3f18139a5ade6e336a1beafe6509100e88ee8f878c6e4a6815209",
+        "message_hash": "0x8f7b252a7a75fb8fd467869a3cb6e401c0854ff7473bbad97acbc6dadbc0a9"
+      }
+    },
+    {
+      "name": "merkletree-2-leaves",
+      "description": "Pair hashed commutatively with hash_array.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Session": [
+            {
+              "name": "Expires At",
+              "type": "timestamp"
+            },
+            {
+              "name": "Allowed Methods",
+              "type": "merkletree",
+              "contains": "Allowed Method"
+            }
+          ],
+          "Allowed Method": [
+            {
+              "name": "Contract Address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Selector",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "Session",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Expires At": 1700000000,
+          "Allowed Methods": [
+            {
+              "Contract Address": "0x1",
+              "Selector": "transfer"
+            },
+            {
+              "Contract Address": "0x2",
+              "Selector": "approve"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Session": "\"Session\"(\"Expires At\":\"timestamp\",\"Allowed Methods\":\"merkletree\")\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")",
+          "Allowed Method": "\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Session": "0x1c596d7455b21f95e0226344b87710b9583baf63b793be8cd2530d2464bbab6",
+          "Allowed Method": "0x349e733d483ab6810e692f381677b7ea1e37a3d2972c55b3f91e01ea8ec4a35"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x6c67e55e6d97dc0585399ff983f90744039fab56f82650622911411a8e73525",
+        "message_hash": "0x27658caafd1df8e706ce419e0d081ec3634f25624774d3be9b0af78266af29e"
+      }
+    },
+    {
+      "name": "merkletree-3-leaves",
+      "description": "Odd node is promoted unchanged.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Session": [
+            {
+              "name": "Expires At",
+              "type": "timestamp"
+            },
+            {
+              "name": "Allowed Methods",
+              "type": "merkletree",
+              "contains": "Allowed Method"
+            }
+          ],
+          "Allowed Method": [
+            {
+              "name": "Contract Address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Selector",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "Session",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Expires At": 1700000000,
+          "Allowed Methods": [
+            {
+              "Contract Address": "0x1",
+              "Selector": "transfer"
+            },
+            {
+              "Contract Address": "0x2",
+              "Selector": "approve"
+            },
+            {
+              "Contract Address": "0x3",
+              "Selector": "mint"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Session": "\"Session\"(\"Expires At\":\"timestamp\",\"Allowed Methods\":\"merkletree\")\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")",
+          "Allowed Method": "\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Session": "0x1c596d7455b21f95e0226344b87710b9583baf63b793be8cd2530d2464bbab6",
+          "Allowed Method": "0x349e733d483ab6810e692f381677b7ea1e37a3d2972c55b3f91e01ea8ec4a35"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x105c439d7743b2c79adb1b2ceba6411af5434475383073236eccbd8c76cecc5",
+        "message_hash": "0x793a5185bea41369715ff94f6070d30aa3c3583c4bb32993db7ad36da71b679"
+      }
+    },
+    {
+      "name": "merkletree-5-leaves",
+      "description": "Two levels with promotion.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Session": [
+            {
+              "name": "Expires At",
+              "type": "timestamp"
+            },
+            {
+              "name": "Allowed Methods",
+              "type": "merkletree",
+              "contains": "Allowed Method"
+            }
+          ],
+          "Allowed Method": [
+            {
+              "name": "Contract Address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Selector",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "Session",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Expires At": 1700000000,
+          "Allowed Methods": [
+            {
+              "Contract Address": "0x1",
+              "Selector": "transfer"
+            },
+            {
+              "Contract Address": "0x2",
+              "Selector": "approve"
+            },
+            {
+              "Contract Address": "0x3",
+              "Selector": "mint"
+            },
+            {
+              "Contract Address": "0x4",
+              "Selector": "burn"
+            },
+            {
+              "Contract Address": "0x5",
+              "Selector": "swap"
+            }
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Session": "\"Session\"(\"Expires At\":\"timestamp\",\"Allowed Methods\":\"merkletree\")\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")",
+          "Allowed Method": "\"Allowed Method\"(\"Contract Address\":\"ContractAddress\",\"Selector\":\"selector\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Session": "0x1c596d7455b21f95e0226344b87710b9583baf63b793be8cd2530d2464bbab6",
+          "Allowed Method": "0x349e733d483ab6810e692f381677b7ea1e37a3d2972c55b3f91e01ea8ec4a35"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x6ae2dd199dea3bd482d27c53a61bc01580b44690b9722bfb60b9dc40704d9c1",
+        "message_hash": "0x5da7d0a676712a21abd789db993ac13151b1bb1728ca0259fadc4fecfe1620"
+      }
+    },
+    {
+      "name": "merkletree-of-enums",
+      "description": "Leaves may be enums.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Policy": [
+            {
+              "name": "Rules",
+              "type": "merkletree",
+              "contains": "Rule"
+            }
+          ],
+          "Rule": [
+            {
+              "name": "Allow",
+              "type": "(ContractAddress)"
+            },
+            {
+              "name": "Deny All",
+              "type": "()"
+            }
+          ]
+        },
+        "primaryType": "Policy",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Rules": [
+            {
+              "Allow": [
+                "0x1"
+              ]
+            },
+            {
+              "Deny All": []
+            },
+            {
+              "Allow": [
+                "0x2"
+              ]
+            }
+          ]
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Policy": "\"Policy\"(\"Rules\":\"merkletree\")\"Rule\"(\"Allow\"(\"ContractAddress\"),\"Deny All\"())",
+          "Rule": "\"Rule\"(\"Allow\"(\"ContractAddress\"),\"Deny All\"())"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Policy": "0x18f91151074545d7f7cc0d7acff8ce0697651c9554eaf641f5b30a48a69dfce",
+          "Rule": "0x213672d2bc88e5b4eb8f9caa8e0d3418ad8a98b3533342a94887735de176c32"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x38716e05c582b0d0ceb79d65288dc90c09bf3c3d2712ef9db6f3274a836b867",
+        "message_hash": "0x4c7dcc146808a04429dbd3697feacce4464abc31a9bb849fdb2bc280d907182"
+      }
+    },
+    {
+      "name": "single-variant-enum",
+      "description": "A type whose only field type is parenthesised is a one-variant enum, not a tuple; nested in a struct it is valid.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Wrapper": [
+            {
+              "name": "pair",
+              "type": "Pair"
+            }
+          ],
+          "Pair": [
+            {
+              "name": "Values",
+              "type": "(felt,u128)"
+            }
+          ]
+        },
+        "primaryType": "Wrapper",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "pair": {
+            "Values": [
+              1,
+              2
+            ]
+          }
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Wrapper": "\"Wrapper\"(\"pair\":\"Pair\")\"Pair\"(\"Values\"(\"felt\",\"u128\"))",
+          "Pair": "\"Pair\"(\"Values\"(\"felt\",\"u128\"))"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Wrapper": "0x1c68b304ada3dd64b867f5dce2a84a222453d2cb5189248f7a270563e394451",
+          "Pair": "0x210ebf2e5dacc2755bc86f5ff49e2df463bc10c8f6b4a012170a4cf2da78029"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x1a623aca460c349afe76d13e8e1a6da9465a3a8f0653fc4b32ef185ae89f30d",
+        "message_hash": "0x1aa4a70a56d8a040d3a226207cf136604e35fc9aeaf61cb194d44dac6998bdc"
+      }
+    },
+    {
+      "name": "domain-descriptor-key-order",
+      "description": "Key order inside a field descriptor is not significant; this hashes identically to the same document written {name, type}.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "type": "shortstring",
+              "name": "name"
+            },
+            {
+              "type": "shortstring",
+              "name": "version"
+            },
+            {
+              "type": "shortstring",
+              "name": "chainId"
+            },
+            {
+              "type": "shortstring",
+              "name": "revision"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Ping": "\"Ping\"(\"n\":\"u8\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Ping": "0x351274262ab1c14ee75490b3e5216a9ef59a8fec7b4cb7110e297dd4de697ac"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x558305362c387f41a3faf93b835f36a7066f6c0960fe69b1e1a8823ef19b13d",
+        "message_hash": "0x5ff8156e38eda100896a106eae827ac1a173853a86e8194827740f9523984f"
+      }
+    },
+    {
+      "name": "json-number-limits",
+      "description": "A JSON number may be used up to 2^53 - 1; anything larger must be a decimal or 0x string (here 2^53 in both string forms).",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Limits": [
+            {
+              "name": "Max Number",
+              "type": "u64"
+            },
+            {
+              "name": "Decimal String",
+              "type": "u64"
+            },
+            {
+              "name": "Hex String",
+              "type": "u64"
+            }
+          ]
+        },
+        "primaryType": "Limits",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Max Number": 9007199254740991,
+          "Decimal String": "9007199254740992",
+          "Hex String": "0x20000000000000"
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\")",
+          "Limits": "\"Limits\"(\"Max Number\":\"u64\",\"Decimal String\":\"u64\",\"Hex String\":\"u64\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x1ff2f602e42168014d405a94f75e8a93d640751d71d16311266e140d8b0a210",
+          "Limits": "0x311b5f786c840c121a32259a4e13f288a42dfe5dca6d1bdd699a265380156d7"
+        },
+        "domain_hash": "0x48e63e9c7cb93bcb202e9134b55cc3d17890eebf376dd23ef411e669f0dd608",
+        "struct_hash": "0x77e1c7a6b10ec003facef5ab90fd44aa281cdd3852e7be82143c449fcd7cc0d",
+        "message_hash": "0x3b72823f21dfa2a120aa089b08e0ad5ede9450be55359277b27ebc6a462c01f"
+      }
+    },
+    {
+      "name": "domain-verifying-contract",
+      "description": "Optional verifyingContract in the domain.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "ContractAddress"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2",
+          "verifyingContract": "0x0777"
+        },
+        "message": {
+          "n": 1
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\",\"verifyingContract\":\"ContractAddress\")",
+          "Ping": "\"Ping\"(\"n\":\"u8\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x22a208060c1d6c5515c9576d39d2b7c812e54202f1e05ea6428500efb4b6a8b",
+          "Ping": "0x351274262ab1c14ee75490b3e5216a9ef59a8fec7b4cb7110e297dd4de697ac"
+        },
+        "domain_hash": "0x202fa290bb6d1e7cd41855e05127cf551c87af34f47bf032707d2515eaba09f",
+        "struct_hash": "0x558305362c387f41a3faf93b835f36a7066f6c0960fe69b1e1a8823ef19b13d",
+        "message_hash": "0x25de19ad50ba0b1f809ab3ccd758e135530775c1e271227a1ed01a5c7a4d64f"
+      }
+    },
+    {
+      "name": "domain-salt",
+      "description": "Optional salt in the domain.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            },
+            {
+              "name": "salt",
+              "type": "felt"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2",
+          "salt": "0x5a17"
+        },
+        "message": {
+          "n": 1
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\",\"salt\":\"felt\")",
+          "Ping": "\"Ping\"(\"n\":\"u8\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0xa6be7486d2812c36d3c878d0053106533675d70a104fe5600617305bcac793",
+          "Ping": "0x351274262ab1c14ee75490b3e5216a9ef59a8fec7b4cb7110e297dd4de697ac"
+        },
+        "domain_hash": "0x5314b052a38ef059392f189f8a622a1e7e4a25be4f04d9ebcaa7b184a65e6cc",
+        "struct_hash": "0x558305362c387f41a3faf93b835f36a7066f6c0960fe69b1e1a8823ef19b13d",
+        "message_hash": "0x5207c463618e39511e0431ceef7864d18656c899eaeea3160834e2df72f2bd3"
+      }
+    },
+    {
+      "name": "domain-verifying-contract-and-salt",
+      "description": "Both optional domain fields, in the required order.",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "salt",
+              "type": "felt"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2",
+          "verifyingContract": "0x0777",
+          "salt": "0x5a17"
+        },
+        "message": {
+          "n": 1
+        }
+      },
+      "expected": {
+        "encode_type": {
+          "StarknetDomain": "\"StarknetDomain\"(\"name\":\"shortstring\",\"version\":\"shortstring\",\"chainId\":\"shortstring\",\"revision\":\"shortstring\",\"verifyingContract\":\"ContractAddress\",\"salt\":\"felt\")",
+          "Ping": "\"Ping\"(\"n\":\"u8\")"
+        },
+        "type_hash": {
+          "StarknetDomain": "0x3d8dc39daf4e8de4ab71497d1947ca1e97d04084a7889c13434359080e3797f",
+          "Ping": "0x351274262ab1c14ee75490b3e5216a9ef59a8fec7b4cb7110e297dd4de697ac"
+        },
+        "domain_hash": "0x435c7c2226acd73f5304c1a61511eb6a01c6446b058b2d70951b8d349eab89",
+        "struct_hash": "0x558305362c387f41a3faf93b835f36a7066f6c0960fe69b1e1a8823ef19b13d",
+        "message_hash": "0x49cb31da1cbaa7809fcb4ee06f758a4e354b4b9d709c5cfa60a67e61000c183"
+      }
+    }
+  ],
+  "invalid": [
+    {
+      "name": "revision-as-number",
+      "reason": "revision must be the JSON string \"2\"",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": 2
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "revision-1-document",
+      "reason": "a revision 1 document is not a revision 2 document",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "1"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "domain-extra-field",
+      "reason": "domain object has a field the domain type does not declare",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2",
+          "extra": 1
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "domain-chain_id-key",
+      "reason": "legacy chain_id key",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "revision": "2",
+          "chain_id": "SN_SEPOLIA"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "domain-fields-reordered",
+      "reason": "domain type fields must be in the specified order",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "domain-optional-out-of-order",
+      "reason": "salt must come after verifyingContract",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            },
+            {
+              "name": "salt",
+              "type": "felt"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "ContractAddress"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2",
+          "salt": "0x1",
+          "verifyingContract": "0x2"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "primary-type-is-domain",
+      "reason": "primaryType cannot be StarknetDomain",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "StarknetDomain",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        }
+      }
+    },
+    {
+      "name": "unknown-type",
+      "reason": "field type is neither basic nor declared",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "uint256"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "dangling-type",
+      "reason": "declared type not reachable from primaryType",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ],
+          "Unused": [
+            {
+              "name": "x",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "recursive-type",
+      "reason": "recursive type definitions are not allowed",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Node": [
+            {
+              "name": "children",
+              "type": "Node*"
+            }
+          ]
+        },
+        "primaryType": "Node",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "children": []
+        }
+      }
+    },
+    {
+      "name": "message-undeclared-field",
+      "reason": "message has a field the type does not declare",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1,
+          "extra": 2
+        }
+      }
+    },
+    {
+      "name": "message-missing-field",
+      "reason": "message lacks a declared field",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {}
+      }
+    },
+    {
+      "name": "u8-out-of-range",
+      "reason": "value exceeds the type range",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Ping": [
+            {
+              "name": "n",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "Ping",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 256
+        }
+      }
+    },
+    {
+      "name": "u64-negative",
+      "reason": "unsigned type given a negative value",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "u64"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": -1
+        }
+      }
+    },
+    {
+      "name": "i8-out-of-range",
+      "reason": "signed value below the type range",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "i8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": -129
+        }
+      }
+    },
+    {
+      "name": "felt-at-prime",
+      "reason": "felt must be below the field prime",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "felt"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": "0x800000000000011000000000000000000000000000000000000000000000001"
+        }
+      }
+    },
+    {
+      "name": "address-above-bound",
+      "reason": "ContractAddress must be below 2^251",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "a",
+              "type": "ContractAddress"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a": "0x800000000000000000000000000000000000000000000000000000000000000"
+        }
+      }
+    },
+    {
+      "name": "selector-hex",
+      "reason": "selector values must be entrypoint names, never hashes",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": "0x1"
+        }
+      }
+    },
+    {
+      "name": "selector-invalid-identifier",
+      "reason": "selector must be a Cairo identifier",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": "trans fer"
+        }
+      }
+    },
+    {
+      "name": "json-number-above-limit",
+      "reason": "a JSON number above 2^53 - 1 must be given as a string",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "u64"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 9007199254740992
+        }
+      }
+    },
+    {
+      "name": "json-number-fractional",
+      "reason": "a JSON number must be a whole number",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "u64"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1.5
+        }
+      }
+    },
+    {
+      "name": "string-unpaired-high-surrogate",
+      "reason": "string values must be well-formed Unicode",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": "a\ud800b"
+        }
+      }
+    },
+    {
+      "name": "string-unpaired-low-surrogate",
+      "reason": "string values must be well-formed Unicode",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "string"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": "a\udc00b"
+        }
+      }
+    },
+    {
+      "name": "field-descriptor-unknown-key",
+      "reason": "a field descriptor may only carry name, type and (for merkletree) contains",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "u8",
+              "display": "hex"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "shortstring-too-long",
+      "reason": "shortstring longer than 31 bytes",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "shortstring"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": "abcdefghijklmnopqrstuvwxyz012345"
+        }
+      }
+    },
+    {
+      "name": "shortstring-non-ascii",
+      "reason": "shortstring must be printable ASCII",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "shortstring"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": "héllo"
+        }
+      }
+    },
+    {
+      "name": "shortstring-as-number",
+      "reason": "shortstring values must be JSON strings",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "s",
+              "type": "shortstring"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "s": 2
+        }
+      }
+    },
+    {
+      "name": "bool-as-string",
+      "reason": "bool must be a JSON boolean",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "b",
+              "type": "bool"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "b": "true"
+        }
+      }
+    },
+    {
+      "name": "reserved-type-name",
+      "reason": "user types cannot use a basic type name",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "u256": [
+            {
+              "name": "low",
+              "type": "u128"
+            }
+          ],
+          "T": [
+            {
+              "name": "a",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a": {
+            "low": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "tuple-as-primary-type",
+      "reason": "an all-parenthesised type is an enum, and primaryType must be a struct",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "(felt,u128)"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "tuple-next-to-struct-field",
+      "reason": "a type mixes struct fields and enum variants",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "n",
+              "type": "(felt,u128)"
+            },
+            {
+              "name": "m",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": [
+            1,
+            2
+          ],
+          "m": 1
+        }
+      }
+    },
+    {
+      "name": "enum-as-primary-type",
+      "reason": "primaryType must be a struct",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Fee Mode",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "No Fee": []
+        }
+      }
+    },
+    {
+      "name": "contains-on-non-merkletree",
+      "reason": "\"contains\" is only allowed on merkletree fields",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "P": [
+            {
+              "name": "n",
+              "type": "u8",
+              "contains": "NoSuchType"
+            }
+          ]
+        },
+        "primaryType": "P",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "n": 1
+        }
+      }
+    },
+    {
+      "name": "duplicate-field-name",
+      "reason": "field names within a type must be unique",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "a",
+              "type": "u8"
+            },
+            {
+              "name": "a",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a": 1
+        }
+      }
+    },
+    {
+      "name": "name-with-quote",
+      "reason": "names cannot contain the double quote character",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "a\"b",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a\"b": 1
+        }
+      }
+    },
+    {
+      "name": "name-with-colon",
+      "reason": "names cannot contain the colon character",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "a:b",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a:b": 1
+        }
+      }
+    },
+    {
+      "name": "name-trailing-space",
+      "reason": "names cannot start or end with whitespace",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "a ",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a ": 1
+        }
+      }
+    },
+    {
+      "name": "type-name-with-star",
+      "reason": "type names cannot end with *",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T*": [
+            {
+              "name": "a",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T*",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a": 1
+        }
+      }
+    },
+    {
+      "name": "enum-two-keys",
+      "reason": "an enum value has exactly one variant key",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "No Fee": [],
+            "Split": [
+              1,
+              []
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "enum-unknown-variant",
+      "reason": "variant not declared",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "Free": []
+          }
+        }
+      }
+    },
+    {
+      "name": "enum-param-count",
+      "reason": "variant parameters must match the declaration",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "Split": [
+              1
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "enum-with-contains",
+      "reason": "revision 2 references enums by name; the \"enum\" pseudo-type is gone",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Payment": [
+            {
+              "name": "Payer",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Fee",
+              "type": "enum",
+              "contains": "Fee Mode"
+            }
+          ],
+          "Fee Mode": [
+            {
+              "name": "No Fee",
+              "type": "()"
+            },
+            {
+              "name": "Pay Fee",
+              "type": "(Fee Transfer)"
+            },
+            {
+              "name": "Split",
+              "type": "(u128,u128*)"
+            }
+          ],
+          "Fee Transfer": [
+            {
+              "name": "Fee Amount",
+              "type": "TokenAmount"
+            },
+            {
+              "name": "Fee Receiver",
+              "type": "ContractAddress"
+            }
+          ],
+          "TokenAmount": [
+            {
+              "name": "token_address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "amount",
+              "type": "u256"
+            }
+          ]
+        },
+        "primaryType": "Payment",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Payer": "0x1",
+          "Fee": {
+            "No Fee": []
+          }
+        }
+      }
+    },
+    {
+      "name": "merkletree-missing-contains",
+      "reason": "merkletree fields must name their leaf type",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "m",
+              "type": "merkletree"
+            }
+          ],
+          "L": [
+            {
+              "name": "x",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "m": [
+            {
+              "x": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "merkletree-empty",
+      "reason": "a merkletree must have at least one leaf",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "Session": [
+            {
+              "name": "Expires At",
+              "type": "timestamp"
+            },
+            {
+              "name": "Allowed Methods",
+              "type": "merkletree",
+              "contains": "Allowed Method"
+            }
+          ],
+          "Allowed Method": [
+            {
+              "name": "Contract Address",
+              "type": "ContractAddress"
+            },
+            {
+              "name": "Selector",
+              "type": "selector"
+            }
+          ]
+        },
+        "primaryType": "Session",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "Expires At": 1,
+          "Allowed Methods": []
+        }
+      }
+    },
+    {
+      "name": "merkletree-basic-leaf",
+      "reason": "leaves must be user-defined structs or enums",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "m",
+              "type": "merkletree",
+              "contains": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "m": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "name": "array-given-scalar",
+      "reason": "array-typed field given a scalar",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "a",
+              "type": "u8*"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "a": 1
+        }
+      }
+    },
+    {
+      "name": "struct-given-array",
+      "reason": "struct-typed field given an array",
+      "typed_data": {
+        "types": {
+          "StarknetDomain": [
+            {
+              "name": "name",
+              "type": "shortstring"
+            },
+            {
+              "name": "version",
+              "type": "shortstring"
+            },
+            {
+              "name": "chainId",
+              "type": "shortstring"
+            },
+            {
+              "name": "revision",
+              "type": "shortstring"
+            }
+          ],
+          "T": [
+            {
+              "name": "i",
+              "type": "Item"
+            }
+          ],
+          "Item": [
+            {
+              "name": "x",
+              "type": "u8"
+            }
+          ]
+        },
+        "primaryType": "T",
+        "domain": {
+          "name": "SNIP-12 Rev 2 Vectors",
+          "version": "1",
+          "chainId": "SN_SEPOLIA",
+          "revision": "2"
+        },
+        "message": {
+          "i": [
+            1
+          ]
+        }
+      }
+    }
+  ]
+}
