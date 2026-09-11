@@ -126,9 +126,8 @@ export function validateTypedData(td) {
   // Domain definition must be one of the allowed shapes, in order.
   const domDef = types[DOMAIN_TYPE];
   if (!Array.isArray(domDef)) throw new Error(`missing ${DOMAIN_TYPE} type`);
-  const allowed = allowedDomainDefinitions();
-  const domKey = JSON.stringify(domDef);
-  if (!allowed.some((d) => JSON.stringify(d) === domKey)) throw new Error(`${DOMAIN_TYPE} definition is not one of the allowed shapes`);
+  const sameDefinition = (a, b) => a.length === b.length && a.every((f, i) => f && f.name === b[i].name && f.type === b[i].type);
+  if (!allowedDomainDefinitions().some((d) => sameDefinition(domDef, d))) throw new Error(`${DOMAIN_TYPE} definition is not one of the allowed shapes`);
   checkObjectKeys(domain, domDef.map((f) => f.name), 'domain');
 
   if (primaryType === DOMAIN_TYPE) throw new Error('primaryType cannot be the domain');
@@ -143,6 +142,9 @@ export function validateTypedData(td) {
     const seen = new Set();
     const isEnum = isEnumDefinition(def);
     for (const field of def) {
+      if (typeof field !== 'object' || field === null) throw new Error(`type ${name}: field descriptor must be an object`);
+      const extraKeys = Object.keys(field).filter((k) => !['name', 'type', 'contains'].includes(k));
+      if (extraKeys.length) throw new Error(`type ${name}: field descriptor has unknown key(s) ${extraKeys.join(', ')}`);
       checkName(field.name, `field of ${name}`);
       if (seen.has(field.name)) throw new Error(`duplicate field ${field.name} in ${name}`);
       seen.add(field.name);
@@ -252,7 +254,7 @@ export function typeHash(types, typeName) {
 
 function parseInteger(value, what) {
   if (typeof value === 'number') {
-    if (!Number.isSafeInteger(value)) throw new Error(`${what}: number is not a safe integer`);
+    if (!Number.isSafeInteger(value)) throw new Error(`${what}: JSON numbers must be whole and within +/-(2^53 - 1); use a decimal or 0x string for larger values`);
     return BigInt(value);
   }
   if (typeof value === 'string') {
@@ -287,6 +289,7 @@ function encodeBasic(type, value, what) {
       return [starknetKeccak(value)];
     case 'string':
       if (typeof value !== 'string') throw new Error(`${what}: string must be a JSON string`);
+      if (!value.isWellFormed()) throw new Error(`${what}: string contains an unpaired surrogate`);
       return [encodeByteArray(value)];
     case 'u256': {
       const v = inRange(parseInteger(value, what), 0n, 2n ** 256n - 1n, what);

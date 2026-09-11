@@ -519,7 +519,7 @@ signed_data = hash_array('StarkNet Message', Enc[domain], account, Enc[message])
 ]
 ```
 
-- The first four fields are mandatory and MUST appear in this order with these names and types.
+- The first four fields are mandatory and MUST appear in this order with these names and types. The order of keys inside a field descriptor (`name`, `type`) is not significant.
 - `verifyingContract` and `salt` are optional. When present they MUST appear after `revision`, in this order. Exactly four definitions of `StarknetDomain` are therefore valid; their type hashes are:
 
 | Fields | `type_hash(StarknetDomain)` |
@@ -568,17 +568,17 @@ There are three kinds of types: basic types, user-defined structs and user-defin
 | `ClassHash` | integer | `0 <= x < 2^251` | `x` |
 | `timestamp` | integer | `0 <= x < 2^64`, seconds since the Unix epoch | `x` |
 | `shortstring` | JSON string | at most 31 printable ASCII characters | the big-endian bytes as a felt; `"2"` is `0x32`, `""` is `0` |
-| `string` | JSON string | any Unicode text | `hash_array(n, w_0, ..., w_{n-1}, pending, pending_len)` where the UTF-8 bytes are split into `n` full 31-byte words `w_i` and a `pending` word of `pending_len` bytes (Cairo `ByteArray` serialisation) |
+| `string` | JSON string | well-formed Unicode text (no unpaired surrogates) | `hash_array(n, w_0, ..., w_{n-1}, pending, pending_len)` where the UTF-8 bytes are split into `n` full 31-byte words `w_i` and a `pending` word of `pending_len` bytes (Cairo `ByteArray` serialisation) |
 | `selector` | JSON string | a Cairo identifier: `^[A-Za-z_][A-Za-z0-9_]*$` | `starknet_keccak(x)` |
 | `merkletree` | JSON array of leaves | see below | the merkle root |
 
-Integers are never parsed from a `shortstring`, and a `shortstring` is never parsed as a number. A value of the wrong JSON kind (for example `"true"` for a `bool`, or a number for a `shortstring`) MUST be rejected.
+An integer given as a JSON number MUST be a whole number with magnitude at most `2^53 - 1`, the range every JSON parser preserves exactly; larger values MUST be given as decimal or `0x` strings. Integers are never parsed from a `shortstring`, and a `shortstring` is never parsed as a number. A value of the wrong JSON kind (for example `"true"` for a `bool`, or a number for a `shortstring`) MUST be rejected.
 
 `P` is the STARK field prime `2^251 + 17 * 2^192 + 1`.
 
 #### User-defined structs
 
-Declared as in revision `1`: an array of `{ "name", "type" }` fields. A field type is a basic type, a user-defined type, or either followed by one or more `*` for arrays. A `merkletree` field additionally carries `"contains"`, the name of the user-defined struct or enum used for its leaves. No other field may carry `"contains"`.
+Declared as in revision `1`: an array of `{ "name", "type" }` fields. A field type is a basic type, a user-defined type, or either followed by one or more `*` for arrays. A `merkletree` field additionally carries `"contains"`, the name of the user-defined struct or enum used for its leaves. No other field may carry `"contains"`, and a field descriptor MUST NOT carry any key other than `name`, `type` and `contains`.
 
 ```
 Enc[x] = hash_array(type_hash(T), Enc[field_1], ..., Enc[field_n])
@@ -660,12 +660,12 @@ A conforming implementation MUST reject a request, before signing or hashing, wh
 2. `types.StarknetDomain` is not one of the four definitions above, or the `domain` object does not have exactly the declared fields.
 3. `domain.chainId` is not the chain the wallet is connected to (wallets).
 4. `primaryType` is `StarknetDomain`, is not declared in `types`, or is not a struct.
-5. A type name or field name violates the naming rules, a type name is a basic type name, or a type declares two fields with the same name.
+5. A type name or field name violates the naming rules, a type name is a basic type name, a type declares two fields with the same name, or a field descriptor carries a key other than `name`, `type` and (for `merkletree` fields) `contains`.
 6. A field or variant parameter references a type that is neither basic nor declared; a `merkletree` field lacks `contains`, or its `contains` is not a user-defined struct or enum; or a field that is not a `merkletree` carries `contains`.
 7. A type mixes struct fields and enum variants (some field types parenthesised, some not).
 8. A declared type (other than `StarknetDomain`) is not reachable from `primaryType`, or type references form a cycle.
 9. The `message`, or any nested struct value, has an undeclared field or lacks a declared field.
-10. A value has the wrong JSON kind, is outside its type's range, is not a valid `selector` identifier, or is a `shortstring` longer than 31 bytes or containing non-printable or non-ASCII characters.
+10. A value has the wrong JSON kind, is outside its type's range, is a JSON number that is not a whole number within `+/-(2^53 - 1)`, is not a valid `selector` identifier, is a `shortstring` longer than 31 bytes or containing non-printable or non-ASCII characters, or is a `string` containing an unpaired surrogate.
 11. An enum value does not have exactly one key, names an undeclared variant, or supplies the wrong number of parameters.
 12. A `merkletree` value is empty.
 

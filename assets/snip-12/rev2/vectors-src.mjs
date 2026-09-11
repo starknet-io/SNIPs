@@ -161,6 +161,20 @@ export const VALID = [
     ),
   },
   {
+    name: 'domain-descriptor-key-order',
+    description: 'Key order inside a field descriptor is not significant; this hashes identically to the same document written {name, type}.',
+    typed_data: doc({ Ping: [{ name: 'n', type: 'u8' }] }, 'Ping', { n: 1 }, DOMAIN, DOMAIN_TYPE.map(({ name, type }) => ({ type, name }))),
+  },
+  {
+    name: 'json-number-limits',
+    description: 'A JSON number may be used up to 2^53 - 1; anything larger must be a decimal or 0x string (here 2^53 in both string forms).',
+    typed_data: doc(
+      { Limits: [{ name: 'Max Number', type: 'u64' }, { name: 'Decimal String', type: 'u64' }, { name: 'Hex String', type: 'u64' }] },
+      'Limits',
+      { 'Max Number': 9007199254740991, 'Decimal String': '9007199254740992', 'Hex String': '0x20000000000000' },
+    ),
+  },
+  {
     name: 'domain-verifying-contract',
     description: 'Optional verifyingContract in the domain.',
     typed_data: doc({ Ping: [{ name: 'n', type: 'u8' }] }, 'Ping', { n: 1 }, { ...DOMAIN, verifyingContract: '0x0777' }, [...DOMAIN_TYPE, { name: 'verifyingContract', type: 'ContractAddress' }]),
@@ -199,6 +213,11 @@ export const INVALID = [
   { name: 'address-above-bound', reason: 'ContractAddress must be below 2^251', typed_data: doc({ T: [{ name: 'a', type: 'ContractAddress' }] }, 'T', { a: '0x800000000000000000000000000000000000000000000000000000000000000' }) },
   { name: 'selector-hex', reason: 'selector values must be entrypoint names, never hashes', typed_data: doc({ T: [{ name: 's', type: 'selector' }] }, 'T', { s: '0x1' }) },
   { name: 'selector-invalid-identifier', reason: 'selector must be a Cairo identifier', typed_data: doc({ T: [{ name: 's', type: 'selector' }] }, 'T', { s: 'trans fer' }) },
+  { name: 'json-number-above-limit', reason: 'a JSON number above 2^53 - 1 must be given as a string', typed_data: doc({ T: [{ name: 'n', type: 'u64' }] }, 'T', { n: 9007199254740992 }) },
+  { name: 'json-number-fractional', reason: 'a JSON number must be a whole number', typed_data: doc({ T: [{ name: 'n', type: 'u64' }] }, 'T', { n: 1.5 }) },
+  { name: 'string-unpaired-high-surrogate', reason: 'string values must be well-formed Unicode', typed_data: doc({ T: [{ name: 's', type: 'string' }] }, 'T', { s: 'a\ud800b' }) },
+  { name: 'string-unpaired-low-surrogate', reason: 'string values must be well-formed Unicode', typed_data: doc({ T: [{ name: 's', type: 'string' }] }, 'T', { s: 'a\udc00b' }) },
+  { name: 'field-descriptor-unknown-key', reason: 'a field descriptor may only carry name, type and (for merkletree) contains', typed_data: doc({ T: [{ name: 'n', type: 'u8', display: 'hex' }] }, 'T', { n: 1 }) },
   { name: 'shortstring-too-long', reason: 'shortstring longer than 31 bytes', typed_data: doc({ T: [{ name: 's', type: 'shortstring' }] }, 'T', { s: STR32 }) },
   { name: 'shortstring-non-ascii', reason: 'shortstring must be printable ASCII', typed_data: doc({ T: [{ name: 's', type: 'shortstring' }] }, 'T', { s: 'héllo' }) },
   { name: 'shortstring-as-number', reason: 'shortstring values must be JSON strings', typed_data: doc({ T: [{ name: 's', type: 'shortstring' }] }, 'T', { s: 2 }) },
