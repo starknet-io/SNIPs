@@ -1,0 +1,13 @@
+{
+  "name": "snip-12-rev2-vectors",
+  "private": true,
+  "type": "module",
+  "description": "Reference encoder and test vectors for SNIP-12 revision 2 (draft)",
+  "scripts": {
+    "generate": "node encoder.mjs generate > vectors.json",
+    "verify": "node encoder.mjs verify vectors.json"
+  },
+  "dependencies": {
+    "starknet": "10.7.2"
+  }
+}
