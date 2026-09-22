@@ -1,0 +1,85 @@
+{
+  "profile": "account-leaf-v1",
+  "encoding": "All 0x-prefixed values are unsigned big-endian byte strings with the fixed widths specified by SNIP-44.",
+  "constants": {
+    "domain_separator_ascii": "STRK20_ACCOUNT_LEAF_V1",
+    "domain_separator_hex": "0x5354524b32305f4143434f554e545f4c4541465f5631",
+    "stark_curve_order": "0x0800000000000010ffffffffffffffffb781126dcae7b2321e66a241adc64d2f",
+    "lower_half_boundary": "0x04000000000000087fffffffffffffffdbc08936e573d9190f335120d6e32697",
+    "rejection_limit": "0xf80000000000020efffffffffffffff738a13b4b920e9411ae6da5f40b0358b1"
+  },
+  "context": {
+    "version": 1,
+    "chain_id": "0x534e5f5345504f4c4941",
+    "chain_id_ascii": "SN_SEPOLIA",
+    "account_address": "0x1234",
+    "pool_address": "0x5678",
+    "key_index": 0,
+    "version_be4": "0x00000001",
+    "chain_id_be32": "0x00000000000000000000000000000000000000000000534e5f5345504f4c4941",
+    "account_address_be32": "0x0000000000000000000000000000000000000000000000000000000000001234",
+    "pool_address_be32": "0x0000000000000000000000000000000000000000000000000000000000005678",
+    "key_index_be16": "0x00000000000000000000000000000000",
+    "context_bytes_length": 116,
+    "context_bytes": "0x0000000100000000000000000000000000000000000000000000534e5f5345504f4c49410000000000000000000000000000000000000000000000000000000000001234000000000000000000000000000000000000000000000000000000000000567800000000000000000000000000000000"
+  },
+  "vectors": [
+    {
+      "id": "primary",
+      "description": "Accepts the first HMAC-SHA256 candidate. The leaf scalar is valid for both Stark-curve and secp256k1 accounts.",
+      "account_key_schemes": [
+        "stark",
+        "secp256k1"
+      ],
+      "account_leaf_private_key_be32": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "attempts": [
+        {
+          "counter": 0,
+          "counter_be4": "0x00000000",
+          "hmac_input_length": 142,
+          "hmac_input": "0x5354524b32305f4143434f554e545f4c4541465f56310000000100000000000000000000000000000000000000000000534e5f5345504f4c4941000000000000000000000000000000000000000000000000000000000000123400000000000000000000000000000000000000000000000000000000000056780000000000000000000000000000000000000000",
+          "hmac_sha256_output": "0x3ed14752a332877b8097f5bc9b24c89689a29a5d10266060345df8685c8efdad",
+          "candidate": "0x3ed14752a332877b8097f5bc9b24c89689a29a5d10266060345df8685c8efdad",
+          "result": "accepted"
+        }
+      ],
+      "accepted_counter": 0,
+      "reduced_scalar": "0x06d14752a33287048097f5bc9b24c898851b195c83d081015f8f889c9c22e164",
+      "viewing_key": "0x012eb8ad5ccd790c7f680a4364db37673265f91147173130bed719a511a36bcb",
+      "public_key_x": "0x0435ada564d3bb1c5ac7caac8aa5fdc7dfa5de1aea83ff660099ea619a08c7a5"
+    },
+    {
+      "id": "rejection-sampling",
+      "description": "Rejects counter zero because its candidate is at or above the limit, then accepts counter one.",
+      "account_key_schemes": [
+        "stark",
+        "secp256k1"
+      ],
+      "account_leaf_private_key_be32": "0x0000000000000000000000000000000000000000000000000000000000000005",
+      "attempts": [
+        {
+          "counter": 0,
+          "counter_be4": "0x00000000",
+          "hmac_input_length": 142,
+          "hmac_input": "0x5354524b32305f4143434f554e545f4c4541465f56310000000100000000000000000000000000000000000000000000534e5f5345504f4c4941000000000000000000000000000000000000000000000000000000000000123400000000000000000000000000000000000000000000000000000000000056780000000000000000000000000000000000000000",
+          "hmac_sha256_output": "0xfd90c57fe6b814ea57268d16153d1c86312344f3e5e77ec22630ad48e6e9b96c",
+          "candidate": "0xfd90c57fe6b814ea57268d16153d1c86312344f3e5e77ec22630ad48e6e9b96c",
+          "result": "rejected-candidate-gte-limit"
+        },
+        {
+          "counter": 1,
+          "counter_be4": "0x00000001",
+          "hmac_input_length": 142,
+          "hmac_input": "0x5354524b32305f4143434f554e545f4c4541465f56310000000100000000000000000000000000000000000000000000534e5f5345504f4c4941000000000000000000000000000000000000000000000000000000000000123400000000000000000000000000000000000000000000000000000000000056780000000000000000000000000000000000000001",
+          "hmac_sha256_output": "0xae52983668004e406e69bfc4a7acfa9765c032128ee6705566e0eb44bde2061a",
+          "candidate": "0xae52983668004e406e69bfc4a7acfa9765c032128ee6705566e0eb44bde2061a",
+          "result": "accepted"
+        }
+      ],
+      "accepted_counter": 1,
+      "reduced_scalar": "0x0652983668004cdb6e69bfc4a7acfa9d5829af10e9e4d238e8759be17c9db13f",
+      "viewing_key": "0x01ad67c997ffb3359196403b585305625f57635ce102dff935f1066031289bf0",
+      "public_key_x": "0x04366caa68f40c9467a805b2646bcca3ac60c320c165564f69bc2de4b668e7ed"
+    }
+  ]
+}
