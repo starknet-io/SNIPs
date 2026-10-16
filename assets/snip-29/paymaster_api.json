@@ -186,6 +186,64 @@
                             "$ref": "#/components/schemas/FEE_ESTIMATE"
                           } 
                         }
+                      },
+                      {
+                        "title": "Apply Action Response",
+                        "required": [
+                          "type",
+                          "parameters",
+                          "fee",
+                          "fee_action"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["apply_action"]
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          },
+                          "fee_action": {
+                            "title": "Fee action",
+                            "description": "What the user must include in the proof to pay the fees",
+                            "$ref": "#/components/schemas/FEE_ACTION"
+                          }
+                        }
+                      },
+                      {
+                        "title": "Invoke and Apply Action Response",
+                        "required": [
+                          "type",
+                          "typed_data",
+                          "parameters",
+                          "fee",
+                          "fee_action"
+                        ],
+                        "properties": {
+                          "type": {
+                            "title": "Transaction type",
+                            "enum": ["invoke_and_apply_action"]
+                          },
+                          "typed_data": {
+                            "title": "Typed data",
+                            "description": "Typed data wrapping the user calls, to be signed by the user",
+                            "$ref": "#/components/schemas/OUTSIDE_EXECUTION_TYPED_DATA"
+                          },
+                          "parameters": {
+                            "$ref": "#/components/schemas/USER_PARAMETERS"
+                          },
+                          "fee": {
+                            "$ref": "#/components/schemas/FEE_ESTIMATE"
+                          },
+                          "fee_action": {
+                            "title": "Fee action",
+                            "description": "What the user must include in the proof to pay the fees",
+                            "$ref": "#/components/schemas/FEE_ACTION"
+                          }
+                        }
                       }
                     ]
                 }
@@ -211,6 +269,12 @@
                 },
                 {
                     "$ref": "#/components/errors/TRANSACTION_EXECUTION_ERROR"
+                },
+                {
+                    "$ref": "#/components/errors/POOL_FEE_REQUIRES_PRIVACY"
+                },
+                {
+                    "$ref": "#/components/errors/POOL_FEE_SPONSORING_NOT_ALLOWED"
                 }
             ]
         },
@@ -280,6 +344,24 @@
                 },
                 {
                     "$ref": "#/components/errors/TRANSACTION_EXECUTION_ERROR"
+                },
+                {
+                    "$ref": "#/components/errors/MISSING_FEE_TRANSFER_TO"
+                },
+                {
+                    "$ref": "#/components/errors/UNEXPECTED_FEE_TRANSFER_TO"
+                },
+                {
+                    "$ref": "#/components/errors/CALLDATA_PARSING"
+                },
+                {
+                    "$ref": "#/components/errors/POOL_FEE_TOO_LOW"
+                },
+                {
+                    "$ref": "#/components/errors/POOL_FEE_REQUIRES_PRIVACY"
+                },
+                {
+                    "$ref": "#/components/errors/POOL_FEE_SPONSORING_NOT_ALLOWED"
                 }
             ]
         }
@@ -356,6 +438,54 @@
                                 "$ref": "#/components/schemas/EXECUTABLE_USER_INVOKE"
                             }
                         }
+                    },
+                    {
+                        "title": "Apply Action",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "apply_action"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "apply_action"
+                                ]
+                            },
+                            "apply_action": {
+                                "title": "Apply action data",
+                                "description": "The private action to apply on the pool, with its proof",
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_APPLY_ACTION"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Invoke and Apply Action",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "invoke",
+                            "apply_action"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "invoke_and_apply_action"
+                                ]
+                            },
+                            "invoke": {
+                                "title": "Invoke data",
+                                "description": "User calls signed by the user, executed before the private action",
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_INVOKE"
+                            },
+                            "apply_action": {
+                                "title": "Apply action data",
+                                "description": "The private action to apply on the pool, with its proof",
+                                "$ref": "#/components/schemas/EXECUTABLE_USER_APPLY_ACTION"
+                            }
+                        }
                     }
                 ]
             },
@@ -381,6 +511,34 @@
                         "title": "Signature",
                         "description": "Signature of the associated Typed Data",
                         "$ref": "#/components/schemas/SIGNATURE"
+                    }
+                }
+            },
+            "EXECUTABLE_USER_APPLY_ACTION": {
+                "type": "object",
+                "required": [
+                    "apply_actions_call",
+                    "proof",
+                    "proof_facts"
+                ],
+                "properties": {
+                    "apply_actions_call": {
+                        "title": "Apply actions call",
+                        "description": "The call to the privacy pool that applies the actions. When the fee action returned by paymaster_buildTransaction is a withdraw, the actions MUST include it",
+                        "$ref": "#/components/schemas/CALL"
+                    },
+                    "proof": {
+                        "title": "Proof",
+                        "description": "The zero-knowledge proof of the actions, as produced by the pool's prover",
+                        "type": "string"
+                    },
+                    "proof_facts": {
+                        "title": "Proof facts",
+                        "description": "The facts used to verify the proof onchain",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FELT"
+                        }
                     }
                 }
             },
@@ -454,6 +612,54 @@
                                 "$ref": "#/components/schemas/USER_INVOKE"
                             }
                         }
+                    },
+                    {
+                        "title": "Apply Action",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "apply_action"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "apply_action"
+                                ]
+                            },
+                            "apply_action": {
+                                "title": "Apply action data",
+                                "description": "A private action on a privacy pool, without user calls",
+                                "$ref": "#/components/schemas/USER_APPLY_ACTION"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Invoke and Apply Action",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "invoke",
+                            "apply_action"
+                        ],
+                        "properties": {
+                            "type": {
+                                "title": "Transaction type",
+                                "enum": [
+                                    "invoke_and_apply_action"
+                                ]
+                            },
+                            "invoke": {
+                                "title": "Invoke data",
+                                "description": "User calls to execute before the private action, through outside execution",
+                                "$ref": "#/components/schemas/USER_INVOKE"
+                            },
+                            "apply_action": {
+                                "title": "Apply action data",
+                                "description": "A private action on a privacy pool",
+                                "$ref": "#/components/schemas/USER_APPLY_ACTION"
+                            }
+                        }
                     }
                 ]
             },
@@ -477,6 +683,21 @@
                         "items": {
                             "$ref": "#/components/schemas/CALL"
                         }
+                    }
+                }
+            },
+            "USER_APPLY_ACTION": {
+                "title": "Apply Action Parameters",
+                "description": "A private action on a privacy pool",
+                "type": "object",
+                "required": [
+                    "pool_address"
+                ],
+                "properties": {
+                    "pool_address": {
+                        "title": "Pool Address",
+                        "description": "The address of the privacy pool contract. The paymaster SHOULD only accept pools it supports",
+                        "$ref": "#/components/schemas/ADDRESS"
                     }
                 }
             },
@@ -518,7 +739,7 @@
                 "oneOf": [
                     {
                         "title": "Sponsor transaction",
-                        "description": "Specify that the transaction should be sponsored. This argument does not guaranteed sponsorship and will depend on the paymaster provider",
+                        "description": "Specify that the gas fee should be sponsored. This argument does not guaranteed sponsorship and will depend on the paymaster provider. On private transactions, pool_fee says who pays the pool fee",
                         "required": [
                             "mode"
                         ],
@@ -527,6 +748,11 @@
                                 "enum": [
                                     "sponsored"
                                 ]
+                            },
+                            "pool_fee": {
+                                "title": "Pool fee",
+                                "description": "Who pays the privacy pool fee. Only for the apply_action and invoke_and_apply_action transaction types, MUST be omitted otherwise",
+                                "$ref": "#/components/schemas/POOL_FEE"
                             },
                             "tip": {
                                 "$ref": "#/components/schemas/TIP_PRIORITY"
@@ -551,6 +777,48 @@
                             },
                             "tip": {
                                 "$ref": "#/components/schemas/TIP_PRIORITY"
+                            }
+                        }
+                    }
+                ]
+            },
+            "POOL_FEE": {
+                "title": "Pool fee",
+                "description": "Who pays the fee charged by the privacy pool on a private transaction",
+                "oneOf": [
+                    {
+                        "title": "Pool fee paid by the user",
+                        "description": "The user pays the pool fee from their private balance, in the given token. The fee action returned by paymaster_buildTransaction is a withdraw the user MUST include in the proof",
+                        "type": "object",
+                        "required": [
+                            "paid_by",
+                            "token"
+                        ],
+                        "properties": {
+                            "paid_by": {
+                                "enum": [
+                                    "user"
+                                ]
+                            },
+                            "token": {
+                                "title": "Pool fee token",
+                                "description": "The token the user pays the pool fee in",
+                                "$ref": "#/components/schemas/ADDRESS"
+                            }
+                        }
+                    },
+                    {
+                        "title": "Pool fee paid by the sponsor",
+                        "description": "The sponsor pays the pool fee. The fee action returned by paymaster_buildTransaction is none and the proof MUST NOT contain a fee withdrawal. The paymaster SHOULD only accept it for sponsors that allowed it",
+                        "type": "object",
+                        "required": [
+                            "paid_by"
+                        ],
+                        "properties": {
+                            "paid_by": {
+                                "enum": [
+                                    "sponsor"
+                                ]
                             }
                         }
                     }
@@ -617,6 +885,60 @@
                         "$ref": "#/components/schemas/FELT"
                     }
                 }
+            },
+            "FEE_ACTION": {
+                "title": "Fee action",
+                "description": "What the user must include in the proof of a private transaction to pay the fees",
+                "oneOf": [
+                    {
+                        "title": "Withdraw",
+                        "description": "The user MUST include a withdrawal of amount of token to recipient in the proof",
+                        "type": "object",
+                        "required": [
+                            "type",
+                            "recipient",
+                            "token",
+                            "amount"
+                        ],
+                        "properties": {
+                            "type": {
+                                "enum": [
+                                    "withdraw"
+                                ]
+                            },
+                            "recipient": {
+                                "title": "Fee recipient",
+                                "description": "The address that must receive the fee payment",
+                                "$ref": "#/components/schemas/ADDRESS"
+                            },
+                            "token": {
+                                "title": "Token",
+                                "description": "The token of the fee payment",
+                                "$ref": "#/components/schemas/ADDRESS"
+                            },
+                            "amount": {
+                                "title": "Amount",
+                                "description": "The amount to withdraw. The pool fee when the gas fee is sponsored, the gas fee and the pool fee otherwise",
+                                "$ref": "#/components/schemas/FELT"
+                            }
+                        }
+                    },
+                    {
+                        "title": "None",
+                        "description": "Nothing to include in the proof: the sponsor pays the pool fee. The proof MUST NOT contain a fee withdrawal",
+                        "type": "object",
+                        "required": [
+                            "type"
+                        ],
+                        "properties": {
+                            "type": {
+                                "enum": [
+                                    "none"
+                                ]
+                            }
+                        }
+                    }
+                ]
             },
             "ADDRESS": {
                 "title": "Address",
@@ -1235,6 +1557,30 @@
                 "code": 163,
                 "message": "An error occurred (UNKNOWN_ERROR)",
                 "data": "string"
+            },
+            "MISSING_FEE_TRANSFER_TO": {
+                "code": 165,
+                "message": "An error occurred (MISSING_FEE_TRANSFER_TO)"
+            },
+            "CALLDATA_PARSING": {
+                "code": 166,
+                "message": "An error occurred (CALLDATA_PARSING)"
+            },
+            "POOL_FEE_TOO_LOW": {
+                "code": 167,
+                "message": "An error occurred (POOL_FEE_TOO_LOW)"
+            },
+            "POOL_FEE_REQUIRES_PRIVACY": {
+                "code": 170,
+                "message": "An error occurred (POOL_FEE_REQUIRES_PRIVACY)"
+            },
+            "POOL_FEE_SPONSORING_NOT_ALLOWED": {
+                "code": 172,
+                "message": "An error occurred (POOL_FEE_SPONSORING_NOT_ALLOWED)"
+            },
+            "UNEXPECTED_FEE_TRANSFER_TO": {
+                "code": 173,
+                "message": "An error occurred (UNEXPECTED_FEE_TRANSFER_TO)"
             }
         }
     }
