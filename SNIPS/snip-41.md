@@ -685,6 +685,7 @@ This proposal builds on prior work across the Starknet ecosystem:
 - **Starknet Foundation**: Seed grant that funded development from day one, and ongoing guidance throughout the process. This work would not exist without their support.
 - **EthSign**: Forum proposal for function call delegation (October 2024)
 - **keep-starknet-strange / Omar Espejel**: Proposed `ISessionSpendingPolicy` ([Issue #5](https://github.com/chipi-pay/sessions-smart-contract/issues/5)), collaborated on spending policy design informed by starknet-agentic's working implementation
+- **loothero**: Gas and fee-exposure review drawing on session accounts built and profiled on Argent and OpenZeppelin, which shaped the storage write budget, mechanism-agnostic transaction limits and the per-transaction fee cap
 
 The fragmentation that motivates this standard is not a failure. It is the natural result of teams independently solving the same problem well. This SNIP aims to provide a coordination layer, not to replace any existing approach.
 
