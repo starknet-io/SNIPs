@@ -1,5 +1,5 @@
 ---
-snip: X
+snip: 41
 title: Session Keys for Smart Accounts
 description: Session key management and paymaster interaction protocol for Starknet smart accounts.
 author: Chipi Pay (@chipi-pay), Omar Espejel (@omarespejel)
@@ -13,7 +13,7 @@ requires: SNIP-5, SNIP-6, SNIP-9, SNIP-12
 
 ## Simple Summary
 
-Standard interface for time-limited, call-limited, selector-restricted session keys on Starknet smart accounts, including the protocol for paymaster discovery and interaction with session-enabled accounts.
+Standard interface for time-limited, call-limited, fee-capped, selector-restricted session keys on Starknet smart accounts, including the protocol for paymaster discovery and interaction with session-enabled accounts.
 
 ## Abstract
 
@@ -21,7 +21,7 @@ This SNIP defines:
 
 1. An `ISessionKeyManager` trait and `SessionData` struct for on-chain session key management
 2. A session signature format: `[session_pubkey, r, s, valid_until]`
-3. A validation algorithm (8 steps) for session-signed transactions
+3. A validation algorithm for session-signed transactions, including a per-transaction fee cap and a storage write budget
 4. An admin selector blocklist that session keys MUST NOT bypass
 5. A paymaster-account interaction protocol covering discovery, `OutsideExecution` construction, and signature passthrough
 6. A canonical SNIP-12 typed data format for session-aware `OutsideExecution` hashing
@@ -63,11 +63,11 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Compliant accounts MUST implement the following interface:
 
 ```cairo
-#[derive(Drop, Copy, Serde, starknet::Store)]
+#[derive(Drop, Copy, Serde)]
 struct SessionData {
     valid_until: u64,
     max_calls: u32,
-    calls_used: u32,
+    max_fee_per_tx: u128,
     allowed_entrypoints_len: u32,
 }
 
@@ -75,27 +75,32 @@ struct SessionData {
 trait ISessionKeyManager<TContractState> {
     /// Adds a new session key or updates an existing one.
     /// MUST only be callable by the account owner.
-    /// MUST reset calls_used to 0 on update.
+    /// MUST reset the session's transaction usage on update (see Part C).
     /// MUST clear stale entrypoints before writing new ones (see Part E).
+    /// max_fee_per_tx is in fri; 0 makes the session paymaster-only (see Part C).
     fn add_or_update_session_key(
         ref self: TContractState,
         session_key: felt252,
         valid_until: u64,
         max_calls: u32,
+        max_fee_per_tx: u128,
         allowed_entrypoints: Array<felt252>
     );
 
     /// Revokes a session key.
     /// MUST only be callable by the account owner.
     /// MUST clear all stored entrypoints for the session.
-    /// MUST set all SessionData fields to zero.
+    /// After revocation, the session MUST fail validation and get_session_data
+    /// MUST return all fields as zero.
     fn revoke_session_key(ref self: TContractState, session_key: felt252);
 
-    /// Returns the current session data for a given key.
+    /// Returns the configuration of a given session key.
     /// A session with valid_until == 0 is considered non-existent or revoked.
     fn get_session_data(self: @TContractState, session_key: felt252) -> SessionData;
 }
 ```
+
+`SessionData` describes a session's configuration, not how it is stored. How an implementation tracks the transactions a session has used is implementation-defined (see Part C, Transaction limit enforcement), and implementations SHOULD document how clients can determine it. Revocation likewise only fixes observable behavior: implementations MAY zero the stored fields or record an explicit revoked state.
 
 **Component architecture**: The reference implementation provides session key management as a reusable `SessionKeyComponent` that any account can embed, not just OpenZeppelin-based accounts. The embedding contract implements a `HasAccountOwner` trait with a single function:
 
@@ -111,16 +116,18 @@ This trait has **zero OpenZeppelin dependencies**. Any wallet framework (Argent,
 1. Add `component!()` declaration for `SessionKeyComponent` (and optionally `SpendingPolicyComponent`)
 2. Implement `HasAccountOwner`: delegate `assert_only_self()` to your own owner check
 3. Call `session_key.is_session_allowed_for_calls()` in `__validate__`
-4. Call `session_key.consume_session_call()` after signature verification
+4. Record the transaction against the session's limit after signature verification (`session_key.consume_session_call()` in the reference implementation)
 5. Optionally call `spending_policy.check_and_update_spending()` in `__execute__`
 
 This design makes session keys a **reusable building block** rather than a monolithic contract that other wallets must fork. The key differentiator is that session key functionality is embeddable by any wallet with minimal integration effort.
 
-**Storage layout**: Implementations SHOULD use two maps:
+**Storage layout** (non-normative): The reference implementation uses two maps:
 - `session_keys: Map<felt252, SessionData>`: session public key to session data
 - `session_entrypoints: Map<(felt252, u32), felt252>`: (session public key, index) to allowed selector
 
-The `allowed_entrypoints_len` field in `SessionData` indicates how many entries exist in the entrypoints map for this session. A value of `0` means the session has no whitelist restriction (all non-admin selectors are allowed).
+Implementations MAY use any layout that meets the storage write budget in Part C. Packing the per-session data read on every transaction into a single felt (for example with `StorePacking`) is RECOMMENDED.
+
+The `allowed_entrypoints_len` field in `SessionData` indicates how many selectors are in the session's whitelist. A value of `0` means the session has no whitelist restriction (all non-admin selectors are allowed).
 
 ### Part B: Session Signature Format
 
@@ -163,9 +170,11 @@ Signature lengths other than 2 or 4 MUST be rejected by returning `0`.
 
 **Step 2**: Check expiration. `block_timestamp` MUST be `<=` `valid_until`. If expired, return `0`.
 
-**Step 3**: Check session exists. Read `SessionData` for `session_pubkey`. If `valid_until == 0` in storage, the session does not exist or was revoked. Return `0`.
+**Step 3**: Check session exists. Read `SessionData` for `session_pubkey`. If the session's `valid_until` is `0`, the session does not exist or was revoked. Return `0`.
 
-**Step 4**: Check call limit. If `calls_used >= max_calls`, the session is exhausted. Return `0`.
+**Step 4**: Check transaction limit. If the session has already authorized `max_calls` transactions (see Transaction limit enforcement below), the session is exhausted. Return `0`.
+
+**Step 4b**: Check fee cap. If `max_fee_per_tx == 0`, the session is paymaster-only. Return `0`. Otherwise, if the transaction's maximum possible fee exceeds `max_fee_per_tx` (see Fee cap below), return `0`.
 
 **Step 5**: Check admin blocklist. For EVERY call in the transaction, verify the selector is not in the admin blocklist (see Part D). If any call targets a blocked selector, return `0`.
 
@@ -175,11 +184,36 @@ Signature lengths other than 2 or 4 MUST be rejected by returning `0`.
 
 **Step 7**: Verify ECDSA signature. Compute the message hash and verify the ECDSA signature `(r, s)` against `session_pubkey`. Return `0` on failure.
 
-**Step 8**: Increment `calls_used`. ONLY after all validation steps pass, increment the session's `calls_used` counter by 1 and write back to storage. Return `VALIDATED`.
+**Step 8**: Record the transaction. ONLY after all validation steps pass, record the transaction against the session's limit. Implementations whose limit mechanism needs no storage write for this transaction (see below) skip the write. Return `VALIDATED`.
 
-**`max_calls` semantics**: `calls_used` is incremented once per `__validate__` invocation (i.e., per transaction), not once per individual call within a multicall. A transaction containing 5 calls consumes 1 from `max_calls`. This means `max_calls` controls the number of **transactions** the session can authorize, not the total number of contract calls.
+**`max_calls` semantics**: `max_calls` counts **transactions**, not individual calls: a transaction containing 5 calls counts once. It is an upper bound. Implementations MUST NOT let a session authorize more than `max_calls` self-paid transactions (through `__validate__`), and MUST NOT let it authorize more than `max_calls` sponsored transactions (through `execute_from_outside_v2`). Implementations MAY enforce a single combined limit across both paths instead. A session MAY end up authorizing fewer than `max_calls` transactions (see nonce anchoring below).
 
-**Critical ordering**: Step 8 (call consumption) MUST occur AFTER Step 7 (signature verification). Consuming before verification causes off-by-one failures for `max_calls = 1` sessions.
+**Critical ordering**: Step 8 (recording the transaction) MUST occur AFTER Step 7 (signature verification). Recording before verification causes off-by-one failures for `max_calls = 1` sessions.
+
+#### Transaction limit enforcement
+
+How the limit is enforced is implementation-defined. Examples:
+
+- **Counter**: a per-session counter, incremented in Step 8 and reset by `add_or_update_session_key`. This costs one storage write per transaction.
+- **Nonce anchoring** (self-paid path): on the session's first self-paid transaction, at account nonce `a`, store `a + max_calls`. Afterwards, accept only transactions with `tx_info.nonce < a + max_calls`, with no further writes. The account nonce is shared with the owner and with other sessions, so their transactions also use up the range and the session may get fewer than `max_calls` transactions. This is compliant.
+- **Bounded nonce range** (sponsored path): accept only SNIP-9 nonces from a range of `max_calls` values reserved for the session. Each SNIP-9 nonce can be used once, so the SNIP-9 replay-protection write also enforces the limit.
+
+#### Fee cap
+
+The fee cap applies to self-paid transactions (`__validate__`), where the account pays the fee. Implementations MUST compute an upper bound on the fee the transaction can be charged from the transaction's own fee fields (`get_execution_info().tx_info`), and MUST reject the transaction if that bound exceeds `max_fee_per_tx`. For V3 transactions, a conservative bound is:
+
+```
+max_fee = sum over resource_bounds of (max_amount * max_price_per_unit)
+        + tip * max_amount of the L2 gas bound
+```
+
+This computation MUST NOT overflow or panic. `max_amount` is a `u64` and `max_price_per_unit` is a `u128`, so implementations SHOULD accumulate in `u256` and return `0` on failure, as with `valid_until` in Part B. Implementations MUST reject session-signed transactions whose fee they cannot bound, for example transaction versions without V3 resource bounds.
+
+The cap is read from transaction info, so it does not change the session signature format or the message hash. A cap of `0` makes the session paymaster-only: it can still sign SNIP-9 `OutsideExecution`s but cannot send self-paid transactions. Fees on the self-paid path are therefore bounded by `max_fee_per_tx × max_calls` for the life of the session.
+
+#### Storage write budget
+
+Session bookkeeping runs on every session transaction, so in high-volume uses such as games its cost scales with transactions per player times the number of players. After a session is set up, implementations SHOULD perform at most one storage write per session-signed transaction for the checks in this Part, including replay protection beyond the protocol nonce, and none where the account nonce already provides it. Implementations SHOULD NOT rewrite unchanged storage fields just to update a counter. Optional extensions such as Part H add their own writes and are outside this budget.
 
 ### Part D: Admin Selector Blocklist
 
@@ -243,14 +277,14 @@ Paymasters SHOULD use a multi-tier detection strategy for session support:
 2. **ABI fallback** (secondary): If SRC-5 returns no results or errors, fetch the account's class hash and inspect its ABI for `execute_from_outside_v2` or `execute_from_outside` entry points.
 3. **Graceful error handling**: If `supports_interface()` reverts (many custom accounts don't implement SRC-5), the paymaster MUST NOT propagate the error. It SHOULD treat this as "interface not detected" and fall back to ABI inspection.
 
-Compliant accounts MUST register the `ISessionKeyManager` interface ID via SRC-5. The interface ID is computed per SNIP-5 as the XOR of all function selectors in the `ISessionKeyManager` trait.
+Compliant accounts MUST register the `ISessionKeyManager` interface ID via SRC-5. The interface ID is computed per SNIP-5 as the XOR of the Extended Function Selectors of the `ISessionKeyManager` trait (see Part G).
 
 #### F.2: OutsideExecution Construction
 
 Paymasters build `OutsideExecution` structs per SNIP-9 V2. For session-enabled accounts:
 
 - The `caller` field SHOULD be `0x0` (ANY_CALLER) to allow any whitelisted relayer to submit the transaction. Restricting to a specific caller address is also valid but limits which relayers can submit.
-- The `nonce` MUST be unique and not previously used by the account.
+- The `nonce` MUST be unique and not previously used by the account. Accounts MAY require nonces to follow a structure that reduces storage writes, for example "nonce channels", where one storage cell holds a bitmap covering up to 128 nonces so replay protection updates an existing cell instead of writing a new one per nonce. A paymaster that picks an arbitrary nonce defeats this. A standard nonce encoding or discovery method is an open issue (see Open Issues).
 - `execute_after` and `execute_before` define the validity window. `execute_after` MUST be strictly less than the current block timestamp, and `execute_before` MUST be strictly greater.
 
 #### F.3: Signature Passthrough
@@ -326,26 +360,33 @@ message_hash = poseidon("StarkNet Message", domain_hash, account_address, struct
 When `execute_from_outside_v2` processes a session signature:
 
 1. Whitelist enforcement MUST happen BEFORE signature validation
-2. `_consume_session_call` (incrementing `calls_used`) MUST happen AFTER successful signature validation
+2. Recording the transaction against the session's limit (`_consume_session_call` in the reference implementation) MUST happen AFTER successful signature validation
 3. Call execution happens last
 
 This ordering prevents:
 - Unauthorized selectors from consuming gas via failed signature validation
 - Off-by-one errors where a valid session with `max_calls = 1` fails because the counter was incremented before verification
 
+#### F.6: Fees on the Sponsored Path
+
+On the SNIP-9 path the relayer pays the transaction fee, so `max_fee_per_tx` (Part C) does not apply. When a paymaster charges the user in tokens, the fee is a token `transfer` call inside the `OutsideExecution` that the session signs. That transfer is bounded only by the session's selector whitelist and by any Part H spending policy for the token. Wallets SHOULD set a Part H policy for the fee token on sessions used in this mode.
+
 ### Part G: SRC-5 Interface ID
 
 Compliant accounts MUST register the `ISessionKeyManager` interface ID via SRC-5.
 
-The interface ID is computed as the XOR of the `starknetKeccak` of each function signature in the trait:
+The interface ID is computed per SNIP-5 as the XOR of the Extended Function Selectors of the trait, i.e. the `starknet_keccak` of each full function signature including parameter and return types:
 
 ```
-interface_id = starknetKeccak("add_or_update_session_key")
-             ^ starknetKeccak("revoke_session_key")
-             ^ starknetKeccak("get_session_data")
+interface_id = starknet_keccak("add_or_update_session_key(felt252,u64,u32,u128,Array<felt252>)")
+             ^ starknet_keccak("revoke_session_key(felt252)")
+             ^ starknet_keccak("get_session_data(felt252)->(u64,u32,u128,u32)")
+             = 0x9da822b09dda470480ed02c12ae8745d4ac010023df23c6db0314abe5cdc02
 ```
 
 This enables paymasters and dApps to detect session key support via `supports_interface()` without needing to know the specific account implementation or class hash.
+
+Earlier drafts of this SNIP derived the ID from function names only. Because names do not change when parameters do, accounts implementing an earlier revision of the interface would have advertised the same ID as accounts implementing this one. Accounts that do not implement this revision of `ISessionKeyManager` MUST NOT register the ID above.
 
 ### Part H: Spending Policy Extension (OPTIONAL)
 
@@ -398,6 +439,8 @@ trait ISessionSpendingPolicy<TContractState> {
 
 If no policy is set for a (session_key, token) pair (i.e., `max_per_window == 0`), the call is unrestricted.
 
+**Fees are not covered**: This extension does not bound transaction fees. Fees are not paid through tracked selectors and are charged even when execution reverts, so they cannot be checked in `__execute__`. Fees on the self-paid path are bounded by `max_fee_per_tx` (Part C). For fees charged in tokens on the sponsored path, see Part F.6.
+
 **Admin blocklist requirement**: Implementations that support this extension MUST include `set_spending_policy` and `remove_spending_policy` in the admin selector blocklist (Part D). Without this, a session key could modify or remove its own spending limits, defeating the purpose of the restriction.
 
 **Rationale**: This extension was proposed by keep-starknet-strange / Omar Espejel ([Issue #5](https://github.com/chipi-pay/sessions-smart-contract/issues/5)) and informed by starknet-agentic's working implementation. Spending limits are critical for DeFi automation and AI agent use cases where session keys need per-token caps beyond selector-level restrictions.
@@ -428,7 +471,19 @@ Blocking `__execute__` for session keys prevents nested execution privilege esca
 
 ### Call Consumption After Validation
 
-Incrementing `calls_used` after signature verification (not before) prevents an off-by-one error: a session with `max_calls = 1` would otherwise fail on its first (and only) valid use because the counter would already be at 1 when the limit check runs. This was identified as a Low severity finding by Nethermind's AuditAgent in February 2026.
+Recording a transaction against the session's limit after signature verification (not before) prevents an off-by-one error: with a counter, a session with `max_calls = 1` would otherwise fail on its first (and only) valid use because the counter would already be at 1 when the limit check runs. This was identified as a Low severity finding by Nethermind's AuditAgent in February 2026.
+
+### Transaction Limits as Upper Bounds
+
+Earlier drafts required a dedicated `calls_used` counter written on every transaction. For high-volume applications such as games, one extra storage write per transaction, across thousands of transactions a day and thousands of players, is a significant cost. Defining `max_calls` as an upper bound with an implementation-defined mechanism lets accounts reuse protection they already pay for: the protocol nonce on the self-paid path, and the SNIP-9 nonce on the sponsored path.
+
+The cost is precision. Under nonce anchoring, a session can authorize fewer than `max_calls` transactions when other signers use the account, and a view call cannot report usage because it cannot read the account nonce. Clients can compute usage off-chain from `starknet_getNonce`. Limits are enforced per path because the two paths use different nonces: a single combined counter would bring back a write on every transaction. Implementations that want a combined limit MAY still enforce one.
+
+### Fee Cap in the Core Session Record
+
+Selector whitelists and the Part H spending policy control what a session can do with tokens, but not what it spends on fees. Without a fee cap, a session with no permission to transfer tokens can still drain the account through fees on the self-paid path. The cap belongs in the core session record rather than in Part H for two reasons. Fees are charged even when execution reverts, so the check has to happen in `__validate__`, while Part H runs in `__execute__`. And bounding the worst-case loss of a session is a baseline security property, not an optional feature.
+
+Capping each transaction, combined with `max_calls`, bounds total fee exposure without any per-transaction storage write. A cumulative fee budget would need one.
 
 ### AI Agent Delegation
 
@@ -436,6 +491,7 @@ Session keys are a natural fit for autonomous AI agents that need restricted on-
 - Time-bounded sessions (prevent permanent access)
 - Function-scoped permissions (agent can only call whitelisted selectors)
 - Call limits (prevent runaway execution loops)
+- Fee caps (bound what the agent can spend on gas)
 - Immediate revocability (emergency kill switch)
 - Non-custodial delegation (agent never holds the owner key)
 
@@ -491,9 +547,9 @@ The reference implementation has been scanned four times by Nethermind's AuditAg
 
 ### Session Hash Does Not Bind Full Transaction Envelope
 
-Session signatures cover `(account_address, chain_id, nonce, valid_until, calls...)` but NOT fee/resource bounds, tip, or paymaster-related fields. A relayer could theoretically reuse a valid signature with modified fee parameters. This is an accepted risk: including envelope fields would require the session signer to know gas parameters at signing time, which breaks the gasless UX model where the paymaster determines fees after signing.
+Session signatures cover `(account_address, chain_id, nonce, valid_until, calls...)` but NOT fee/resource bounds, tip, or paymaster-related fields. Including envelope fields would require the session signer to know gas parameters at signing time, which breaks the gasless UX model where the paymaster determines fees after signing.
 
-Implementations SHOULD document this tradeoff. Future revisions of this SNIP MAY add optional envelope binding for use cases where fee control matters.
+On the self-paid path, this would let a compromised session key, or anyone holding a signed session transaction, resubmit it with inflated resource bounds or tip and drain the account through fees, even if the session cannot transfer tokens. The fee cap (Part C, Step 4b) closes this: it is checked in `__validate__` against the transaction's own fee fields, so no signed envelope field is needed. On the sponsored path the relayer pays the fee. Fees charged to the user in tokens are covered by Part F.6.
 
 ### Admin Blocklist is Essential
 
@@ -505,9 +561,9 @@ Using `try_into().unwrap()` for the `felt252` → `u64` conversion of `valid_unt
 
 ### `is_valid_signature` and Call Context
 
-`is_valid_signature(hash, signature)` receives no call context. It cannot enforce selector whitelists. This is an inherent limitation of the ERC-1271 interface. Compliant accounts MUST enforce whitelists in `__validate__` and `execute_from_outside_v2` where calls are available. The `is_valid_signature` function SHOULD still validate session existence, expiration, and call limits.
+`is_valid_signature(hash, signature)` receives no call context. It cannot enforce selector whitelists. This is an inherent limitation of the ERC-1271 interface. Compliant accounts MUST enforce whitelists in `__validate__` and `execute_from_outside_v2` where calls are available. The `is_valid_signature` function SHOULD still validate session existence and expiration, and the transaction limit where the implementation's mechanism allows it to be checked without transaction context.
 
-`is_valid_signature` MUST be read-only (`@ContractState`) and MUST NOT increment `calls_used`.
+`is_valid_signature` MUST be read-only (`@ContractState`) and MUST NOT record transactions against the session's limit.
 
 ### No Calldata Restriction
 
@@ -525,7 +581,15 @@ The `ISessionSpendingPolicy` extension (Part H) provides optional per-token spen
 - **Cross-chain replay**: Prevented by including `chain_id` in the message hash
 - **Account confusion**: Prevented by including the account address in the message hash
 
+## Open Issues
+
+1. **SNIP-9 nonce encoding**: accounts that use structured nonces (Part F.2) need paymasters to construct nonces in that structure. This SNIP should define either a standard encoding or a way for the paymaster or session signer to obtain the next valid nonce from the account.
+2. **Sponsored transaction limit**: this revision applies `max_calls` to sponsored transactions as well as self-paid ones. On the self-paid path the limit also bounds fee exposure; on the sponsored path it only guards against runaway execution. Whether it should remain mandatory there is open.
+3. **Bulk revocation**: an optional per-account session epoch, recorded with each session when it is added so that bumping it once revokes every session in one write, could be standardized alongside `revoke_session_key`.
+
 ## Reference Implementation
+
+This revision introduces the fee cap, mechanism-agnostic transaction limits and the SNIP-5 extended-selector interface ID. The reference implementation and production class hash below predate it and implement the previous revision of the interface.
 
 - **Session account contract**: [github.com/chipi-pay/sessions-smart-contract](https://github.com/chipi-pay/sessions-smart-contract)
 - **Architecture**: Reusable `SessionKeyComponent` and optional `SpendingPolicyComponent` that any OZ-based account can embed via the `HasAccountOwner` trait pattern
@@ -539,11 +603,11 @@ The `ISessionSpendingPolicy` extension (Part H) provides optional per-token spen
 ### Reference Interface Definitions
 
 ```cairo
-#[derive(Drop, Copy, Serde, starknet::Store)]
+#[derive(Drop, Copy, Serde)]
 pub struct SessionData {
     pub valid_until: u64,
     pub max_calls: u32,
-    pub calls_used: u32,
+    pub max_fee_per_tx: u128,
     pub allowed_entrypoints_len: u32,
 }
 
@@ -554,6 +618,7 @@ pub trait ISessionKeyManager<TContractState> {
         session_key: felt252,
         valid_until: u64,
         max_calls: u32,
+        max_fee_per_tx: u128,
         allowed_entrypoints: Array<felt252>
     );
     fn revoke_session_key(ref self: TContractState, session_key: felt252);
@@ -576,7 +641,12 @@ function validate(calls, signature):
 
         session = storage.read(session_pubkey)
         if session.valid_until == 0: return 0
-        if session.calls_used >= session.max_calls: return 0
+        if session_limit_reached(session): return 0  // counter or nonce anchor
+
+        if session.max_fee_per_tx == 0: return 0  // paymaster-only
+        max_fee = sum(b.max_amount * b.max_price_per_unit for b in tx.resource_bounds)
+                + tx.tip * l2_gas_bound(tx).max_amount  // u256, no overflow
+        if max_fee > session.max_fee_per_tx: return 0
 
         for call in calls:
             if call.selector in ADMIN_BLOCKLIST: return 0
@@ -591,8 +661,7 @@ function validate(calls, signature):
         msg_hash = compute_hash(calls, valid_until)
         if not verify_ecdsa(msg_hash, session_pubkey, r, s): return 0
 
-        session.calls_used += 1
-        storage.write(session_pubkey, session)
+        record_session_tx(session)  // at most one storage write, none if nonce-anchored
         return VALIDATED
 
     if signature.length == 2:
@@ -616,6 +685,7 @@ This proposal builds on prior work across the Starknet ecosystem:
 - **Starknet Foundation**: Seed grant that funded development from day one, and ongoing guidance throughout the process. This work would not exist without their support.
 - **EthSign**: Forum proposal for function call delegation (October 2024)
 - **keep-starknet-strange / Omar Espejel**: Proposed `ISessionSpendingPolicy` ([Issue #5](https://github.com/chipi-pay/sessions-smart-contract/issues/5)), collaborated on spending policy design informed by starknet-agentic's working implementation
+- **loothero**: Gas and fee-exposure review drawing on session accounts built and profiled on Argent and OpenZeppelin, which shaped the storage write budget, mechanism-agnostic transaction limits and the per-transaction fee cap
 
 The fragmentation that motivates this standard is not a failure. It is the natural result of teams independently solving the same problem well. This SNIP aims to provide a coordination layer, not to replace any existing approach.
 
