@@ -3,7 +3,7 @@ snip: 45
 title: Staked STRK Vote Delegation to Validators (Opt-Out)
 description: Validators vote on behalf of their delegators by default; any delegator can take back their vote or give it to any other address.
 author: Henri (@l-henri)
-discussions-to: TBD
+discussions-to: https://community.starknet.io/t/snip-45-staked-strk-vote-delegation-to-validators/116483
 status: Draft
 type: Meta
 created: 2026-11-10
